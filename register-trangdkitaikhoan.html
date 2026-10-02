@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng ký tài khoản | SiteSafe</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .register-page {
+        display: grid;
+        grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
+        gap: 32px;
+        align-items: center;
+        width: min(1080px, calc(100% - 32px));
+        min-height: 100vh;
+        margin: 0 auto;
+        padding: 32px 0;
+      }
+
+      .register-banner {
+        min-height: 560px;
+        padding: 32px;
+        color: var(--color-white);
+        background-image:
+          linear-gradient(rgb(15 23 42 / 35%), rgb(15 23 42 / 72%)),
+          url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80");
+        background-position: center;
+        background-size: cover;
+        border-radius: 8px;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .register-banner h1 {
+        margin: 0 0 8px;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        line-height: 1.15;
+      }
+
+      .register-banner p {
+        max-width: 420px;
+        margin: 0;
+        color: #e2e8f0;
+      }
+
+      .register-form {
+        max-width: 520px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .register-form h2 {
+        margin-top: 0;
+        color: var(--color-primary);
+      }
+
+      .register-form .form-group {
+        margin-bottom: 16px;
+      }
+
+      .register-form label {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--color-primary);
+        font-weight: 600;
+      }
+
+      .register-form .btn {
+        width: 100%;
+        margin-top: 8px;
+        text-align: center;
+      }
+
+      .register-note {
+        margin: 16px 0 0;
+        color: #64748b;
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
+      .register-note a {
+        color: #2563eb;
+      }
+
+      @media (max-width: 768px) {
+        .register-page {
+          grid-template-columns: 1fr;
+          width: min(560px, calc(100% - 24px));
+          padding: 24px 0;
+        }
+
+        .register-banner {
+          min-height: 260px;
+          padding: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="register-page">
+      <!-- Thay URL ảnh banner tại background-image bằng ảnh công trường chính thức của dự án. -->
+      <!-- Prompt AI: "Realistic construction site with workers wearing safety helmets and reflective vests, clean organized work area, warm natural light, professional safety documentary photography." -->
+      <section class="register-banner" aria-label="Giới thiệu SiteSafe">
+        <div>
+          <h1>Tham gia SiteSafe</h1>
+          <p>
+            Tạo tài khoản để cùng xây dựng môi trường làm việc an toàn, rõ ràng
+            và hiệu quả hơn.
+          </p>
+        </div>
+      </section>
+
+      <section class="card register-form" aria-labelledby="register-title">
+        <h2 id="register-title">Đăng ký tài khoản</h2>
+        <p>
+          Nhập email và mật khẩu giả để tạo tài khoản demo trên trình duyệt này.
+        </p>
+
+        <form id="registerForm" novalidate>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              class="form-control"
+              id="email"
+              name="email"
+              type="email"
+              placeholder="demo@example.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Mật khẩu</label>
+            <input
+              class="form-control"
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Nhập mật khẩu demo"
+              autocomplete="new-password"
+              minlength="6"
+              required
+            />
+          </div>
+
+          <button class="btn btn-success" type="submit">Tạo tài khoản</button>
+          <p
+            class="form-message"
+            id="registerMessage"
+            role="alert"
+            aria-live="polite"
+          ></p>
+        </form>
+
+        <p class="register-note">
+          Đã có tài khoản? <a href="login.html">Đăng nhập</a>
+        </p>
+      </section>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script>
+      const registerForm = document.getElementById("registerForm");
+      const registerMessage = document.getElementById("registerMessage");
+
+      registerForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const email = document
+          .getElementById("email")
+          .value.trim()
+          .toLowerCase();
+        const password = document.getElementById("password").value;
+
+        if (!email || !email.includes("@")) {
+          registerMessage.textContent =
+            "Vui lòng nhập email demo hợp lệ, ví dụ demo@example.com.";
+          return;
+        }
+
+        if (password.length < 6) {
+          registerMessage.textContent = "Mật khẩu demo cần có ít nhất 6 ký tự.";
+          return;
+        }
+
+        const existingUser = siteSafeApi
+          .getUsers()
+          .find((user) => user.email.toLowerCase() === email);
+
+        if (existingUser) {
+          registerMessage.textContent =
+            "Email này đã được đăng ký trong dữ liệu demo.";
+          return;
+        }
+
+        siteSafeApi.saveUser({
+          fullName: email.split("@")[0],
+          email,
+          password,
+          role: "WORKER",
+          roleLabel: "Công nhân hiện trường",
+          status: "ACTIVE",
+        });
+
+        const next = new URLSearchParams(window.location.search).get("next");
+        const nextUrl =
+          next && next.startsWith("pages/")
+            ? `?next=${encodeURIComponent(next)}`
+            : "";
+        window.location.href = `login.html${nextUrl}`;
+      });
+    </script>
+  </body>
+</html>

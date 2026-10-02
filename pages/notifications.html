@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông báo | SiteSafe</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+      .page {
+        width: min(820px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: center;
+      }
+      .header h1 {
+        color: var(--color-primary);
+      }
+      .notification {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--color-border);
+      }
+      .notification.unread {
+        font-weight: 600;
+      }
+      .notification small {
+        display: block;
+        margin-top: 5px;
+        color: #64748b;
+        font-weight: 400;
+      }
+      @media (max-width: 600px) {
+        .page {
+          width: min(560px, calc(100% - 24px));
+        }
+        .header {
+          align-items: stretch;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body data-required-role="ANY">
+    <main class="page">
+      <section class="card">
+        <div class="header">
+          <div>
+            <h1>Thông báo</h1>
+            <p>Các cập nhật mới liên quan đến an toàn công trường.</p>
+          </div>
+          <button class="btn" id="clearButton" type="button">
+            Đánh dấu đã đọc
+          </button>
+        </div>
+        <div id="notificationList"></div>
+      </section>
+    </main>
+    <script src="../js/main.js"></script>
+    <script>
+      const defaultNotifications = [
+        {
+          id: "NT-001",
+          title: "Có sự cố mới cần xem xét",
+          detail: "Lan can sàn tầng 12 đang chờ xử lý.",
+          read: false,
+        },
+        {
+          id: "NT-002",
+          title: "Checklist đã được duyệt",
+          detail: "Checklist an toàn điện đã hoàn thành.",
+          read: false,
+        },
+        {
+          id: "NT-003",
+          title: "Hành động khắc phục sắp đến hạn",
+          detail: "Cần cập nhật tiến độ trước ngày 25/09/2026.",
+          read: true,
+        },
+      ];
+      let notifications =
+        JSON.parse(localStorage.getItem("siteSafeNotifications") || "null") ||
+        defaultNotifications;
+      function renderNotifications() {
+        notificationList.innerHTML = notifications
+          .map(
+            (item) =>
+              `<article class="notification ${item.read ? "" : "unread"}"><div>${item.title}<small>${item.detail}</small></div><span class="badge ${item.read ? "badge-success" : "badge-warning"}">${item.read ? "Đã đọc" : "Mới"}</span></article>`,
+          )
+          .join("");
+      }
+      clearButton.addEventListener("click", function () {
+        notifications = notifications.map((item) => ({ ...item, read: true }));
+        localStorage.setItem(
+          "siteSafeNotifications",
+          JSON.stringify(notifications),
+        );
+        renderNotifications();
+      });
+      renderNotifications();
+    </script>
+  </body>
+</html>

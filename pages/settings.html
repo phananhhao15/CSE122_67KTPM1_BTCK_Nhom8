@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cài đặt | SiteSafe</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+      .page {
+        width: min(720px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0;
+      }
+      .card h1 {
+        margin-top: 0;
+        color: var(--color-primary);
+      }
+      .setting {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--color-border);
+      }
+      .setting label {
+        color: var(--color-primary);
+        font-weight: 600;
+      }
+      .setting small {
+        display: block;
+        margin-top: 4px;
+        color: #64748b;
+        font-weight: 400;
+      }
+      .message {
+        min-height: 22px;
+        color: var(--color-success);
+      }
+      @media (max-width: 600px) {
+        .page {
+          width: min(560px, calc(100% - 24px));
+        }
+        .setting {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body data-required-role="ANY">
+    <main class="page">
+      <section class="card">
+        <h1>Cài đặt</h1>
+        <p>Điều chỉnh trải nghiệm sử dụng SiteSafe.</p>
+        <form id="settingsForm">
+          <div class="setting">
+            <label for="emailAlerts"
+              >Nhận email cảnh báo<small
+                >Thông báo khi có sự cố nghiêm trọng.</small
+              ></label
+            ><input id="emailAlerts" type="checkbox" />
+          </div>
+          <div class="setting">
+            <label for="compactMode"
+              >Chế độ bảng gọn<small
+                >Hiển thị nhiều dữ liệu hơn trên màn hình.</small
+              ></label
+            ><input id="compactMode" type="checkbox" />
+          </div>
+          <p class="message" id="message" role="status"></p>
+          <button class="btn btn-success" type="submit">Lưu cài đặt</button>
+        </form>
+      </section>
+    </main>
+    <script src="../js/main.js"></script>
+    <script>
+      const settings = JSON.parse(
+        localStorage.getItem("siteSafeSettings") || "{}",
+      );
+      emailAlerts.checked = settings.emailAlerts !== false;
+      compactMode.checked = Boolean(settings.compactMode);
+      settingsForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        localStorage.setItem(
+          "siteSafeSettings",
+          JSON.stringify({
+            emailAlerts: emailAlerts.checked,
+            compactMode: compactMode.checked,
+          }),
+        );
+        message.textContent = "Đã lưu cài đặt.";
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,115 @@
+/* Quy tắc responsive cho điện thoại và máy tính bảng nhỏ. */
+@media (max-width: 768px) {
+  /* Sidebar trượt từ bên trái vào khi có class is-open. */
+  .sidebar {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: min(260px, 85vw);
+    min-height: 100vh;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+
+  .sidebar.is-open,
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Lớp nền giúp người dùng dễ đóng drawer bằng cách chạm ra ngoài. */
+  .sidebar-overlay {
+    position: fixed;
+    z-index: 999;
+    inset: 0;
+    visibility: hidden;
+    background-color: rgb(15 23 42 / 45%);
+    opacity: 0;
+    transition:
+      opacity 0.2s ease,
+      visibility 0.2s ease;
+  }
+
+  .sidebar-overlay.is-visible,
+  .sidebar-overlay.visible {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* Nút mở menu có vùng chạm đủ lớn cho ngón tay. */
+  .menu-toggle,
+  .sidebar-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px;
+    color: var(--color-primary);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  /* Nội dung chiếm toàn bộ chiều rộng khi sidebar thành drawer. */
+  .app-layout {
+    display: block;
+  }
+
+  .main-content {
+    width: 100%;
+  }
+
+  /* Các layout 2 hoặc 3 cột chuyển thành một cột. */
+  .grid-2,
+  .grid-3,
+  .cards-grid,
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Các nút và ô nhập dễ bấm trên màn hình nhỏ. */
+  .btn,
+  .form-control,
+  select.form-control,
+  textarea.form-control {
+    min-height: 44px;
+  }
+
+  .btn {
+    padding: 10px 16px;
+  }
+
+  /* Khoảng cách gọn hơn nhưng vẫn thoáng cho người dùng hiện trường. */
+  .topbar,
+  .page-content {
+    padding: 16px;
+  }
+
+  /* Bảng dài có thể vuốt ngang thay vì làm vỡ bố cục. */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    min-width: 600px;
+  }
+
+  /* Accordion native: summary là dòng tiêu đề có thể chạm để mở. */
+  .sidebar details summary {
+    min-height: 44px;
+    padding: 10px 8px;
+    cursor: pointer;
+  }
+
+  .sidebar details ul,
+  .sidebar details .submenu {
+    margin: 0;
+    padding-left: 20px;
+  }
+}

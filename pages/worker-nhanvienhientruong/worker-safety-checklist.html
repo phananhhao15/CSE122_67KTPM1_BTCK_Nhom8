@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checklist an toàn hằng ngày | SiteSafe</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <style>
+      .checklist-page {
+        width: min(1100px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0;
+      }
+
+      .checklist-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+
+      .checklist-header h1 {
+        margin: 0 0 6px;
+        color: var(--color-primary);
+        font-size: clamp(1.7rem, 4vw, 2.4rem);
+      }
+
+      .checklist-header p {
+        margin: 0;
+        color: #64748b;
+      }
+
+      /* Thay URL ảnh bằng ảnh minh họa công trường chính thức khi dự án có tài sản riêng. */
+      /* Prompt AI: "Construction worker performing a daily safety checklist at an organized building site, wearing a white hard hat and reflective vest, clipboard in hand, realistic professional safety photography." */
+      .checklist-illustration {
+        width: 100%;
+        height: 220px;
+        margin-bottom: 24px;
+        background-image:
+          linear-gradient(90deg, rgb(15 23 42 / 75%), rgb(15 23 42 / 15%)),
+          url("https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1400&q=80");
+        background-position: center;
+        background-size: cover;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        padding: 28px;
+        color: var(--color-white);
+      }
+
+      .checklist-illustration h2 {
+        max-width: 480px;
+        margin: 0;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+      }
+
+      .checklist-meta {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .checklist-meta label {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--color-primary);
+        font-weight: 600;
+      }
+
+      .checklist-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .checklist-table {
+        min-width: 680px;
+      }
+
+      .checklist-table th,
+      .checklist-table td {
+        vertical-align: middle;
+      }
+
+      .checklist-table th:not(:first-child),
+      .checklist-table td:not(:first-child) {
+        width: 126px;
+        text-align: center;
+      }
+
+      .choice {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 72px;
+        min-height: 52px;
+        padding: 8px;
+        color: var(--color-primary);
+        background-color: #f8fafc;
+        border: 2px solid var(--color-border);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .choice input {
+        width: 22px;
+        height: 22px;
+        margin: 0 6px 0 0;
+        accent-color: var(--color-success);
+        cursor: pointer;
+      }
+
+      .choice:has(input:checked) {
+        color: #166534;
+        background-color: #dcfce7;
+        border-color: var(--color-success);
+      }
+
+      .choice--fail input {
+        accent-color: var(--color-danger);
+      }
+
+      .choice--fail:has(input:checked) {
+        color: #991b1b;
+        background-color: #fee2e2;
+        border-color: var(--color-danger);
+      }
+
+      .checklist-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 24px;
+      }
+
+      .checklist-actions .btn {
+        min-height: 46px;
+      }
+
+      .report-button {
+        flex: 0 0 auto;
+        background-color: var(--color-warning);
+        border-color: var(--color-warning);
+      }
+
+      @media (max-width: 768px) {
+        .checklist-page {
+          width: min(640px, calc(100% - 24px));
+          padding: 20px 0;
+        }
+
+        .checklist-header {
+          display: block;
+        }
+
+        .checklist-header .btn {
+          width: 100%;
+          margin-top: 16px;
+          min-height: 48px;
+        }
+
+        .checklist-illustration {
+          height: 180px;
+          padding: 20px;
+        }
+
+        .checklist-meta {
+          grid-template-columns: 1fr;
+        }
+
+        .checklist-actions {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+
+        .checklist-actions .btn {
+          width: 100%;
+          min-height: 52px;
+        }
+      }
+    </style>
+  </head>
+  <body data-required-role="WORKER">
+    <main class="checklist-page">
+      <header class="checklist-header">
+        <div>
+          <h1>Checklist an toàn hằng ngày</h1>
+          <p>Hoàn thành kiểm tra trước khi bắt đầu ca làm việc.</p>
+        </div>
+        <a class="btn btn-warning" href="worker-hazard-create.html"
+          >Báo cáo sự cố</a
+        >
+      </header>
+
+      <section
+        class="checklist-illustration"
+        aria-label="Ảnh minh họa kiểm tra an toàn"
+      >
+        <h2>An toàn bắt đầu từ một lần kiểm tra cẩn thận.</h2>
+      </section>
+
+      <form id="checklistForm" action="#" method="post">
+        <section class="card checklist-meta" aria-label="Thông tin ca kiểm tra">
+          <div>
+            <label for="check-date">Ngày kiểm tra</label>
+            <input
+              class="form-control"
+              id="check-date"
+              name="checkDate"
+              type="date"
+              required
+            />
+          </div>
+          <div>
+            <label for="work-zone">Khu vực làm việc</label>
+            <select
+              class="form-control"
+              id="work-zone"
+              name="workZone"
+              required
+            >
+              <option value="">Chọn khu vực</option>
+              <option value="LM-STR">Khu kết cấu và giàn giáo</option>
+              <option value="LM-MAT">Kho vật tư và thiết bị nâng</option>
+              <option value="BR-PILE">
+                Khu thi công cọc và mố cầu phía Đông
+              </option>
+            </select>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="checklist-title">
+          <h2 id="checklist-title">Nội dung kiểm tra</h2>
+          <div class="checklist-table-wrap">
+            <table class="table checklist-table">
+              <thead>
+                <tr>
+                  <th scope="col">Hạng mục an toàn</th>
+                  <th scope="col">Đạt</th>
+                  <th scope="col">Không đạt</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    Đã đội mũ bảo hộ và mang đầy đủ trang bị bảo hộ cá nhân.
+                  </td>
+                  <td>
+                    <label class="choice">
+                      <input type="radio" name="item-1" value="pass" required />
+                      Đạt
+                    </label>
+                  </td>
+                  <td>
+                    <label class="choice choice--fail">
+                      <input type="radio" name="item-1" value="fail" />
+                      Không đạt
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Lối đi, sàn thao tác và khu vực làm việc không có vật cản
+                    nguy hiểm.
+                  </td>
+                  <td>
+                    <label class="choice">
+                      <input type="radio" name="item-2" value="pass" required />
+                      Đạt
+                    </label>
+                  </td>
+                  <td>
+                    <label class="choice choice--fail">
+                      <input type="radio" name="item-2" value="fail" />
+                      Không đạt
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Máy móc, dụng cụ và dây điện đã được kiểm tra trước khi sử
+                    dụng.
+                  </td>
+                  <td>
+                    <label class="choice">
+                      <input type="radio" name="item-3" value="pass" required />
+                      Đạt
+                    </label>
+                  </td>
+                  <td>
+                    <label class="choice choice--fail">
+                      <input type="radio" name="item-3" value="fail" />
+                      Không đạt
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Khu vực có nguy cơ rơi ngã đã được rào chắn và đặt biển cảnh
+                    báo.
+                  </td>
+                  <td>
+                    <label class="choice">
+                      <input type="radio" name="item-4" value="pass" required />
+                      Đạt
+                    </label>
+                  </td>
+                  <td>
+                    <label class="choice choice--fail">
+                      <input type="radio" name="item-4" value="fail" />
+                      Không đạt
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Đã nắm rõ hướng dẫn công việc và phương án ứng phó khẩn cấp
+                    trong ca.
+                  </td>
+                  <td>
+                    <label class="choice">
+                      <input type="radio" name="item-5" value="pass" required />
+                      Đạt
+                    </label>
+                  </td>
+                  <td>
+                    <label class="choice choice--fail">
+                      <input type="radio" name="item-5" value="fail" />
+                      Không đạt
+                    </label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="checklist-actions">
+            <p>Hãy báo ngay cho cán bộ an toàn nếu có mục “Không đạt”.</p>
+            <button class="btn btn-success" type="submit">Lưu checklist</button>
+          </div>
+          <p id="saveMessage" role="status"></p>
+        </section>
+      </form>
+    </main>
+    <script src="../../js/api.js"></script>
+    <script>
+      document
+        .getElementById("checklistForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const formData = new FormData(event.currentTarget);
+          const result = {
+            checkDate: formData.get("checkDate"),
+            workZone: formData.get("workZone"),
+            items: [1, 2, 3, 4, 5].map((number) => ({
+              id: `item-${number}`,
+              result: formData.get(`item-${number}`),
+            })),
+            submittedAt: new Date().toISOString(),
+          };
+
+          siteSafeApi.saveChecklistResult(result);
+          document.getElementById("saveMessage").textContent =
+            "Đã lưu checklist vào dữ liệu dùng chung.";
+        });
+    </script>
+    <script src="../../js/main.js"></script>
+  </body>
+</html>

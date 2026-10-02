@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Khôi phục mật khẩu | SiteSafe</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .forgot-page {
+        display: grid;
+        grid-template-columns: minmax(280px, 0.85fr) minmax(320px, 1.15fr);
+        gap: 32px;
+        align-items: center;
+        width: min(1000px, calc(100% - 32px));
+        min-height: 100vh;
+        margin: 0 auto;
+        padding: 32px 0;
+      }
+
+      .forgot-banner {
+        min-height: 480px;
+        padding: 32px;
+        color: var(--color-white);
+        background-image:
+          linear-gradient(rgb(15 23 42 / 30%), rgb(15 23 42 / 72%)),
+          url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80");
+        background-position: center;
+        background-size: cover;
+        border-radius: 8px;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .forgot-banner h1 {
+        margin: 0 0 8px;
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        line-height: 1.15;
+      }
+
+      .forgot-banner p {
+        max-width: 380px;
+        margin: 0;
+        color: #e2e8f0;
+      }
+
+      .forgot-form {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .forgot-form h2 {
+        margin-top: 0;
+        color: var(--color-primary);
+      }
+
+      .forgot-form label {
+        display: block;
+        margin: 20px 0 6px;
+        color: var(--color-primary);
+        font-weight: 600;
+      }
+
+      .forgot-form .btn {
+        width: 100%;
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .forgot-message {
+        margin: 12px 0 0;
+        color: #64748b;
+        font-size: 0.92rem;
+      }
+
+      .forgot-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #2563eb;
+        text-decoration: none;
+      }
+
+      .forgot-link:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        .forgot-page {
+          grid-template-columns: 1fr;
+          width: min(560px, calc(100% - 24px));
+          padding: 24px 0;
+        }
+
+        .forgot-banner {
+          min-height: 260px;
+          padding: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="forgot-page">
+      <!-- Thay URL trong background-image bằng ảnh banner chính thức của SiteSafe khi có ảnh mới. -->
+      <!-- Prompt AI: "Realistic construction site safety officer helping a worker, organized building site, safety helmets and reflective vests, warm natural light, professional documentary photography." -->
+      <section class="forgot-banner" aria-label="Hỗ trợ khôi phục mật khẩu">
+        <div>
+          <h1>Luôn đồng hành cùng bạn</h1>
+          <p>
+            SiteSafe sẽ giúp bạn lấy lại quyền truy cập tài khoản một cách nhanh
+            chóng và an toàn.
+          </p>
+        </div>
+      </section>
+
+      <section class="card forgot-form" aria-labelledby="forgot-title">
+        <h2 id="forgot-title">Khôi phục mật khẩu</h2>
+        <p>
+          Nhập email đã đăng ký. Chúng tôi sẽ gửi hướng dẫn tạo mật khẩu mới đến
+          địa chỉ này.
+        </p>
+
+        <form action="#" method="post">
+          <label for="recovery-email">Email đăng ký</label>
+          <input
+            class="form-control"
+            id="recovery-email"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          />
+          <button class="btn" type="submit">Gửi hướng dẫn khôi phục</button>
+        </form>
+
+        <p class="forgot-message">
+          Vui lòng kiểm tra cả thư mục Spam nếu bạn chưa nhận được email sau vài
+          phút.
+        </p>
+        <a class="forgot-link" href="login.html">Quay lại trang đăng nhập</a>
+      </section>
+    </main>
+  </body>
+</html>

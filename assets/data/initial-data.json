@@ -1,0 +1,659 @@
+{
+  "sites": [
+    {
+      "id": "S-001",
+      "code": "LM-2026",
+      "name": "Công trường Tòa nhà Cao tầng Landmark",
+      "location": "Thủ Đức, TP. Hồ Chí Minh",
+      "manager": "Phạm Minh Quân",
+      "status": "ACTIVE",
+      "statusLabel": "Đang xử lý",
+      "startDate": "2026-01-15",
+      "endDate": "2027-06-30",
+      "progress": 42,
+      "contact": "quan.pm@sitesafe.test"
+    },
+    {
+      "id": "S-002",
+      "code": "BR-2026",
+      "name": "Cầu vượt Bình Triệu",
+      "location": "Bình Thạnh, TP. Hồ Chí Minh",
+      "manager": "Lê Hoàng Nam",
+      "status": "ACTIVE",
+      "statusLabel": "Đang xử lý",
+      "startDate": "2026-03-01",
+      "endDate": "2027-02-28",
+      "progress": 28,
+      "contact": "nam.lh@sitesafe.test"
+    },
+    {
+      "id": "S-003",
+      "code": "HN-2025",
+      "name": "Khu đô thị ven sông Hồng",
+      "location": "Long Biên, Hà Nội",
+      "manager": "Nguyễn Thu Hà",
+      "status": "ARCHIVED",
+      "statusLabel": "Đã lưu trữ",
+      "startDate": "2025-04-01",
+      "endDate": "2026-08-31",
+      "progress": 100,
+      "contact": "ha.nt@sitesafe.test"
+    },
+    {
+      "id": "S-004",
+      "code": "DN-2026",
+      "name": "Nhà máy logistics Hòa Khánh",
+      "location": "Liên Chiểu, Đà Nẵng",
+      "manager": "Đặng Minh Khoa",
+      "status": "PENDING",
+      "statusLabel": "Đang chờ",
+      "startDate": "2026-10-05",
+      "endDate": "2027-12-20",
+      "progress": 0,
+      "contact": "khoa.dm@sitesafe.test"
+    }
+  ],
+  "zones": [
+    {
+      "id": "Z-001",
+      "siteId": "S-001",
+      "code": "LM-A",
+      "name": "Tòa A - Khối tháp 25 tầng",
+      "riskLevel": "CRITICAL",
+      "description": "Thi công kết cấu tầng cao và giàn giáo.",
+      "supervisor": "Bùi Văn D",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "Z-002",
+      "siteId": "S-001",
+      "code": "LM-B",
+      "name": "Kho vật tư và nhiên liệu",
+      "riskLevel": "MEDIUM",
+      "description": "Lưu trữ máy móc, sơn và nhiên liệu.",
+      "supervisor": "Trần Văn C",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "Z-003",
+      "siteId": "S-001",
+      "code": "LM-C",
+      "name": "Khu điều hành và hạ tầng",
+      "riskLevel": "LOW",
+      "description": "Văn phòng ban chỉ huy công trường.",
+      "supervisor": "Đỗ Ngọc Mai",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "Z-004",
+      "siteId": "S-002",
+      "code": "BR-E",
+      "name": "Mố cầu phía Đông",
+      "riskLevel": "HIGH",
+      "description": "Thi công cọc khoan nhồi và dầm cầu.",
+      "supervisor": "Võ Thành Long",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "Z-005",
+      "siteId": "S-002",
+      "code": "BR-W",
+      "name": "Mố cầu phía Tây",
+      "riskLevel": "MEDIUM",
+      "description": "Điều phối giao thông và thiết bị nâng.",
+      "supervisor": "Phan Quốc Huy",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "Z-006",
+      "siteId": "S-003",
+      "code": "HN-R",
+      "name": "Khu nhà ở R1",
+      "riskLevel": "LOW",
+      "description": "Khu vực đã hoàn thiện.",
+      "supervisor": "Nguyễn Thu Hà",
+      "status": "ARCHIVED",
+      "statusLabel": "Đã lưu trữ"
+    },
+    {
+      "id": "Z-007",
+      "siteId": "S-004",
+      "code": "DN-L",
+      "name": "Khu lắp đặt dây chuyền",
+      "riskLevel": "HIGH",
+      "description": "Khu vực chuẩn bị lắp đặt kết cấu thép và băng tải.",
+      "supervisor": "Đặng Minh Khoa",
+      "status": "PENDING",
+      "statusLabel": "Đang chờ"
+    },
+    {
+      "id": "Z-008",
+      "siteId": "S-001",
+      "code": "LM-D",
+      "name": "Khu tập kết phế liệu",
+      "riskLevel": "MEDIUM",
+      "description": "Khu vực tạm thời đang chờ phê duyệt phương án thu gom.",
+      "supervisor": "Nguyễn Quốc Bảo",
+      "status": "REJECTED",
+      "statusLabel": "Bị từ chối"
+    }
+  ],
+  "checklists": [
+    {
+      "id": "CL-001",
+      "title": "An toàn công việc trên cao",
+      "workType": "Thi công giàn giáo",
+      "version": 3,
+      "status": "PUBLISHED",
+      "items": [
+        {
+          "id": "CLI-001",
+          "label": "Trang bị dây an toàn 2 móc",
+          "required": true
+        },
+        {
+          "id": "CLI-002",
+          "label": "Sàn thao tác có rào chắn",
+          "required": true
+        },
+        {
+          "id": "CLI-003",
+          "label": "Tấm chống rơi đã được gia cố",
+          "required": true
+        },
+        {
+          "id": "CLI-004",
+          "label": "Kiểm tra thời tiết trước ca",
+          "required": false
+        }
+      ],
+      "createdBy": "Admin",
+      "updatedAt": "2026-08-20"
+    },
+    {
+      "id": "CL-002",
+      "title": "An toàn nguồn điện thi công",
+      "workType": "Cơ điện và hàn cắt",
+      "version": 2,
+      "status": "PUBLISHED",
+      "items": [
+        {
+          "id": "CLI-005",
+          "label": "Tủ điện có aptomat chống giật",
+          "required": true
+        },
+        { "id": "CLI-006", "label": "Cáp nguồn không hở vỏ", "required": true },
+        {
+          "id": "CLI-007",
+          "label": "Nối đất thiết bị đầy đủ",
+          "required": true
+        },
+        {
+          "id": "CLI-008",
+          "label": "Khu vực hàn có màn chắn",
+          "required": false
+        }
+      ],
+      "createdBy": "Admin",
+      "updatedAt": "2026-08-12"
+    },
+    {
+      "id": "CL-003",
+      "title": "An toàn nâng hạ vật liệu",
+      "workType": "Vận hành cẩu tháp",
+      "version": 1,
+      "status": "DRAFT",
+      "statusLabel": "Đang chờ",
+      "items": [
+        {
+          "id": "CLI-009",
+          "label": "Kiểm tra tải trọng và bán kính nâng",
+          "required": true
+        },
+        {
+          "id": "CLI-010",
+          "label": "Tín hiệu viên có mặt tại vị trí",
+          "required": true
+        },
+        {
+          "id": "CLI-011",
+          "label": "Khu vực bên dưới đã được rào chắn",
+          "required": true
+        }
+      ],
+      "createdBy": "Bùi Văn D",
+      "updatedAt": "2026-09-01"
+    },
+    {
+      "id": "CL-004",
+      "title": "Kiểm soát không gian hạn chế",
+      "workType": "Bảo trì bồn chứa",
+      "version": 1,
+      "status": "REJECTED",
+      "statusLabel": "Bị từ chối",
+      "items": [
+        { "id": "CLI-012", "label": "Đo khí trước khi vào", "required": true },
+        {
+          "id": "CLI-013",
+          "label": "Có người giám sát bên ngoài",
+          "required": true
+        }
+      ],
+      "createdBy": "Trần Minh An",
+      "updatedAt": "2026-09-02",
+      "reviewNote": "Cần bổ sung quy trình cứu hộ."
+    },
+    {
+      "id": "CL-005",
+      "title": "Kiểm tra phá dỡ khu cũ",
+      "workType": "Phá dỡ",
+      "version": 2,
+      "status": "ARCHIVED",
+      "statusLabel": "Đã lưu trữ",
+      "items": [
+        { "id": "CLI-014", "label": "Cô lập nguồn điện", "required": true },
+        { "id": "CLI-015", "label": "Thiết lập vùng cấm", "required": true }
+      ],
+      "createdBy": "Admin",
+      "updatedAt": "2026-07-10"
+    }
+  ],
+  "hazards": [
+    {
+      "id": "HZ-001",
+      "siteId": "S-001",
+      "zoneId": "Z-001",
+      "reporter": "Nguyễn Văn An",
+      "description": "Giàn giáo tầng 5 thiếu sàn thao tác và dây cứu sinh.",
+      "category": "Làm việc trên cao",
+      "priority": "CRITICAL",
+      "status": "IN_PROGRESS",
+      "createdAt": "2026-09-15T08:30:00+07:00",
+      "evidence": ["scaffold-level5.jpg"]
+    },
+    {
+      "id": "HZ-002",
+      "siteId": "S-001",
+      "zoneId": "Z-002",
+      "reporter": "Trần Văn C",
+      "description": "Thiếu bình chữa cháy tại khu vực lưu trữ nhiên liệu.",
+      "category": "PCCC",
+      "priority": "HIGH",
+      "status": "OPEN",
+      "createdAt": "2026-09-16T10:15:00+07:00",
+      "evidence": []
+    },
+    {
+      "id": "HZ-003",
+      "siteId": "S-002",
+      "zoneId": "Z-004",
+      "reporter": "Phạm Đức Minh",
+      "description": "Rào chắn hố móng phía Đông bị lệch sau mưa lớn.",
+      "category": "Hạ tầng công trường",
+      "priority": "HIGH",
+      "status": "RESOLVED",
+      "createdAt": "2026-09-12T14:00:00+07:00",
+      "resolvedAt": "2026-09-13T09:20:00+07:00",
+      "evidence": ["east-pit-barrier.jpg"]
+    },
+    {
+      "id": "HZ-004",
+      "siteId": "S-001",
+      "zoneId": "Z-003",
+      "reporter": "Lê Thị Hương",
+      "description": "Lối thoát hiểm văn phòng bị che bởi thùng carton.",
+      "category": "Lối thoát hiểm",
+      "priority": "MEDIUM",
+      "status": "OPEN",
+      "createdAt": "2026-09-17T07:45:00+07:00",
+      "evidence": []
+    },
+    {
+      "id": "HZ-005",
+      "siteId": "S-002",
+      "zoneId": "Z-005",
+      "reporter": "Hoàng Văn Phúc",
+      "description": "Công nhân chưa đeo áo phản quang khi làm gần làn xe.",
+      "category": "PPE",
+      "priority": "MEDIUM",
+      "status": "IN_PROGRESS",
+      "createdAt": "2026-09-18T16:10:00+07:00",
+      "evidence": []
+    },
+    {
+      "id": "HZ-006",
+      "siteId": "S-001",
+      "zoneId": "Z-001",
+      "reporter": "Nguyễn Văn An",
+      "description": "Vật liệu xếp gần mép sàn tầng 8.",
+      "category": "Vật rơi",
+      "priority": "CRITICAL",
+      "status": "CLOSED",
+      "statusLabel": "Hoàn thành",
+      "createdAt": "2026-09-10T11:30:00+07:00",
+      "resolvedAt": "2026-09-10T15:30:00+07:00",
+      "evidence": ["edge-storage.jpg"]
+    },
+    {
+      "id": "HZ-007",
+      "siteId": "S-004",
+      "zoneId": "Z-007",
+      "reporter": "Đặng Minh Khoa",
+      "description": "Khu vực lắp đặt chưa có phương án phân luồng người và thiết bị.",
+      "category": "Điều phối giao thông",
+      "priority": "HIGH",
+      "status": "PENDING",
+      "statusLabel": "Đang chờ",
+      "createdAt": "2026-09-21T09:00:00+07:00",
+      "evidence": []
+    },
+    {
+      "id": "HZ-008",
+      "siteId": "S-001",
+      "zoneId": "Z-008",
+      "reporter": "Nguyễn Quốc Bảo",
+      "description": "Phương án đặt container phế liệu bị thiếu sơ đồ thoát nước.",
+      "category": "Môi trường",
+      "priority": "MEDIUM",
+      "status": "REJECTED",
+      "statusLabel": "Bị từ chối",
+      "createdAt": "2026-09-19T13:40:00+07:00",
+      "evidence": ["waste-layout.jpg"],
+      "reviewNote": "Yêu cầu cập nhật bản vẽ mặt bằng."
+    },
+    {
+      "id": "HZ-009",
+      "siteId": "S-003",
+      "zoneId": "Z-006",
+      "reporter": "Nguyễn Thu Hà",
+      "description": "Biên bản mối nguy của khu vực đã đóng dự án.",
+      "category": "Hồ sơ",
+      "priority": "LOW",
+      "status": "ARCHIVED",
+      "statusLabel": "Đã lưu trữ",
+      "createdAt": "2026-08-30T10:00:00+07:00",
+      "evidence": []
+    }
+  ],
+  "correctiveActions": [
+    {
+      "id": "ACT-001",
+      "hazardId": "HZ-001",
+      "assignee": "Đội thi công giàn giáo 1",
+      "deadline": "2026-09-19",
+      "progress": 80,
+      "status": "IN_PROGRESS",
+      "notes": "Đã bổ sung sàn thao tác, chờ nghiệm thu dây cứu sinh.",
+      "createdAt": "2026-09-15"
+    },
+    {
+      "id": "ACT-002",
+      "hazardId": "HZ-002",
+      "assignee": "Đội PCCC công trường",
+      "deadline": "2026-09-20",
+      "progress": 20,
+      "status": "PENDING",
+      "notes": "Đặt mua 2 bình CO2 và 2 bình bột.",
+      "createdAt": "2026-09-16"
+    },
+    {
+      "id": "ACT-003",
+      "hazardId": "HZ-003",
+      "assignee": "Tổ hạ tầng Bình Triệu",
+      "deadline": "2026-09-13",
+      "progress": 100,
+      "status": "COMPLETED",
+      "notes": "Đã dựng lại rào chắn và kiểm tra độ ổn định.",
+      "createdAt": "2026-09-12"
+    },
+    {
+      "id": "ACT-004",
+      "hazardId": "HZ-004",
+      "assignee": "Bộ phận hành chính",
+      "deadline": "2026-09-18",
+      "progress": 0,
+      "status": "OVERDUE",
+      "notes": "Cần dọn vật cản và đánh dấu lối thoát hiểm.",
+      "createdAt": "2026-09-17"
+    },
+    {
+      "id": "ACT-005",
+      "hazardId": "HZ-005",
+      "assignee": "Chỉ huy ca đêm",
+      "deadline": "2026-09-21",
+      "progress": 50,
+      "status": "IN_PROGRESS",
+      "statusLabel": "Đang xử lý",
+      "notes": "Đã cấp bổ sung áo phản quang cho tổ thi công.",
+      "createdAt": "2026-09-18"
+    },
+    {
+      "id": "ACT-006",
+      "hazardId": "HZ-007",
+      "assignee": "Ban chỉ huy công trường",
+      "deadline": "2026-09-28",
+      "progress": 0,
+      "status": "PENDING",
+      "statusLabel": "Đang chờ",
+      "notes": "Chờ phê duyệt phương án phân luồng.",
+      "createdAt": "2026-09-21"
+    },
+    {
+      "id": "ACT-007",
+      "hazardId": "HZ-008",
+      "assignee": "Đội môi trường",
+      "deadline": "2026-09-25",
+      "progress": 0,
+      "status": "REJECTED",
+      "statusLabel": "Bị từ chối",
+      "notes": "Đã trả lại để bổ sung bản vẽ.",
+      "createdAt": "2026-09-20"
+    },
+    {
+      "id": "ACT-008",
+      "hazardId": "HZ-009",
+      "assignee": "Ban quản lý dự án",
+      "deadline": "2026-08-31",
+      "progress": 100,
+      "status": "ARCHIVED",
+      "statusLabel": "Đã lưu trữ",
+      "notes": "Lưu hồ sơ theo dự án đã đóng.",
+      "createdAt": "2026-08-30"
+    }
+  ],
+  "inspections": [
+    {
+      "id": "INS-001",
+      "siteId": "S-001",
+      "zoneId": "Z-001",
+      "inspector": "Cán bộ an toàn - Bùi Văn D",
+      "date": "2026-09-20",
+      "type": "Định kỳ",
+      "status": "SCHEDULED",
+      "checklistId": "CL-001",
+      "notes": ""
+    },
+    {
+      "id": "INS-002",
+      "siteId": "S-001",
+      "zoneId": "Z-002",
+      "inspector": "Cán bộ an toàn - Bùi Văn D",
+      "date": "2026-09-19",
+      "type": "Đột xuất",
+      "status": "IN_PROGRESS",
+      "checklistId": "CL-002",
+      "notes": "Kiểm tra sau phản ánh thiếu bình chữa cháy."
+    },
+    {
+      "id": "INS-003",
+      "siteId": "S-002",
+      "zoneId": "Z-004",
+      "inspector": "Võ Thanh Tùng",
+      "date": "2026-09-18",
+      "type": "Định kỳ",
+      "status": "COMPLETED",
+      "checklistId": "CL-003",
+      "score": 92,
+      "notes": "Đã hoàn tất, không phát sinh nguy cơ nghiêm trọng."
+    },
+    {
+      "id": "INS-004",
+      "siteId": "S-001",
+      "zoneId": "Z-003",
+      "inspector": "Đỗ Ngọc Mai",
+      "date": "2026-09-22",
+      "type": "Định kỳ",
+      "status": "SCHEDULED",
+      "statusLabel": "Đang chờ",
+      "checklistId": "CL-002",
+      "notes": ""
+    },
+    {
+      "id": "INS-005",
+      "siteId": "S-001",
+      "zoneId": "Z-008",
+      "inspector": "Bùi Văn D",
+      "date": "2026-09-23",
+      "type": "Đột xuất",
+      "status": "REJECTED",
+      "statusLabel": "Bị từ chối",
+      "checklistId": "CL-003",
+      "notes": "Khu vực chưa được bàn giao để kiểm tra."
+    },
+    {
+      "id": "INS-006",
+      "siteId": "S-003",
+      "zoneId": "Z-006",
+      "inspector": "Nguyễn Thu Hà",
+      "date": "2026-08-30",
+      "type": "Định kỳ",
+      "status": "ARCHIVED",
+      "statusLabel": "Đã lưu trữ",
+      "checklistId": "CL-001",
+      "score": 88,
+      "notes": "Lưu cùng hồ sơ dự án đã đóng."
+    }
+  ],
+  "pages": [
+    {
+      "id": "PG-001",
+      "route": "pages/login.html",
+      "title": "Đăng nhập",
+      "role": "public"
+    },
+    {
+      "id": "PG-002",
+      "route": "pages/register-trangdkitaikhoan.html",
+      "title": "Đăng ký tài khoản",
+      "role": "public"
+    },
+    {
+      "id": "PG-003",
+      "route": "pages/forgot-pasword-quenmk-datlaimk.html",
+      "title": "Quên mật khẩu",
+      "role": "public"
+    },
+    {
+      "id": "PG-004",
+      "route": "pages/worker-nhanvienhientruong/worker-safety-checklist.html",
+      "title": "Thực hiện checklist an toàn",
+      "role": "worker"
+    },
+    {
+      "id": "PG-005",
+      "route": "pages/worker-nhanvienhientruong/worker-hazard-create.html",
+      "title": "Báo cáo mối nguy",
+      "role": "worker"
+    },
+    {
+      "id": "PG-006",
+      "route": "pages/worker-nhanvienhientruong/worker-my-hazards.html",
+      "title": "Mối nguy của tôi",
+      "role": "worker"
+    },
+    {
+      "id": "PG-007",
+      "route": "pages/safety-officer-can bo an toan/safety-dashboard.html",
+      "title": "Bảng điều khiển an toàn",
+      "role": "safety"
+    },
+    {
+      "id": "PG-008",
+      "route": "pages/safety-officer-can bo an toan/safety-hazard-detail.html",
+      "title": "Chi tiết mối nguy",
+      "role": "safety"
+    },
+    {
+      "id": "PG-009",
+      "route": "pages/safety-officer-can bo an toan/safety-inspection-management.html",
+      "title": "Quản lý kiểm tra",
+      "role": "safety"
+    },
+    {
+      "id": "PG-010",
+      "route": "pages/site-quanlycongtruong/manager-zone-risk-map.html",
+      "title": "Bản đồ rủi ro khu vực",
+      "role": "manager"
+    },
+    {
+      "id": "PG-011",
+      "route": "pages/site-quanlycongtruong/manager-corrective-actions.html",
+      "title": "Theo dõi hành động khắc phục",
+      "role": "manager"
+    },
+    {
+      "id": "PG-012",
+      "route": "pages/site-quanlycongtruong/manager-safety-report.html",
+      "title": "Báo cáo an toàn",
+      "role": "manager"
+    },
+    {
+      "id": "PG-013",
+      "route": "pages/admin-quantrivien/admin-checklist-template-management.html",
+      "title": "Quản lý mẫu checklist",
+      "role": "admin"
+    },
+    {
+      "id": "PG-014",
+      "route": "pages/admin-quantrivien/admin-zone-management.html",
+      "title": "Quản lý khu vực",
+      "role": "admin"
+    },
+    {
+      "id": "PG-015",
+      "route": "pages/admin-quantrivien/admin-user-management.html",
+      "title": "Quản lý người dùng",
+      "role": "admin"
+    },
+    {
+      "id": "PG-016",
+      "route": "pages/profile.html",
+      "title": "Hồ sơ cá nhân",
+      "role": "all"
+    },
+    {
+      "id": "PG-017",
+      "route": "pages/notifications.html",
+      "title": "Thông báo",
+      "role": "all"
+    },
+    {
+      "id": "PG-018",
+      "route": "pages/settings.html",
+      "title": "Cài đặt hệ thống",
+      "role": "admin"
+    },
+    {
+      "id": "PG-019",
+      "route": "pages/403.html",
+      "title": "Không có quyền truy cập",
+      "role": "all"
+    },
+    {
+      "id": "PG-020",
+      "route": "pages/404.html",
+      "title": "Không tìm thấy trang",
+      "role": "all"
+    }
+  ]
+}

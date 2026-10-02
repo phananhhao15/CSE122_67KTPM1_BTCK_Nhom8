@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hành động khắc phục | SiteSafe</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <style>
+      .actions-page {
+        width: min(1200px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 30px 0;
+      }
+
+      .actions-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+
+      .actions-header h1 {
+        margin: 0 0 6px;
+        color: var(--color-primary);
+        font-size: clamp(1.7rem, 4vw, 2.3rem);
+      }
+
+      .actions-header p {
+        margin: 0;
+        color: #64748b;
+      }
+
+      /* Thay URL ảnh banner bằng ảnh hoạt động khắc phục thực tế khi có ảnh local. */
+      /* Prompt AI: "Construction safety team repairing a hazardous work area, workers installing a secure guardrail, hard hats and reflective vests, realistic workplace safety photography." */
+      .actions-banner {
+        min-height: 180px;
+        margin-bottom: 24px;
+        padding: 28px;
+        color: var(--color-white);
+        background-image:
+          linear-gradient(90deg, rgb(15 23 42 / 84%), rgb(15 23 42 / 18%)),
+          url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80");
+        background-position: center;
+        background-size: cover;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+      }
+
+      .actions-banner h2 {
+        max-width: 520px;
+        margin: 0;
+        font-size: clamp(1.35rem, 3vw, 2rem);
+        line-height: 1.25;
+      }
+
+      .action-summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .summary-card {
+        padding: 16px 18px;
+      }
+
+      .summary-card span {
+        display: block;
+        color: #64748b;
+        font-size: 0.88rem;
+      }
+
+      .summary-card strong {
+        display: block;
+        margin-top: 5px;
+        color: var(--color-primary);
+        font-size: 1.7rem;
+      }
+
+      .summary-card--progress strong {
+        color: var(--color-warning);
+      }
+      .summary-card--done strong {
+        color: var(--color-success);
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .actions-table {
+        min-width: 900px;
+      }
+
+      .actions-table td,
+      .actions-table th {
+        vertical-align: middle;
+      }
+
+      .action-name {
+        color: var(--color-primary);
+        font-weight: 600;
+      }
+
+      .action-context {
+        display: block;
+        margin-top: 4px;
+        color: #64748b;
+        font-size: 0.82rem;
+      }
+
+      .progress-cell {
+        width: 220px;
+      }
+
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        color: #475569;
+        font-size: 0.84rem;
+        font-weight: 600;
+      }
+
+      .progress-track {
+        width: 100%;
+        height: 10px;
+        overflow: hidden;
+        background: #e2e8f0;
+        border-radius: 999px;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background: var(--color-warning);
+        border-radius: inherit;
+        transition: width 0.25s ease;
+      }
+
+      .progress-bar--done {
+        background: var(--color-success);
+      }
+      .progress-bar--late {
+        background: var(--color-danger);
+      }
+
+      .status-cell {
+        white-space: nowrap;
+      }
+
+      @media (max-width: 700px) {
+        .actions-page {
+          width: min(560px, calc(100% - 24px));
+          padding: 20px 0;
+        }
+
+        .actions-header {
+          display: block;
+        }
+
+        .actions-header .btn {
+          width: 100%;
+          margin-top: 16px;
+          text-align: center;
+        }
+
+        .actions-banner {
+          min-height: 160px;
+          padding: 20px;
+        }
+
+        .action-summary {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body data-required-role="SITE_MANAGER">
+    <main class="actions-page">
+      <header class="actions-header">
+        <div>
+          <h1>Hành động khắc phục</h1>
+          <p>Theo dõi tiến độ xử lý các sự cố an toàn tại công trường.</p>
+        </div>
+        <a
+          class="btn"
+          href="../safety-officer-can bo an toan/safety-dashboard.html"
+          >Về dashboard an toàn</a
+        >
+      </header>
+
+      <section class="actions-banner" aria-label="Minh họa hành động khắc phục">
+        <h2>Biến mỗi phát hiện thành một hành động an toàn cụ thể.</h2>
+      </section>
+
+      <section class="action-summary" aria-label="Tổng quan tiến độ">
+        <article class="card summary-card">
+          <span>Tổng hành động</span>
+          <strong>18</strong>
+        </article>
+        <article class="card summary-card summary-card--progress">
+          <span>Đang thực hiện</span>
+          <strong>09</strong>
+        </article>
+        <article class="card summary-card summary-card--done">
+          <span>Đã hoàn thành</span>
+          <strong>07</strong>
+        </article>
+      </section>
+
+      <section class="card" aria-labelledby="actions-table-title">
+        <div class="section-heading">
+          <h2 id="actions-table-title">Danh sách hành động đang theo dõi</h2>
+          <span class="action-context">Cập nhật: 24/09/2026</span>
+        </div>
+        <div class="table-wrap">
+          <table class="table actions-table">
+            <thead>
+              <tr>
+                <th scope="col">Hành động khắc phục</th>
+                <th scope="col">Người phụ trách</th>
+                <th scope="col">Hạn hoàn thành</th>
+                <th scope="col">Tiến độ</th>
+                <th scope="col">Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <span class="action-name">Dựng rào chắn quanh miệng cọc</span
+                  ><span class="action-context">HZ-001 · Mố cầu phía Đông</span>
+                </td>
+                <td>Võ Thành Long</td>
+                <td>21/09/2026</td>
+                <td class="progress-cell">
+                  <div class="progress-label">
+                    <span>Đã hoàn thành</span><span>100%</span>
+                  </div>
+                  <div class="progress-track">
+                    <div
+                      class="progress-bar progress-bar--done"
+                      style="width: 100%"
+                    ></div>
+                  </div>
+                </td>
+                <td class="status-cell">
+                  <span class="badge badge-success">Hoàn thành</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="action-name"
+                    >Lắp bổ sung lan can và tấm chắn chân</span
+                  ><span class="action-context"
+                    >HZ-002 · Khu kết cấu và giàn giáo</span
+                  >
+                </td>
+                <td>Phan Quốc Huy</td>
+                <td>25/09/2026</td>
+                <td class="progress-cell">
+                  <div class="progress-label">
+                    <span>Đang thực hiện</span><span>65%</span>
+                  </div>
+                  <div class="progress-track">
+                    <div class="progress-bar" style="width: 65%"></div>
+                  </div>
+                </td>
+                <td class="status-cell">
+                  <span class="badge badge-warning">Đang xử lý</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="action-name"
+                    >Treo cao và bọc bảo vệ dây điện tạm</span
+                  ><span class="action-context">HZ-003 · Khu cơ điện</span>
+                </td>
+                <td>Trần Huy Hoàng</td>
+                <td>22/09/2026</td>
+                <td class="progress-cell">
+                  <div class="progress-label">
+                    <span>Quá hạn</span><span>35%</span>
+                  </div>
+                  <div class="progress-track">
+                    <div
+                      class="progress-bar progress-bar--late"
+                      style="width: 35%"
+                    ></div>
+                  </div>
+                </td>
+                <td class="status-cell">
+                  <span class="badge badge-danger">Cần đôn đốc</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="action-name"
+                    >Vệ sinh dầu tràn và đặt biển cảnh báo</span
+                  ><span class="action-context">HZ-004 · Kho vật tư</span>
+                </td>
+                <td>Nguyễn Minh Khoa</td>
+                <td>24/09/2026</td>
+                <td class="progress-cell">
+                  <div class="progress-label">
+                    <span>Đang thực hiện</span><span>80%</span>
+                  </div>
+                  <div class="progress-track">
+                    <div class="progress-bar" style="width: 80%"></div>
+                  </div>
+                </td>
+                <td class="status-cell">
+                  <span class="badge badge-warning">Đang xử lý</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="action-name"
+                    >Bổ sung kính bảo hộ tại khu cắt vật liệu</span
+                  ><span class="action-context"
+                    >Khu gia công · Kiểm tra định kỳ</span
+                  >
+                </td>
+                <td>Trần Huy Hoàng</td>
+                <td>18/09/2026</td>
+                <td class="progress-cell">
+                  <div class="progress-label">
+                    <span>Đã hoàn thành</span><span>100%</span>
+                  </div>
+                  <div class="progress-track">
+                    <div
+                      class="progress-bar progress-bar--done"
+                      style="width: 100%"
+                    ></div>
+                  </div>
+                </td>
+                <td class="status-cell">
+                  <span class="badge badge-success">Hoàn thành</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <script src="../../js/api.js"></script>
+    <script>
+      const savedActions = siteSafeApi.getCorrectiveActions();
+      savedActions.forEach(function (action) {
+        const row = Array.from(
+          document.querySelectorAll(".actions-table tbody tr"),
+        ).find((currentRow) =>
+          currentRow
+            .querySelector(".action-context")
+            .textContent.includes(action.id),
+        );
+        if (!row || typeof action.progress !== "number") return;
+        row.querySelector(".progress-bar").style.width = `${action.progress}%`;
+        row.querySelector(".progress-label span:last-child").textContent =
+          `${action.progress}%`;
+        row.querySelector(".progress-label span:first-child").textContent =
+          action.progress === 100 ? "Đã hoàn thành" : "Đang thực hiện";
+      });
+
+      document
+        .querySelectorAll(".actions-table tbody tr")
+        .forEach(function (row) {
+          const actionCell = row.lastElementChild;
+          const updateButton = document.createElement("button");
+          updateButton.className = "btn btn-warning update-progress";
+          updateButton.type = "button";
+          updateButton.textContent = "Cập nhật";
+          updateButton.style.marginLeft = "8px";
+          actionCell.appendChild(updateButton);
+          updateButton.addEventListener("click", function () {
+            const progressValue = Number(
+              prompt(
+                "Tiến độ mới (0-100):",
+                row
+                  .querySelector(".progress-label span:last-child")
+                  .textContent.replace("%", ""),
+              ),
+            );
+            if (
+              !Number.isFinite(progressValue) ||
+              progressValue < 0 ||
+              progressValue > 100
+            )
+              return;
+            const progress = Math.round(progressValue);
+            const progressBar = row.querySelector(".progress-bar");
+            const progressText = row.querySelector(
+              ".progress-label span:last-child",
+            );
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${progress}%`;
+            row.querySelector(".progress-label span:first-child").textContent =
+              progress === 100 ? "Đã hoàn thành" : "Đang thực hiện";
+            siteSafeApi.saveCorrectiveAction({
+              id: row
+                .querySelector(".action-context")
+                .textContent.split("·")[0]
+                .trim(),
+              title: row.querySelector(".action-name").textContent,
+              progress,
+              status: progress === 100 ? "COMPLETED" : "IN_PROGRESS",
+            });
+          });
+        });
+    </script>
+    <script src="../../js/main.js"></script>
+  </body>
+</html>
