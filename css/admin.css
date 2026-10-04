@@ -1,0 +1,207 @@
+/* ADMIN DASHBOARD STYLES */
+
+/* Header and Page Actions */
+.users-header, .template-header, .zones-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.users-header h1, .template-header h1, .zones-header h1 {
+  font-size: 1.75rem;
+  color: var(--color-primary);
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.users-header p, .template-header p, .zones-header p {
+  color: var(--color-text);
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* Banners */
+.users-banner, .template-banner, .zones-banner {
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+.users-banner h2, .template-banner h2, .zones-banner h2 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+/* Toolbar & Filters */
+.users-toolbar, .template-toolbar, .zones-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.role-filter, .template-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 250px;
+}
+.role-filter label, .template-filter label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+/* Data Tables Enhancements */
+.users-table-wrap, .table-wrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table th {
+  background: var(--color-background);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  padding: 16px;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.table td {
+  padding: 16px;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.95rem;
+  vertical-align: middle;
+}
+
+.table tr:hover td {
+  background: var(--color-background);
+}
+
+/* Avatar & Image Cells */
+.user-cell, .zone-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-border);
+}
+.zone-image {
+  width: 72px;
+  height: 54px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+}
+.user-name, .zone-name {
+  display: block;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 2px;
+}
+.user-id, .zone-code {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+/* Badges for roles */
+.role-admin { background-color: var(--color-primary); color: var(--color-white); }
+.role-safety { background-color: #3b82f6; color: var(--color-white); }
+.role-manager { background-color: #8b5cf6; color: var(--color-white); }
+.role-worker { background-color: #0ea5e9; color: var(--color-white); }
+
+/* Forms & Modals */
+.question-form, .zone-form {
+  display: none;
+  background: var(--color-background);
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  border: 1px solid var(--color-border);
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: end;
+}
+.question-form.is-visible, .zone-form.is-visible {
+  display: grid;
+}
+.question-form label, .zone-form label {
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 8px;
+  display: block;
+}
+.form-actions, .zone-form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Empty State */
+.empty-state {
+  padding: 40px;
+  text-align: center;
+  color: var(--color-text);
+  font-weight: 600;
+  display: none;
+  background: var(--color-background);
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+/* Checklist Template Specific Styles */
+.question-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  line-height: 1.4;
+  max-width: 400px;
+}
+
+.question-note {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #64748b;
+  margin-top: 6px;
+}
+
+.action-buttons, .user-actions, .zone-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-buttons .btn, .user-actions .btn, .zone-actions .btn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.action-buttons .btn-edit, .user-actions .edit-user, .zone-actions .edit-zone {
+  background-color: #f1f5f9;
+  color: var(--color-primary);
+  border: 1px solid #cbd5e1;
+  transition: all 0.2s;
+}
+
+.action-buttons .btn-edit:hover, .user-actions .edit-user:hover, .zone-actions .edit-zone:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+}
