@@ -37,13 +37,24 @@
       return defaultTrainings;
     }
     try {
-      return JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      return Array.isArray(parsed) ? parsed : defaultTrainings;
     } catch (e) {
       return defaultTrainings;
     }
   }
 
+  // Cập nhật trạng thái học của một khóa và lưu lại.
+  function updateTrainingStatus(id, status) {
+    const trainings = getTrainings().map(function (course) {
+      return course.id === id ? { ...course, status } : course;
+    });
+    localStorage.setItem("siteSafeTrainings", JSON.stringify(trainings));
+    return trainings;
+  }
+
   window.siteSafeTraining = {
     getTrainings,
+    updateTrainingStatus,
   };
 })(window);

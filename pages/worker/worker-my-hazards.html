@@ -356,12 +356,12 @@
         const hazardId = card.dataset.hazardId;
         card
           .querySelector(".edit-saved-hazard")
-          .addEventListener("click", function () {
+          .addEventListener("click", async function () {
             const hazard = siteSafeApi
               .getHazards()
               .find((item) => item.id === hazardId);
             if (!hazard) return;
-            const description = prompt(
+            const description = await showCustomPrompt(
               "Cập nhật mô tả nguy cơ:",
               hazard.description,
             );
