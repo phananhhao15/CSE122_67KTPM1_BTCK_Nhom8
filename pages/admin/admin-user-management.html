@@ -7,154 +7,7 @@
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="../../css/admin.css" />
     <link rel="stylesheet" href="../../css/responsive.css" />
-    <style>
-      /* Thay URL ảnh banner bằng ảnh quản trị người dùng local khi có ảnh dự án. */
-      /* Prompt AI: "Diverse construction site team portrait, workers, safety officer and site manager wearing hard hats and reflective vests, friendly professional avatar photography, clean background." */
-      .users-banner {
-        min-height: 160px;
-        margin-bottom: 24px;
-        padding: 28px;
-        color: var(--color-white);
-        background-image:
-          linear-gradient(90deg, rgb(15 23 42 / 86%), rgb(15 23 42 / 18%)),
-          url("https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1400&q=80");
-        background-position: center;
-        background-size: cover;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-      }
-
-      .users-banner h2 {
-        max-width: 520px;
-        margin: 0;
-        font-size: clamp(1.35rem, 3vw, 2rem);
-        line-height: 1.25;
-      }
-
-      .users-toolbar {
-        display: flex;
-        align-items: end;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 18px;
-      }
-
-      .role-filter {
-        width: min(300px, 100%);
-      }
-
-      .role-filter label {
-        display: block;
-        margin-bottom: 6px;
-        color: var(--color-primary);
-        font-size: 0.88rem;
-        font-weight: 600;
-      }
-
-      .users-table-wrap {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .users-table {
-        min-width: 900px;
-      }
-
-      .users-table td,
-      .users-table th {
-        vertical-align: middle;
-      }
-
-      .user-cell {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        min-width: 220px;
-      }
-
-      /* Avatar luôn hiển thị hình tròn và không bị méo. */
-      .user-avatar {
-        width: 46px;
-        height: 46px;
-        flex-shrink: 0;
-        border: 2px solid var(--color-info-light);
-        border-radius: 50%;
-        object-fit: cover;
-      }
-
-      .user-name {
-        display: block;
-        color: var(--color-primary);
-        font-weight: 600;
-      }
-
-      .user-id {
-        display: block;
-        margin-top: 3px;
-        color: var(--color-neutral-500);
-        font-size: 0.8rem;
-      }
-
-      .role-admin {
-        color: var(--color-info-text);
-        background: var(--color-info-light);
-      }
-      .role-safety {
-        color: var(--color-info-hover);
-        background: var(--color-info-light);
-      }
-      .role-manager {
-        color: var(--color-primary-text);
-        background: var(--color-primary-light);
-      }
-      .role-worker {
-        color: var(--color-success-text);
-        background: var(--color-success-light);
-      }
-
-      .user-actions {
-        display: flex;
-        gap: 8px;
-      }
-
-      .user-actions .btn {
-        padding: 6px 10px;
-        font-size: 0.86rem;
-      }
-
-      .edit-user {
-        color: var(--color-info-hover);
-        background: var(--color-info-light);
-        border-color: var(--color-info);
-      }
-
-      @media (max-width: 480px) {
-        .users-header .btn {
-          width: 100%;
-          margin-top: 16px;
-          text-align: center;
-        }
-
-        .users-banner {
-          min-height: 145px;
-          padding: 20px;
-        }
-
-        .users-toolbar {
-          align-items: stretch;
-          flex-direction: column;
-        }
-
-        .role-filter {
-          width: 100%;
-        }
-
-        .users-toolbar > .btn {
-          width: 100%;
-        }
-      }
-    </style>
+    
   </head>
   <body data-required-role="ADMIN">
     <div class="app-layout">
@@ -163,10 +16,7 @@
         <header class="topbar">
           <span class="topbar-title">SiteSafe</span>
           <div class="topbar-user">
-            <div class="topbar-user-info">
-              <span class="topbar-user-name">Hệ thống quản lý</span>
-              <span class="topbar-user-role" data-current-user-role></span>
-            </div>
+            <span class="topbar-user-role" data-current-user-role></span>
           </div>
         </header>
         <div class="page-content">
@@ -334,15 +184,7 @@
     <script src="../../js/api.js"></script>
     <script>
       const roleFilter = document.getElementById("role-filter");
-
-      roleFilter.addEventListener("change", function () {
-        document.querySelectorAll("#user-rows tr").forEach(function (row) {
-          row.style.display =
-            !roleFilter.value || row.dataset.role === roleFilter.value
-              ? "table-row"
-              : "none";
-        });
-      });
+      const userRows = document.getElementById("user-rows");
 
       const roleNames = {
         ADMIN: "Quản trị viên",
@@ -350,99 +192,210 @@
         SITE_MANAGER: "Quản lý công trường",
         WORKER: "Công nhân hiện trường",
       };
-      const storedUsers = siteSafeApi.getUsers();
-      storedUsers.forEach(function (user) {
-        const existingRow = Array.from(
-          document.querySelectorAll("#user-rows tr"),
-        ).find((row) => row.querySelector(".user-id").textContent === user.id);
-        if (existingRow) {
-          existingRow.dataset.role = user.role;
+      const roleClasses = {
+        ADMIN: "role-admin",
+        SAFETY_OFFICER: "role-safety",
+        SITE_MANAGER: "role-manager",
+        WORKER: "role-worker",
+      };
+      const defaultAvatar =
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80";
+
+      // Escape dữ liệu động trước khi đưa vào innerHTML để tránh XSS.
+      function escapeHtml(value) {
+        return String(value == null ? "" : value).replace(
+          /[&<>"']/g,
+          function (character) {
+            return {
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[character];
+          },
+        );
+      }
+
+      function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      function getRowId(row) {
+        return row.querySelector(".user-id").textContent.trim();
+      }
+
+      function getRowEmail(row) {
+        return row.children[1].textContent.trim();
+      }
+
+      // Cập nhật badge trạng thái và nhãn nút Khóa/Mở khóa theo status của hàng.
+      function applyRowStatus(row, status) {
+        const isLocked = status === "INACTIVE";
+        row.dataset.status = isLocked ? "INACTIVE" : "ACTIVE";
+        row.children[3].innerHTML = `<span class="badge ${isLocked ? "badge-warning" : "badge-success"}">${isLocked ? "Đã khóa" : "Đang hoạt động"}</span>`;
+        const lockButton = row.querySelector(".lock-user");
+        if (lockButton) {
+          lockButton.textContent = isLocked ? "Mở khóa" : "Khóa";
+        }
+      }
+
+      function applyRowRole(row, role) {
+        row.dataset.role = role;
+        row.children[2].innerHTML = `<span class="badge ${roleClasses[role] || ""}">${escapeHtml(roleNames[role] || role)}</span>`;
+      }
+
+      // Đảm bảo hàng nào cũng có đủ nút Sửa / Khóa / Xóa (sự kiện dùng delegation).
+      function decorateRow(row) {
+        const actions = row.querySelector(".user-actions");
+        if (!actions) return;
+        const lockButton = actions.querySelector(".btn-danger:not(.delete-user)");
+        if (lockButton) lockButton.classList.add("lock-user");
+        if (!actions.querySelector(".delete-user")) {
+          const deleteButton = document.createElement("button");
+          deleteButton.className = "btn btn-danger delete-user";
+          deleteButton.type = "button";
+          deleteButton.textContent = "Xóa";
+          actions.appendChild(deleteButton);
+        }
+        applyRowStatus(row, row.dataset.status || "ACTIVE");
+      }
+
+      function createUserRow(user) {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td><div class="user-cell"><img class="user-avatar" src="${defaultAvatar}" alt="Avatar" /><div><span class="user-name">${escapeHtml(user.fullName)}</span><span class="user-id">${escapeHtml(user.id)}</span></div></div></td><td>${escapeHtml(user.email)}</td><td></td><td></td><td>Mới cập nhật</td><td><div class="user-actions"><button class="btn edit-user" type="button">Sửa</button><button class="btn btn-danger lock-user" type="button">Khóa</button></div></td>`;
+        row.querySelector(".user-avatar").alt = `Avatar ${user.fullName}`;
+        applyRowRole(row, user.role);
+        row.dataset.status = user.status || "ACTIVE";
+        decorateRow(row);
+        userRows.appendChild(row);
+        return row;
+      }
+
+      function persistRow(row) {
+        siteSafeApi.saveUser({
+          id: getRowId(row),
+          fullName: row.querySelector(".user-name").textContent.trim(),
+          email: getRowEmail(row),
+          role: row.dataset.role,
+          status: row.dataset.status || "ACTIVE",
+        });
+      }
+
+      function applyRoleFilter() {
+        userRows.querySelectorAll("tr").forEach(function (row) {
+          row.style.display =
+            !roleFilter.value || row.dataset.role === roleFilter.value
+              ? ""
+              : "none";
+        });
+      }
+
+      function isEmailUsed(email, ignoreRow) {
+        return Array.from(userRows.querySelectorAll("tr")).some(
+          (row) =>
+            row !== ignoreRow &&
+            getRowEmail(row).toLowerCase() === email.toLowerCase(),
+        );
+      }
+
+      // Khởi tạo: gộp dữ liệu đã lưu vào các hàng mẫu có sẵn.
+      userRows.querySelectorAll("tr").forEach(decorateRow);
+      siteSafeApi.getUsers().forEach(function (user) {
+        const existingRow = Array.from(userRows.querySelectorAll("tr")).find(
+          (row) => getRowId(row) === user.id,
+        );
+        if (!existingRow) {
+          createUserRow(user);
+          return;
+        }
+        if (user.role) applyRowRole(existingRow, user.role);
+        if (user.fullName)
           existingRow.querySelector(".user-name").textContent = user.fullName;
-          existingRow.children[1].textContent = user.email;
-          existingRow.children[3].innerHTML = `<span class="badge ${user.status === "INACTIVE" ? "badge-warning" : "badge-success"}">${user.status === "INACTIVE" ? "Đã khóa" : "Đang hoạt động"}</span>`;
+        if (user.email) existingRow.children[1].textContent = user.email;
+        applyRowStatus(existingRow, user.status);
+      });
+
+      roleFilter.addEventListener("change", applyRoleFilter);
+
+      // Delegation: hoạt động cả với các hàng được thêm sau khi tải trang.
+      userRows.addEventListener("click", async function (event) {
+        const button = event.target.closest("button");
+        if (!button) return;
+        const row = button.closest("tr");
+
+        if (button.classList.contains("lock-user")) {
+          applyRowStatus(row, row.dataset.status === "INACTIVE" ? "ACTIVE" : "INACTIVE");
+          persistRow(row);
           return;
         }
 
-        const row = document.createElement("tr");
-        row.dataset.role = user.role;
-        row.innerHTML = `<td><div class="user-cell"><img class="user-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80" alt="Avatar ${user.fullName}"><div><span class="user-name">${user.fullName}</span><span class="user-id">${user.id}</span></div></div></td><td>${user.email}</td><td><span class="badge">${roleNames[user.role] || user.role}</span></td><td><span class="badge ${user.status === "INACTIVE" ? "badge-warning" : "badge-success"}">${user.status === "INACTIVE" ? "Đã khóa" : "Đang hoạt động"}</span></td><td>Mới cập nhật</td><td><div class="user-actions"><button class="btn edit-user" type="button">Sửa</button><button class="btn btn-danger" type="button">Khóa</button></div></td>`;
-        document.getElementById("user-rows").appendChild(row);
-      });
-
-      document
-        .querySelectorAll(".user-actions .btn-danger")
-        .forEach(function (button) {
-          button.addEventListener("click", function () {
-            button.textContent =
-              button.textContent === "Khóa" ? "Mở khóa" : "Khóa";
-            const row = button.closest("tr");
-            siteSafeApi.saveUser({
-              id: row.querySelector(".user-id").textContent,
-              fullName: row.querySelector(".user-name").textContent,
-              email: row.children[1].textContent,
-              role: row.dataset.role,
-              status: button.textContent === "Mở khóa" ? "INACTIVE" : "ACTIVE",
-            });
-          });
-        });
-
-      document.querySelectorAll(".edit-user").forEach(function (button) {
-        button.addEventListener("click", function () {
-          const row = button.closest("tr");
-          const name = prompt(
+        if (button.classList.contains("edit-user")) {
+          const name = await showCustomPrompt(
             "Họ tên người dùng:",
             row.querySelector(".user-name").textContent,
           );
-          const email = prompt(
-            "Email người dùng:",
-            row.children[1].textContent,
-          );
-          if (!name || !email) return;
-          row.querySelector(".user-name").textContent = name.trim();
-          row.children[1].textContent = email.trim();
-          siteSafeApi.saveUser({
-            id: row.querySelector(".user-id").textContent,
-            fullName: name.trim(),
-            email: email.trim(),
-            role: row.dataset.role,
-            status: "ACTIVE",
-          });
-        });
-      });
+          if (name === null) return;
+          const email = await showCustomPrompt("Email người dùng:", getRowEmail(row));
+          if (email === null) return;
+          const cleanName = name.trim();
+          const cleanEmail = email.trim();
+          if (!cleanName || !isValidEmail(cleanEmail)) {
+            alert("Họ tên không được để trống và email phải hợp lệ.");
+            return;
+          }
+          if (isEmailUsed(cleanEmail, row)) {
+            alert("Email này đã tồn tại.");
+            return;
+          }
+          row.querySelector(".user-name").textContent = cleanName;
+          row.children[1].textContent = cleanEmail;
+          persistRow(row); // giữ nguyên trạng thái khóa hiện tại
+          return;
+        }
 
-      document.querySelectorAll("#user-rows tr").forEach(function (row) {
-        const actions = row.querySelector(".user-actions");
-        const deleteButton = document.createElement("button");
-        deleteButton.className = "btn btn-danger delete-user";
-        deleteButton.type = "button";
-        deleteButton.textContent = "Xóa";
-        actions.appendChild(deleteButton);
-        deleteButton.addEventListener("click", function () {
+        if (button.classList.contains("delete-user")) {
           if (!confirm("Bạn có chắc muốn xóa tài khoản này không?")) return;
-          siteSafeApi.deleteUser(row.querySelector(".user-id").textContent);
+          siteSafeApi.deleteUser(getRowId(row));
           row.remove();
-        });
+        }
       });
 
       document
         .getElementById("add-user-button")
-        .addEventListener("click", function () {
-          const name = prompt("Họ tên người dùng mới:");
-          const email = prompt("Email người dùng mới:");
-          if (!name || !email) return;
-          const role = prompt(
+        .addEventListener("click", async function () {
+          const name = await showCustomPrompt("Họ tên người dùng mới:");
+          if (name === null) return;
+          const email = await showCustomPrompt("Email người dùng mới:");
+          if (email === null) return;
+          const role = await showCustomPrompt(
             "Role (ADMIN, SAFETY_OFFICER, SITE_MANAGER, WORKER):",
             "WORKER",
-          ).toUpperCase();
-          const userId = `USR-${Date.now()}`;
-          siteSafeApi.saveUser({
-            id: userId,
-            fullName: name.trim(),
-            email: email.trim(),
-            role,
+          );
+          if (role === null) return;
+          const cleanName = name.trim();
+          const cleanEmail = email.trim();
+          const cleanRole = role.trim().toUpperCase();
+          if (!cleanName || !isValidEmail(cleanEmail)) {
+            alert("Họ tên không được để trống và email phải hợp lệ.");
+            return;
+          }
+          if (!roleNames[cleanRole]) {
+            alert("Role không hợp lệ.");
+            return;
+          }
+          if (isEmailUsed(cleanEmail, null)) {
+            alert("Email này đã tồn tại.");
+            return;
+          }
+          const user = siteSafeApi.saveUser({
+            fullName: cleanName,
+            email: cleanEmail,
+            role: cleanRole,
             status: "ACTIVE",
           });
-          alert("Đã lưu tài khoản mới. Tải lại trang để xem đầy đủ dữ liệu.");
+          createUserRow(user);
+          applyRoleFilter();
         });
     </script>
     <script src="../../js/main.js"></script>

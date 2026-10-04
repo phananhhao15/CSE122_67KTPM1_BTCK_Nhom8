@@ -27,18 +27,81 @@ function loadSidebarMenu() {
   }
 
   const rootPrefix = getProjectRootPrefix();
+  const currentUser = getCurrentUser();
+  const navigationLinks = [
+    {
+      href: "pages/worker/worker-safety-checklist.html",
+      label: "Checklist an toàn",
+      roles: ["WORKER"],
+    },
+    {
+      href: "pages/worker/worker-hazard-create.html",
+      label: "Báo cáo nguy cơ",
+      roles: ["WORKER"],
+    },
+    {
+      href: "pages/worker/worker-my-hazards.html",
+      label: "Sự cố của tôi",
+      roles: ["WORKER"],
+    },
+    {
+      href: "pages/safety-officer/safety-dashboard.html",
+      label: "Safety Dashboard",
+      roles: ["SAFETY_OFFICER"],
+    },
+    {
+      href: "pages/safety-officer/safety-inspection-management.html",
+      label: "Quản lý kiểm tra",
+      roles: ["SAFETY_OFFICER"],
+    },
+    {
+      href: "pages/manager/manager-safety-report.html",
+      label: "Báo cáo an toàn",
+      roles: ["SITE_MANAGER"],
+    },
+    {
+      href: "pages/manager/manager-corrective-actions.html",
+      label: "Hành động khắc phục",
+      roles: ["SITE_MANAGER"],
+    },
+    {
+      href: "pages/manager/manager-zone-risk-map.html",
+      label: "Bản đồ rủi ro",
+      roles: ["SITE_MANAGER"],
+    },
+    {
+      href: "pages/admin/admin-user-management.html",
+      label: "Quản lý người dùng",
+      roles: ["ADMIN"],
+    },
+    {
+      href: "pages/admin/admin-checklist-template-management.html",
+      label: "Quản lý mẫu checklist",
+      roles: ["ADMIN"],
+    },
+    {
+      href: "pages/admin/admin-zone-management.html",
+      label: "Quản lý khu vực",
+      roles: ["ADMIN"],
+    },
+    {
+      href: "pages/training/safety-training.html",
+      label: "Huấn luyện an toàn",
+      roles: ["WORKER", "SAFETY_OFFICER", "SITE_MANAGER", "ADMIN"],
+    },
+  ];
+  const visibleLinks = navigationLinks
+    .filter((link) => currentUser && link.roles.includes(currentUser.role))
+    .map(
+      (link) =>
+        `<a href="${rootPrefix}${link.href}">${link.label}</a>`,
+    )
+    .join("");
+
   sidebar.innerHTML = `
     <a class="sidebar-brand" href="${rootPrefix}index.html">SiteSafe</a>
 		<nav aria-label="Menu chính">
-      <a href="${rootPrefix}pages/worker/worker-safety-checklist.html">Checklist an toàn</a>
-      <a href="${rootPrefix}pages/worker/worker-hazard-create.html">Báo cáo nguy cơ</a>
-      <a href="${rootPrefix}pages/worker/worker-my-hazards.html">Sự cố của tôi</a>
-      <a href="${rootPrefix}pages/safety-officer/safety-dashboard.html">Safety Dashboard</a>
-      <a href="${rootPrefix}pages/safety-officer/safety-inspection-management.html">Quản lý kiểm tra</a>
-      <a href="${rootPrefix}pages/manager/manager-corrective-actions.html">Hành động khắc phục</a>
-      <a href="${rootPrefix}pages/manager/manager-zone-risk-map.html">Bản đồ rủi ro</a>
-      <a href="${rootPrefix}pages/admin/admin-user-management.html">Quản lý người dùng</a>
-      <a href="${rootPrefix}pages/training/safety-training.html">Huấn luyện an toàn</a>
+      ${visibleLinks}
 		</nav>
 		<button class="sidebar-logout" type="button">Đăng xuất</button>
 	`;

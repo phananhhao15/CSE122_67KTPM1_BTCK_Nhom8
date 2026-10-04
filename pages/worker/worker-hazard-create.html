@@ -8,6 +8,27 @@
     <link rel="stylesheet" href="../../css/worker.css" />
     <link rel="stylesheet" href="../../css/responsive.css" />
     <style>
+      .hazard-page {
+        width: min(760px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0;
+      }
+
+      .hazard-header {
+        margin-bottom: 24px;
+      }
+
+      .hazard-header h1 {
+        margin: 0 0 6px;
+        color: var(--color-primary);
+        font-size: clamp(1.7rem, 4vw, 2.3rem);
+      }
+
+      .hazard-header p {
+        margin: 0;
+        color: #64748b;
+      }
+
       .hazard-form .form-group {
         margin-bottom: 20px;
       }
@@ -31,12 +52,12 @@
         min-height: 150px;
         margin-bottom: 10px;
         padding: 24px;
-        color: var(--color-neutral-600);
-        background: var(--color-neutral-50)
+        color: #475569;
+        background: #f8fafc
           url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=900&q=80")
           center / cover;
         background-blend-mode: screen;
-        border: 2px dashed var(--color-neutral-400);
+        border: 2px dashed #94a3b8;
         border-radius: 8px;
         text-align: center;
       }
@@ -55,7 +76,7 @@
         margin-top: 12px;
         border-radius: 8px;
         object-fit: contain;
-        background: var(--color-neutral-100);
+        background: #f1f5f9;
       }
 
       .upload-input {
@@ -83,13 +104,18 @@
         width: 100%;
         margin-top: 14px;
         padding: 12px 14px;
-        color: var(--color-primary-text);
-        background: var(--color-primary-light);
+        color: #7c2d12;
+        background: #ffedd5;
         border-left: 4px solid var(--color-warning);
         border-radius: 4px;
       }
 
-      @media (max-width: 480px) {
+      @media (max-width: 600px) {
+        .hazard-page {
+          width: min(560px, calc(100% - 24px));
+          padding: 20px 0;
+        }
+
         .form-actions {
           display: grid;
           grid-template-columns: 1fr;
@@ -109,10 +135,7 @@
         <header class="topbar">
           <span class="topbar-title">SiteSafe</span>
           <div class="topbar-user">
-            <div class="topbar-user-info">
-              <span class="topbar-user-name">Hệ thống quản lý</span>
-              <span class="topbar-user-role" data-current-user-role></span>
-            </div>
+            <span class="topbar-user-role" data-current-user-role></span>
           </div>
         </header>
         <div class="page-content">
@@ -178,8 +201,8 @@
           aria-live="polite"
         ></div>
       </form>
-    </div>
-        </main>
+    </main>
+        </div>
       </div>
     </div>
 

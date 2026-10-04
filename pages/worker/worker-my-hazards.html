@@ -8,6 +8,31 @@
     <link rel="stylesheet" href="../../css/worker.css" />
     <link rel="stylesheet" href="../../css/responsive.css" />
     <style>
+      .hazards-page {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0;
+      }
+
+      .hazards-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .hazards-header h1 {
+        margin: 0 0 6px;
+        color: var(--color-primary);
+        font-size: clamp(1.7rem, 4vw, 2.3rem);
+      }
+
+      .hazards-header p {
+        margin: 0;
+        color: #64748b;
+      }
+
       .hazards-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -29,7 +54,7 @@
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
         position: relative;
-        background-color: var(--color-neutral-100);
+        background-color: #f1f5f9;
       }
 
       .card-img-wrapper img {
@@ -62,7 +87,7 @@
 
       .hazard-card p {
         margin: 0 0 14px;
-        color: var(--color-neutral-600);
+        color: #475569;
         font-size: 0.94rem;
       }
 
@@ -73,7 +98,7 @@
         gap: 10px;
         margin-top: auto;
         padding-top: 14px;
-        color: var(--color-neutral-500);
+        color: #64748b;
         border-top: 1px solid var(--color-border);
         font-size: 0.85rem;
       }
@@ -93,13 +118,22 @@
         font-size: 0.85rem;
       }
 
-      @media (max-width: 768px) {
+      @media (max-width: 900px) {
         .hazards-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
 
-      @media (max-width: 480px) {
+      @media (max-width: 600px) {
+        .hazards-page {
+          width: min(560px, calc(100% - 24px));
+          padding: 20px 0;
+        }
+
+        .hazards-header {
+          display: block;
+        }
+
         .hazards-header .btn {
           width: 100%;
           margin-top: 16px;
@@ -119,10 +153,7 @@
         <header class="topbar">
           <span class="topbar-title">SiteSafe</span>
           <div class="topbar-user">
-            <div class="topbar-user-info">
-              <span class="topbar-user-name">Hệ thống quản lý</span>
-              <span class="topbar-user-role" data-current-user-role></span>
-            </div>
+            <span class="topbar-user-role" data-current-user-role></span>
           </div>
         </header>
         <div class="page-content">
@@ -295,8 +326,8 @@
           </div>
         </article>
       </section>
-    </div>
-        </main>
+    </main>
+        </div>
       </div>
     </div>
     <script src="../../js/api.js"></script>
@@ -339,12 +370,12 @@
         const hazardId = card.dataset.hazardId;
         card
           .querySelector(".edit-saved-hazard")
-          .addEventListener("click", function () {
+          .addEventListener("click", async function () {
             const hazard = siteSafeApi
               .getHazards()
               .find((item) => item.id === hazardId);
             if (!hazard) return;
-            const description = prompt(
+            const description = await showCustomPrompt(
               "Cập nhật mô tả nguy cơ:",
               hazard.description,
             );

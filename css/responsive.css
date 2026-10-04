@@ -1,26 +1,27 @@
-/* Responsive shell and interaction sizing. Breakpoints: 768px and 480px. */
+/* Shared responsive layout for SiteSafe business pages. */
 @media (max-width: 768px) {
   .app-layout {
-    grid-template-columns: minmax(0, 1fr);
+    display: block;
   }
 
   .sidebar {
     width: 100%;
     min-height: auto;
-    padding: var(--spacing-4);
+    gap: var(--spacing-3, 12px);
+    padding: var(--spacing-4, 16px);
     overflow: visible;
-    border-right: 0;
-    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+    border-bottom: 1px solid var(--color-border);
   }
 
   .sidebar-brand {
-    margin-bottom: var(--spacing-4);
+    margin-bottom: 0;
   }
 
   .sidebar nav {
     flex-direction: row;
+    gap: var(--spacing-1, 4px);
     overflow-x: auto;
-    padding-bottom: var(--spacing-1);
+    padding-bottom: var(--spacing-1, 4px);
   }
 
   .sidebar nav a {
@@ -29,24 +30,17 @@
   }
 
   .sidebar-logout {
-    width: auto;
-    margin-top: var(--spacing-3);
+    align-self: flex-start;
+    margin-top: 0;
   }
 
   .topbar {
     position: static;
-    padding: var(--spacing-2) var(--spacing-4);
+    padding: var(--spacing-3, 12px) var(--spacing-4, 16px);
   }
 
   .page-content {
-    padding: var(--spacing-4);
-  }
-
-  .grid-2,
-  .grid-3,
-  .cards-grid,
-  .dashboard-grid {
-    grid-template-columns: 1fr;
+    padding: var(--spacing-4, 16px);
   }
 
   .btn,
@@ -55,56 +49,37 @@
   }
 
   .table {
-    min-width: 600px;
-  }
-
-  .sidebar details summary {
-    min-height: 44px;
-    padding: var(--spacing-2);
-    cursor: pointer;
-  }
-
-  .sidebar details ul,
-  .sidebar details .submenu {
-    margin: 0;
-    padding-left: var(--spacing-5);
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
   }
 }
 
 @media (max-width: 480px) {
   .sidebar {
-    padding: var(--spacing-3);
+    padding: var(--spacing-3, 12px);
   }
 
   .sidebar nav a {
     min-height: 40px;
-    padding: var(--spacing-2) var(--spacing-3);
+    padding: var(--spacing-2, 8px) var(--spacing-3, 12px);
+    font-size: 0.8125rem;
   }
 
   .topbar {
-    align-items: flex-start;
-    gap: var(--spacing-2);
+    gap: var(--spacing-2, 8px);
+    padding: var(--spacing-2, 8px) var(--spacing-3, 12px);
   }
 
   .topbar-title {
-    font-size: var(--font-size-base);
-  }
-
-  .topbar-user-info {
-    max-width: 10rem;
-  }
-
-  .topbar-user-name {
-    font-size: var(--font-size-xs);
+    font-size: 1rem;
   }
 
   .topbar-user-role {
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .sidebar {
-    transition-duration: 0.01ms;
+  .page-content {
+    padding: var(--spacing-3, 12px);
   }
 }

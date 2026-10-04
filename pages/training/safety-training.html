@@ -3,10 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Các khóa huấn luyện an toàn lao động dành cho nhân sự công trường SiteSafe."
+    />
     <title>Huấn luyện an toàn | SiteSafe</title>
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="../../css/training.css" />
     <link rel="stylesheet" href="../../css/responsive.css" />
+    <style>
+      .course-card img {
+        background: #e2e8f0;
+        min-height: 160px;
+      }
+      .course-progress {
+        height: 6px;
+        margin-bottom: 12px;
+        overflow: hidden;
+        background: #e2e8f0;
+        border-radius: 999px;
+      }
+      .course-progress-bar {
+        height: 100%;
+        background: var(--color-warning);
+        transition: width 0.3s ease;
+      }
+      .course-progress-bar--done {
+        background: var(--color-success);
+      }
+      .course-actions {
+        margin-bottom: 12px;
+      }
+      .training-empty {
+        padding: 24px;
+        color: #64748b;
+        text-align: center;
+      }
+    </style>
   </head>
   <body data-required-role="ANY">
     <div class="app-layout">
@@ -15,51 +48,130 @@
         <header class="topbar">
           <span class="topbar-title">SiteSafe</span>
           <div class="topbar-user">
-            <div class="topbar-user-info">
-              <span class="topbar-user-name">Hệ thống quản lý</span>
-              <span class="topbar-user-role" data-current-user-role></span>
-            </div>
+            <span class="topbar-user-role" data-current-user-role></span>
           </div>
         </header>
-        <main class="page-content">
-    <div class="training-container">
+        <div class="page-content">
+    <main class="training-container">
       <section class="training-card">
-        <header class="page-header">
-          <div>
-            <h1>Huấn luyện an toàn lao động</h1>
-            <p class="page-description">Các khóa học và tài liệu đào tạo an toàn bắt buộc cho nhân sự công trường.</p>
-          </div>
-        </header>
-        
-        <div class="training-grid" id="trainingList"></div>
+        <h1>Huấn luyện an toàn lao động</h1>
+        <p>
+          Các khóa học và tài liệu đào tạo an toàn bắt buộc cho nhân sự công
+          trường.
+        </p>
+
+        <div class="training-grid" id="trainingList" aria-live="polite"></div>
+        <p class="training-empty" id="trainingEmpty" hidden>
+          Chưa có khóa huấn luyện nào.
+        </p>
       </section>
-    </div>
-        </main>
+    </main>
+        </div>
       </div>
     </div>
 
-    <script src="../../js/api.js"></script>
     <script src="../../js/main.js"></script>
     <script src="../../js/modules/training.js"></script>
     <script>
       const trainingList = document.getElementById("trainingList");
-      const trainings = siteSafeTraining.getTrainings();
+      const trainingEmpty = document.getElementById("trainingEmpty");
 
-      trainingList.innerHTML = trainings.map(course => `
+      const statusInfo = {
+        COMPLETED: {
+          label: "Đã hoàn thành",
+          badge: "badge-success",
+          progress: 100,
+          action: "Học lại",
+          next: "IN_PROGRESS",
+        },
+        IN_PROGRESS: {
+          label: "Đang học",
+          badge: "badge-warning",
+          progress: 50,
+          action: "Hoàn thành khóa học",
+          next: "COMPLETED",
+        },
+        NOT_STARTED: {
+          label: "Chưa học",
+          badge: "",
+          progress: 0,
+          action: "Bắt đầu học",
+          next: "IN_PROGRESS",
+        },
+      };
+      const fallbackImage =
+        "data:image/svg+xml;utf8," +
+        encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="320"><rect width="100%" height="100%" fill="#e2e8f0"/><text x="50%" y="50%" fill="#64748b" font-family="Arial" font-size="22" text-anchor="middle">SiteSafe</text></svg>',
+        );
+
+      // Escape dữ liệu động trước khi đưa vào innerHTML để tránh XSS.
+      function escapeHtml(value) {
+        return String(value == null ? "" : value).replace(
+          /[&<>"']/g,
+          function (character) {
+            return {
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[character];
+          },
+        );
+      }
+
+      function renderTrainings() {
+        const trainings = siteSafeTraining.getTrainings();
+        trainingEmpty.hidden = trainings.length > 0;
+        trainingList.innerHTML = trainings
+          .map(function (course) {
+            const info = statusInfo[course.status] || statusInfo.NOT_STARTED;
+            return `
         <article class="course-card">
-          <img src="${course.image}" alt="${course.title}" />
+          <img src="${escapeHtml(course.image || fallbackImage)}" alt="${escapeHtml(course.title)}" data-fallback />
           <div class="course-body">
-            <h3 class="course-title">${course.title}</h3>
-            <p class="course-desc">${course.description}</p>
+            <h3 class="course-title">${escapeHtml(course.title)}</h3>
+            <p class="course-desc">${escapeHtml(course.description)}</p>
+            <div class="course-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${info.progress}">
+              <div class="course-progress-bar ${info.progress === 100 ? "course-progress-bar--done" : ""}" style="width: ${info.progress}%"></div>
+            </div>
+            <div class="course-actions">
+              <button class="btn ${info.progress === 100 ? "btn-success" : "btn-warning"}" type="button" data-course-id="${escapeHtml(course.id)}" data-next-status="${info.next}">${info.action}</button>
+            </div>
             <div class="course-footer">
-              <span class="badge ${course.status === 'COMPLETED' ? 'badge-success' : course.status === 'IN_PROGRESS' ? 'badge-warning' : ''}">
-                ${course.status === 'COMPLETED' ? 'Đã hoàn thành' : course.status === 'IN_PROGRESS' ? 'Đang học' : 'Chưa học'}
-              </span>
-              <small>${course.duration}</small>
+              <span class="badge ${info.badge}">${info.label}</span>
+              <small>${escapeHtml(course.duration)} · ${escapeHtml(course.level)}</small>
             </div>
           </div>
-        </article>
-      `).join("");
+        </article>`;
+          })
+          .join("");
+      }
+
+      // Ảnh lỗi (mất mạng/URL hỏng) thì thay bằng ảnh dự phòng.
+      trainingList.addEventListener(
+        "error",
+        function (event) {
+          if (event.target.matches("img[data-fallback]")) {
+            event.target.removeAttribute("data-fallback");
+            event.target.src = fallbackImage;
+          }
+        },
+        true,
+      );
+
+      trainingList.addEventListener("click", function (event) {
+        const button = event.target.closest("[data-course-id]");
+        if (!button) return;
+        siteSafeTraining.updateTrainingStatus(
+          button.dataset.courseId,
+          button.dataset.nextStatus,
+        );
+        renderTrainings();
+      });
+
+      renderTrainings();
     </script>
   </body>
 </html>

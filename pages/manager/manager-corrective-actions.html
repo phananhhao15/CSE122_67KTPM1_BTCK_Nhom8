@@ -7,144 +7,7 @@
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="../../css/manager.css" />
     <link rel="stylesheet" href="../../css/responsive.css" />
-    <style>
-      /* Thay URL ảnh banner bằng ảnh hoạt động khắc phục thực tế khi có ảnh local. */
-      /* Prompt AI: "Construction safety team repairing a hazardous work area, workers installing a secure guardrail, hard hats and reflective vests, realistic workplace safety photography." */
-      .actions-banner {
-        min-height: 180px;
-        margin-bottom: 24px;
-        padding: 28px;
-        color: var(--color-white);
-        background-image:
-          linear-gradient(90deg, rgb(15 23 42 / 84%), rgb(15 23 42 / 18%)),
-          url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80");
-        background-position: center;
-        background-size: cover;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-      }
-
-      .actions-banner h2 {
-        max-width: 520px;
-        margin: 0;
-        font-size: clamp(1.35rem, 3vw, 2rem);
-        line-height: 1.25;
-      }
-
-      .action-summary {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 16px;
-        margin-bottom: 24px;
-      }
-
-      .summary-card {
-        padding: 16px 18px;
-      }
-
-      .summary-card span {
-        display: block;
-        color: var(--color-neutral-500);
-        font-size: 0.88rem;
-      }
-
-      .summary-card strong {
-        display: block;
-        margin-top: 5px;
-        color: var(--color-primary);
-        font-size: 1.7rem;
-      }
-
-      .summary-card--progress strong {
-        color: var(--color-warning);
-      }
-      .summary-card--done strong {
-        color: var(--color-success);
-      }
-
-      .table-wrap {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .actions-table {
-        min-width: 900px;
-      }
-
-      .actions-table td,
-      .actions-table th {
-        vertical-align: middle;
-      }
-
-      .action-name {
-        color: var(--color-primary);
-        font-weight: 600;
-      }
-
-      .action-context {
-        display: block;
-        margin-top: 4px;
-        color: var(--color-neutral-500);
-        font-size: 0.82rem;
-      }
-
-      .progress-cell {
-        width: 220px;
-      }
-
-      .progress-label {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 6px;
-        color: var(--color-neutral-600);
-        font-size: 0.84rem;
-        font-weight: 600;
-      }
-
-      .progress-track {
-        width: 100%;
-        height: 10px;
-        overflow: hidden;
-        background: var(--color-neutral-200);
-        border-radius: 999px;
-      }
-
-      .progress-bar {
-        height: 100%;
-        background: var(--color-warning);
-        border-radius: inherit;
-        transition: width 0.25s ease;
-      }
-
-      .progress-bar--done {
-        background: var(--color-success);
-      }
-      .progress-bar--late {
-        background: var(--color-danger);
-      }
-
-      .status-cell {
-        white-space: nowrap;
-      }
-
-      @media (max-width: 480px) {
-        .actions-header .btn {
-          width: 100%;
-          margin-top: 16px;
-          text-align: center;
-        }
-
-        .actions-banner {
-          min-height: 160px;
-          padding: 20px;
-        }
-
-        .action-summary {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
+    
   </head>
   <body data-required-role="SITE_MANAGER">
     <div class="app-layout">
@@ -153,10 +16,7 @@
         <header class="topbar">
           <span class="topbar-title">SiteSafe</span>
           <div class="topbar-user">
-            <div class="topbar-user-info">
-              <span class="topbar-user-name">Hệ thống quản lý</span>
-              <span class="topbar-user-role" data-current-user-role></span>
-            </div>
+            <span class="topbar-user-role" data-current-user-role></span>
           </div>
         </header>
         <div class="page-content">
@@ -166,11 +26,6 @@
           <h1>Hành động khắc phục</h1>
           <p>Theo dõi tiến độ xử lý các sự cố an toàn tại công trường.</p>
         </div>
-        <a
-          class="btn"
-          href="../safety-officer/safety-dashboard.html"
-          >Về dashboard an toàn</a
-        >
       </header>
 
       <section class="actions-banner" aria-label="Minh họa hành động khắc phục">
@@ -180,22 +35,22 @@
       <section class="action-summary" aria-label="Tổng quan tiến độ">
         <article class="card summary-card">
           <span>Tổng hành động</span>
-          <strong>18</strong>
+          <strong id="summary-total">18</strong>
         </article>
         <article class="card summary-card summary-card--progress">
           <span>Đang thực hiện</span>
-          <strong>09</strong>
+          <strong id="summary-progress">09</strong>
         </article>
         <article class="card summary-card summary-card--done">
           <span>Đã hoàn thành</span>
-          <strong>07</strong>
+          <strong id="summary-done">07</strong>
         </article>
       </section>
 
       <section class="card" aria-labelledby="actions-table-title">
         <div class="section-heading">
           <h2 id="actions-table-title">Danh sách hành động đang theo dõi</h2>
-          <span class="action-context">Cập nhật: 24/09/2026</span>
+          <span class="action-context" id="summary-updated">Cập nhật: 24/09/2026</span>
         </div>
         <div class="table-wrap">
           <table class="table actions-table">
@@ -331,68 +186,110 @@
     </div>
     <script src="../../js/api.js"></script>
     <script>
-      const savedActions = siteSafeApi.getCorrectiveActions();
-      savedActions.forEach(function (action) {
-        const row = Array.from(
-          document.querySelectorAll(".actions-table tbody tr"),
-        ).find((currentRow) =>
-          currentRow
-            .querySelector(".action-context")
-            .textContent.includes(action.id),
-        );
-        if (!row || typeof action.progress !== "number") return;
-        row.querySelector(".progress-bar").style.width = `${action.progress}%`;
+      const actionRows = Array.from(
+        document.querySelectorAll(".actions-table tbody tr"),
+      );
+
+      function getRowActionId(row) {
+        return row
+          .querySelector(".action-context")
+          .textContent.split("·")[0]
+          .trim();
+      }
+
+      // Đồng bộ thanh tiến độ, nhãn, badge trạng thái của một hàng theo giá trị tiến độ.
+      function applyProgress(row, progress) {
+        const isDone = progress >= 100;
+        const isLate = row.dataset.late === "true" && !isDone;
+        const bar = row.querySelector(".progress-bar");
+        const badge = row.querySelector(".status-cell .badge");
+
+        bar.style.width = `${progress}%`;
+        bar.classList.toggle("progress-bar--done", isDone);
+        bar.classList.toggle("progress-bar--late", isLate);
         row.querySelector(".progress-label span:last-child").textContent =
-          `${action.progress}%`;
+          `${progress}%`;
         row.querySelector(".progress-label span:first-child").textContent =
-          action.progress === 100 ? "Đã hoàn thành" : "Đang thực hiện";
+          isDone ? "Đã hoàn thành" : isLate ? "Quá hạn" : "Đang thực hiện";
+
+        badge.className = `badge ${isDone ? "badge-success" : isLate ? "badge-danger" : "badge-warning"}`;
+        badge.textContent = isDone
+          ? "Hoàn thành"
+          : isLate
+            ? "Cần đôn đốc"
+            : "Đang xử lý";
+        row.dataset.progress = String(progress);
+        row.dataset.done = String(isDone);
+      }
+
+      // Tính lại số liệu tổng quan từ dữ liệu thực trong bảng.
+      function updateSummary() {
+        const total = actionRows.length;
+        const done = actionRows.filter((row) => row.dataset.done === "true")
+          .length;
+        document.getElementById("summary-total").textContent = String(total);
+        document.getElementById("summary-progress").textContent = String(
+          total - done,
+        );
+        document.getElementById("summary-done").textContent = String(done);
+        document.getElementById("summary-updated").textContent =
+          `Cập nhật: ${new Date().toLocaleDateString("vi-VN")}`;
+      }
+
+      // Khởi tạo: ghi nhớ trạng thái quá hạn mẫu rồi áp dụng dữ liệu đã lưu.
+      actionRows.forEach(function (row) {
+        row.dataset.late = String(
+          row.querySelector(".progress-bar--late") !== null,
+        );
+        const initialProgress = parseInt(
+          row.querySelector(".progress-label span:last-child").textContent,
+          10,
+        );
+        applyProgress(row, Number.isFinite(initialProgress) ? initialProgress : 0);
       });
 
-      document
-        .querySelectorAll(".actions-table tbody tr")
-        .forEach(function (row) {
-          const actionCell = row.lastElementChild;
-          const updateButton = document.createElement("button");
-          updateButton.className = "btn btn-warning update-progress";
-          updateButton.type = "button";
-          updateButton.textContent = "Cập nhật";
-          updateButton.style.marginLeft = "8px";
-          actionCell.appendChild(updateButton);
-          updateButton.addEventListener("click", function () {
-            const progressValue = Number(
-              prompt(
-                "Tiến độ mới (0-100):",
-                row
-                  .querySelector(".progress-label span:last-child")
-                  .textContent.replace("%", ""),
-              ),
-            );
-            if (
-              !Number.isFinite(progressValue) ||
-              progressValue < 0 ||
-              progressValue > 100
-            )
-              return;
-            const progress = Math.round(progressValue);
-            const progressBar = row.querySelector(".progress-bar");
-            const progressText = row.querySelector(
-              ".progress-label span:last-child",
-            );
-            progressBar.style.width = `${progress}%`;
-            progressText.textContent = `${progress}%`;
-            row.querySelector(".progress-label span:first-child").textContent =
-              progress === 100 ? "Đã hoàn thành" : "Đang thực hiện";
-            siteSafeApi.saveCorrectiveAction({
-              id: row
-                .querySelector(".action-context")
-                .textContent.split("·")[0]
-                .trim(),
-              title: row.querySelector(".action-name").textContent,
-              progress,
-              status: progress === 100 ? "COMPLETED" : "IN_PROGRESS",
-            });
+      siteSafeApi.getCorrectiveActions().forEach(function (action) {
+        const row = actionRows.find((r) => getRowActionId(r) === action.id);
+        if (!row || typeof action.progress !== "number") return;
+        applyProgress(row, Math.max(0, Math.min(100, action.progress)));
+      });
+      updateSummary();
+
+      actionRows.forEach(function (row) {
+        const updateButton = document.createElement("button");
+        updateButton.className = "btn btn-warning update-progress";
+        updateButton.type = "button";
+        updateButton.textContent = "Cập nhật";
+        updateButton.style.marginLeft = "8px";
+        row.querySelector(".status-cell").appendChild(updateButton);
+
+        updateButton.addEventListener("click", async function () {
+          const input = await showCustomPrompt(
+            "Tiến độ mới (0-100):",
+            row.dataset.progress || "0",
+          );
+          // Bấm Cancel hoặc để trống thì không thay đổi gì.
+          if (input === null || input.trim() === "") return;
+          const progressValue = Number(input);
+          if (
+            !Number.isFinite(progressValue) ||
+            progressValue < 0 ||
+            progressValue > 100
+          ) {
+            alert("Vui lòng nhập số từ 0 đến 100.");
+            return;
+          }
+          const progress = Math.round(progressValue);
+          applyProgress(row, progress);
+          updateSummary();
+          siteSafeApi.saveCorrectiveAction({
+            id: getRowActionId(row),
+            title: row.querySelector(".action-name").textContent,
+            progress,
+            status: progress === 100 ? "COMPLETED" : "IN_PROGRESS",
           });
         });
+      });
     </script>
     <script src="../../js/main.js"></script>
     <script src="../../js/modules/manager.js"></script>

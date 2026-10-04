@@ -7,191 +7,7 @@
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="../../css/admin.css" />
     <link rel="stylesheet" href="../../css/responsive.css" />
-    <style>
-      /* Thay URL ảnh banner bằng ảnh khu vực công trường local khi có tài sản riêng. */
-      /* Prompt AI: "Aerial view of an organized construction site divided into clearly marked work zones, safety signs, material storage, access roads, realistic planning photography." */
-      .zones-banner {
-        min-height: 165px;
-        margin-bottom: 24px;
-        padding: 28px;
-        color: var(--color-white);
-        background-image:
-          linear-gradient(90deg, rgb(15 23 42 / 86%), rgb(15 23 42 / 18%)),
-          url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80");
-        background-position: center;
-        background-size: cover;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-      }
-
-      .zones-banner h2 {
-        max-width: 560px;
-        margin: 0;
-        font-size: clamp(1.35rem, 3vw, 2rem);
-        line-height: 1.25;
-      }
-
-      .zones-toolbar {
-        display: grid;
-        grid-template-columns: minmax(220px, 1fr) 190px 190px auto;
-        gap: 14px;
-        align-items: end;
-        margin-bottom: 18px;
-      }
-
-      .filter-field label,
-      .zone-form label {
-        display: block;
-        margin-bottom: 6px;
-        color: var(--color-primary);
-        font-size: 0.88rem;
-        font-weight: 600;
-      }
-
-      .zone-form {
-        display: none;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
-        margin-bottom: 18px;
-        padding: 18px;
-        background: var(--color-neutral-50);
-        border: 1px solid var(--color-border);
-        border-radius: 8px;
-      }
-
-      .zone-form.is-visible {
-        display: grid;
-      }
-
-      .form-field--full,
-      .zone-form-actions {
-        grid-column: 1 / -1;
-      }
-
-      .zone-form-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
-      }
-
-      .zones-table-wrap {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .zones-table {
-        min-width: 1040px;
-      }
-
-      .zones-table td,
-      .zones-table th {
-        vertical-align: middle;
-      }
-
-      .zone-cell {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        min-width: 250px;
-      }
-
-      /* Thay URL ảnh thumbnail bằng ảnh khu vực tương ứng trong assets/images khi có. */
-      .zone-image {
-        width: 58px;
-        height: 48px;
-        flex-shrink: 0;
-        border-radius: 6px;
-        object-fit: cover;
-      }
-
-      .zone-name {
-        display: block;
-        color: var(--color-primary);
-        font-weight: 600;
-      }
-
-      .zone-code {
-        display: block;
-        margin-top: 3px;
-        color: var(--color-neutral-500);
-        font-size: 0.8rem;
-      }
-
-      .risk-critical {
-        color: var(--color-danger-text);
-        background: var(--color-danger-light);
-      }
-      .risk-high {
-        color: var(--color-primary-text);
-        background: var(--color-primary-light);
-      }
-      .risk-medium {
-        color: var(--color-warning-text);
-        background: var(--color-warning-light);
-      }
-      .risk-low {
-        color: var(--color-success-text);
-        background: var(--color-success-light);
-      }
-
-      .zone-actions {
-        display: flex;
-        gap: 8px;
-      }
-
-      .zone-actions .btn {
-        padding: 6px 10px;
-        font-size: 0.84rem;
-      }
-
-      .edit-zone {
-        color: var(--color-info-hover);
-        background: var(--color-info-light);
-        border-color: var(--color-info);
-      }
-
-      .empty-state {
-        display: none;
-        padding: 28px;
-        color: var(--color-neutral-500);
-        text-align: center;
-      }
-
-      @media (max-width: 768px) {
-        .zones-toolbar {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-
-      @media (max-width: 480px) {
-        .zones-header .btn {
-          width: 100%;
-          margin-top: 16px;
-          text-align: center;
-        }
-
-        .zones-banner {
-          min-height: 145px;
-          padding: 20px;
-        }
-
-        .zones-toolbar,
-        .zone-form.is-visible {
-          grid-template-columns: 1fr;
-        }
-
-        .zones-toolbar > .btn,
-        .zone-form-actions .btn {
-          width: 100%;
-        }
-
-        .zone-form-actions {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-        }
-      }
-    </style>
+    
   </head>
   <body data-required-role="ADMIN">
     <div class="app-layout">
@@ -200,10 +16,7 @@
         <header class="topbar">
           <span class="topbar-title">SiteSafe</span>
           <div class="topbar-user">
-            <div class="topbar-user-info">
-              <span class="topbar-user-name">Hệ thống quản lý</span>
-              <span class="topbar-user-role" data-current-user-role></span>
-            </div>
+            <span class="topbar-user-role" data-current-user-role></span>
           </div>
         </header>
         <div class="page-content">
@@ -481,16 +294,49 @@
       let editingRow = null;
       let nextZoneNumber = 6;
 
+      const zoneImageUrl =
+        "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=160&q=80";
+      const riskLabels = {
+        LOW: "Thấp",
+        MEDIUM: "Trung bình",
+        HIGH: "Cao",
+        CRITICAL: "Nghiêm trọng",
+      };
+      const statusLabels = {
+        ACTIVE: "Đang hoạt động",
+        INACTIVE: "Tạm dừng",
+      };
+
       function escapeHtml(value) {
-        return value.replace(/[&<>'"]/g, function (character) {
-          return {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            "'": "&#39;",
-            '"': "&quot;",
-          }[character];
-        });
+        return String(value == null ? "" : value).replace(
+          /[&<>'"]/g,
+          function (character) {
+            return {
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              "'": "&#39;",
+              '"': "&quot;",
+            }[character];
+          },
+        );
+      }
+
+      // Cập nhật badge mức rủi ro và trạng thái theo dataset của hàng.
+      function renderRowBadges(row) {
+        const risk = row.dataset.risk;
+        const status = row.dataset.status;
+        row.children[2].innerHTML = `<span class="badge risk-${escapeHtml(String(risk).toLowerCase())}">${escapeHtml(riskLabels[risk] || risk)}</span>`;
+        row.children[4].innerHTML = `<span class="badge ${status === "ACTIVE" ? "badge-success" : "badge-warning"}">${escapeHtml(statusLabels[status] || status)}</span>`;
+      }
+
+      function buildZoneRow(zone) {
+        const row = document.createElement("tr");
+        row.dataset.risk = zone.riskLevel;
+        row.dataset.status = zone.status;
+        row.innerHTML = `<td><div class="zone-cell"><img class="zone-image" src="${zoneImageUrl}" alt="Ảnh ${escapeHtml(zone.code)}"><div><span class="zone-name">${escapeHtml(zone.name)}</span><span class="zone-code">${escapeHtml(zone.code)}</span></div></div></td><td>${escapeHtml(zone.description)}</td><td></td><td>${Number(zone.incidentCount) || 0}</td><td></td><td><div class="zone-actions"><button class="btn edit-zone" type="button">Sửa</button><button class="btn btn-danger delete-zone" type="button">Xóa</button></div></td>`;
+        renderRowBadges(row);
+        return row;
       }
 
       function showZoneForm(isVisible) {
@@ -539,6 +385,7 @@
         row
           .querySelector(".delete-zone")
           .addEventListener("click", function () {
+            if (!confirm("Bạn có chắc muốn xóa khu vực này không?")) return;
             const zoneId = row.querySelector(".zone-code").textContent;
             row.remove();
             siteSafeApi.deleteZone(zoneId);
@@ -562,17 +409,31 @@
 
       zoneForm.addEventListener("submit", function (event) {
         event.preventDefault();
-        const code = escapeHtml(
-          document.getElementById("zone-code-input").value.trim(),
-        );
-        const name = escapeHtml(
-          document.getElementById("zone-name-input").value.trim(),
-        );
-        const description = escapeHtml(
-          document.getElementById("zone-description-input").value.trim(),
-        );
+        // Lưu giá trị gốc; chỉ escape khi chèn vào innerHTML.
+        const code = document.getElementById("zone-code-input").value.trim();
+        const name = document.getElementById("zone-name-input").value.trim();
+        const description = document
+          .getElementById("zone-description-input")
+          .value.trim();
         const risk = document.getElementById("zone-risk-input").value;
         const status = document.getElementById("zone-status-input").value;
+
+        if (!code || !name) {
+          alert("Mã vùng và tên khu vực không được để trống.");
+          return;
+        }
+
+        const isDuplicate = Array.from(zoneRows.querySelectorAll("tr")).some(
+          (row) =>
+            row !== editingRow &&
+            row.querySelector(".zone-code").textContent.trim().toLowerCase() ===
+              code.toLowerCase(),
+        );
+        if (isDuplicate) {
+          alert("Mã vùng này đã tồn tại.");
+          return;
+        }
+
         const zoneId = editingRow
           ? editingRow.querySelector(".zone-code").textContent
           : code;
@@ -583,11 +444,15 @@
           editingRow.querySelector(".zone-code").textContent = code;
           editingRow.querySelector(".zone-name").textContent = name;
           editingRow.children[1].textContent = description;
+          renderRowBadges(editingRow);
         } else {
-          const row = document.createElement("tr");
-          row.dataset.risk = risk;
-          row.dataset.status = status;
-          row.innerHTML = `<td><div class="zone-cell"><img class="zone-image" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=160&q=80" alt="Ảnh ${code}"><div><span class="zone-name">${name}</span><span class="zone-code">${code}</span></div></div></td><td>${description}</td><td><span class="badge">${risk}</span></td><td>00</td><td><span class="badge">${status}</span></td><td><div class="zone-actions"><button class="btn edit-zone" type="button">Sửa</button><button class="btn btn-danger delete-zone" type="button">Xóa</button></div></td>`;
+          const row = buildZoneRow({
+            code,
+            name,
+            description,
+            riskLevel: risk,
+            status,
+          });
           zoneRows.appendChild(row);
           nextZoneNumber += 1;
           bindRowActions(row);
@@ -615,14 +480,11 @@
           existingRow.dataset.status = zone.status;
           existingRow.querySelector(".zone-name").textContent = zone.name;
           existingRow.children[1].textContent = zone.description;
+          renderRowBadges(existingRow);
           return;
         }
 
-        const row = document.createElement("tr");
-        row.dataset.risk = zone.riskLevel;
-        row.dataset.status = zone.status;
-        row.innerHTML = `<td><div class="zone-cell"><img class="zone-image" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=160&q=80" alt="Ảnh ${escapeHtml(zone.code)}"><div><span class="zone-name">${escapeHtml(zone.name)}</span><span class="zone-code">${escapeHtml(zone.code)}</span></div></div></td><td>${escapeHtml(zone.description)}</td><td><span class="badge">${escapeHtml(zone.riskLevel)}</span></td><td>00</td><td><span class="badge">${escapeHtml(zone.status)}</span></td><td><div class="zone-actions"><button class="btn edit-zone" type="button">Sửa</button><button class="btn btn-danger delete-zone" type="button">Xóa</button></div></td>`;
-        zoneRows.appendChild(row);
+        zoneRows.appendChild(buildZoneRow(zone));
       });
 
       zoneRows.querySelectorAll("tr").forEach(bindRowActions);

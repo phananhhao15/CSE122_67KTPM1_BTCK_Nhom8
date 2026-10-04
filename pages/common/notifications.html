@@ -8,22 +8,44 @@
     <link rel="stylesheet" href="../../css/common.css" />
     <link rel="stylesheet" href="../../css/responsive.css" />
     <style>
+      .page {
+        width: min(820px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: center;
+      }
+      .header h1 {
+        color: var(--color-primary);
+      }
       .notification {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        gap: var(--spacing-4);
-        padding: var(--spacing-4) 0;
+        gap: 16px;
+        padding: 16px 0;
         border-bottom: 1px solid var(--color-border);
       }
       .notification.unread {
-        font-weight: var(--font-weight-semibold);
+        font-weight: 600;
       }
       .notification small {
         display: block;
-        margin-top: var(--spacing-1);
-        color: var(--color-neutral-500);
-        font-weight: var(--font-weight-normal);
+        margin-top: 5px;
+        color: #64748b;
+        font-weight: 400;
+      }
+      @media (max-width: 600px) {
+        .page {
+          width: min(560px, calc(100% - 24px));
+        }
+        .header {
+          align-items: stretch;
+          flex-direction: column;
+        }
       }
     </style>
   </head>
@@ -34,32 +56,25 @@
         <header class="topbar">
           <span class="topbar-title">SiteSafe</span>
           <div class="topbar-user">
-            <div class="topbar-user-info">
-              <span class="topbar-user-name">Hệ thống quản lý</span>
-              <span class="topbar-user-role" data-current-user-role></span>
-            </div>
+            <span class="topbar-user-role" data-current-user-role></span>
           </div>
         </header>
-        <main class="page-content">
-          <div class="common-page">
-            <section class="card common-card common-card--wide">
-              <header class="page-header common-header">
-                <div>
-                  <h1 class="common-title">Thông báo</h1>
-                  <p class="page-description">
-                    Các cập nhật mới liên quan đến an toàn công trường.
-                  </p>
-                </div>
-                <div class="page-actions">
-                  <button class="btn" id="clearButton" type="button">
-                    Đánh dấu đã đọc
-                  </button>
-                </div>
-              </header>
-              <div id="notificationList"></div>
-            </section>
+        <div class="page-content">
+    <main class="page">
+      <section class="card">
+        <div class="header">
+          <div>
+            <h1>Thông báo</h1>
+            <p>Các cập nhật mới liên quan đến an toàn công trường.</p>
           </div>
-        </main>
+          <button class="btn" id="clearButton" type="button">
+            Đánh dấu đã đọc
+          </button>
+        </div>
+        <div id="notificationList"></div>
+      </section>
+    </main>
+        </div>
       </div>
     </div>
     <script src="../../js/main.js"></script>
