@@ -6,32 +6,8 @@
     <title>Chi tiết sự cố | SiteSafe</title>
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="../../css/safety.css" />
+    <link rel="stylesheet" href="../../css/responsive.css" />
     <style>
-      .detail-page {
-        width: min(1160px, calc(100% - 32px));
-        margin: 0 auto;
-        padding: 30px 0;
-      }
-
-      .detail-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 20px;
-        margin-bottom: 22px;
-      }
-
-      .detail-header h1 {
-        margin: 0 0 6px;
-        color: var(--color-primary);
-        font-size: clamp(1.7rem, 4vw, 2.35rem);
-      }
-
-      .detail-header p {
-        margin: 0;
-        color: #64748b;
-      }
-
       .detail-layout {
         display: grid;
         grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
@@ -55,7 +31,7 @@
 
       .photo-caption {
         padding: 14px 18px;
-        color: #64748b;
+        color: var(--color-neutral-500);
         font-size: 0.9rem;
       }
 
@@ -80,7 +56,7 @@
 
       .info-description {
         margin: 0 0 18px;
-        color: #475569;
+        color: var(--color-neutral-600);
       }
 
       .info-list {
@@ -96,7 +72,7 @@
       }
 
       .info-list dt {
-        color: #64748b;
+        color: var(--color-neutral-500);
         font-size: 0.82rem;
       }
 
@@ -143,7 +119,7 @@
 
       .assignment-actions p {
         margin: 0;
-        color: #64748b;
+        color: var(--color-neutral-500);
         font-size: 0.9rem;
       }
 
@@ -151,16 +127,7 @@
         min-height: 46px;
       }
 
-      @media (max-width: 800px) {
-        .detail-page {
-          width: min(640px, calc(100% - 24px));
-          padding: 20px 0;
-        }
-
-        .detail-header {
-          display: block;
-        }
-
+      @media (max-width: 768px) {
         .detail-header .btn {
           width: 100%;
           margin-top: 16px;
@@ -176,7 +143,7 @@
         }
       }
 
-      @media (max-width: 560px) {
+      @media (max-width: 480px) {
         .hazard-photo {
           height: 280px;
         }
@@ -203,6 +170,19 @@
     </style>
   </head>
   <body data-required-role="SAFETY_OFFICER">
+    <div class="app-layout">
+      <aside class="sidebar" aria-label="Điều hướng chính"></aside>
+      <div class="main-content">
+        <header class="topbar">
+          <span class="topbar-title">SiteSafe</span>
+          <div class="topbar-user">
+            <div class="topbar-user-info">
+              <span class="topbar-user-name">Hệ thống quản lý</span>
+              <span class="topbar-user-role" data-current-user-role></span>
+            </div>
+          </div>
+        </header>
+        <div class="page-content">
     <main class="detail-page">
       <header class="detail-header">
         <div>
@@ -348,6 +328,9 @@
         </section>
       </div>
     </main>
+        </div>
+      </div>
+    </div>
 
     <script src="../../js/api.js"></script>
     <script>

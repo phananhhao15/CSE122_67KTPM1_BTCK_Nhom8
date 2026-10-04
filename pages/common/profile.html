@@ -6,69 +6,78 @@
     <title>Hồ sơ | SiteSafe</title>
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="../../css/common.css" />
+    <link rel="stylesheet" href="../../css/responsive.css" />
     <style>
-      .page {
-        width: min(720px, calc(100% - 32px));
-        margin: 0 auto;
-        padding: 32px 0;
-      }
-      .card h1 {
-        margin-top: 0;
-        color: var(--color-primary);
-      }
       .field {
-        margin: 16px 0;
+        margin: var(--spacing-4) 0;
       }
       .field label {
         display: block;
-        margin-bottom: 6px;
-        font-weight: 600;
+        margin-bottom: var(--spacing-2);
+        color: var(--color-neutral-700);
+        font-weight: var(--font-weight-semibold);
       }
       .actions {
         display: flex;
-        gap: 10px;
-        margin-top: 22px;
+        gap: var(--spacing-3);
+        margin-top: var(--spacing-5);
       }
       .message {
         min-height: 22px;
-        color: var(--color-success);
-      }
-      @media (max-width: 600px) {
-        .page {
-          width: min(560px, calc(100% - 24px));
-        }
-        .actions .btn {
-          flex: 1;
-        }
+        color: var(--color-success-text);
       }
     </style>
   </head>
   <body data-required-role="ANY">
-    <main class="page">
-      <section class="card">
-        <h1>Hồ sơ cá nhân</h1>
-        <p>Cập nhật thông tin hiển thị của tài khoản SiteSafe.</p>
-        <form id="profileForm">
-          <div class="field">
-            <label for="fullName">Họ tên</label
-            ><input class="form-control" id="fullName" required />
+    <div class="app-layout">
+      <aside class="sidebar" aria-label="Điều hướng chính"></aside>
+      <div class="main-content">
+        <header class="topbar">
+          <span class="topbar-title">SiteSafe</span>
+          <div class="topbar-user">
+            <div class="topbar-user-info">
+              <span class="topbar-user-name">Hệ thống quản lý</span>
+              <span class="topbar-user-role" data-current-user-role></span>
+            </div>
           </div>
-          <div class="field">
-            <label for="email">Email</label
-            ><input class="form-control" id="email" type="email" required />
+        </header>
+        <main class="page-content">
+          <div class="common-page">
+            <section class="card common-card common-card--narrow">
+              <header class="common-header">
+                <div>
+                  <h1 class="common-title">Hồ sơ cá nhân</h1>
+                  <p class="page-description">
+                    Cập nhật thông tin hiển thị của tài khoản SiteSafe.
+                  </p>
+                </div>
+              </header>
+              <form id="profileForm">
+                <div class="field">
+                  <label for="fullName">Họ tên</label
+                  ><input class="form-control" id="fullName" required />
+                </div>
+                <div class="field">
+                  <label for="email">Email</label
+                  ><input class="form-control" id="email" type="email" required />
+                </div>
+                <div class="field">
+                  <label for="phone">Số điện thoại</label
+                  ><input class="form-control" id="phone" />
+                </div>
+                <p class="message" id="message" role="status"></p>
+                <div class="actions">
+                  <button class="btn btn-success" type="submit">
+                    Lưu hồ sơ
+                  </button>
+                  <a class="btn" href="../../index.html">Trang chính</a>
+                </div>
+              </form>
+            </section>
           </div>
-          <div class="field">
-            <label for="phone">Số điện thoại</label
-            ><input class="form-control" id="phone" />
-          </div>
-          <p class="message" id="message" role="status"></p>
-          <div class="actions">
-            <button class="btn btn-success" type="submit">Lưu hồ sơ</button
-            ><a class="btn" href="../../index.html">Trang chính</a>
-          </div>
-        </form>
-      </section>
-    </main>
+        </main>
+      </div>
+    </div>
     <script src="../../js/main.js"></script>
     <script src="../../js/modules/common.js"></script>
     <script>

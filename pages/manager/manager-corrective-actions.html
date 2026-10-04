@@ -6,32 +6,8 @@
     <title>Hành động khắc phục | SiteSafe</title>
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="../../css/manager.css" />
+    <link rel="stylesheet" href="../../css/responsive.css" />
     <style>
-      .actions-page {
-        width: min(1200px, calc(100% - 32px));
-        margin: 0 auto;
-        padding: 30px 0;
-      }
-
-      .actions-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-        margin-bottom: 24px;
-      }
-
-      .actions-header h1 {
-        margin: 0 0 6px;
-        color: var(--color-primary);
-        font-size: clamp(1.7rem, 4vw, 2.3rem);
-      }
-
-      .actions-header p {
-        margin: 0;
-        color: #64748b;
-      }
-
       /* Thay URL ảnh banner bằng ảnh hoạt động khắc phục thực tế khi có ảnh local. */
       /* Prompt AI: "Construction safety team repairing a hazardous work area, workers installing a secure guardrail, hard hats and reflective vests, realistic workplace safety photography." */
       .actions-banner {
@@ -69,7 +45,7 @@
 
       .summary-card span {
         display: block;
-        color: #64748b;
+        color: var(--color-neutral-500);
         font-size: 0.88rem;
       }
 
@@ -109,7 +85,7 @@
       .action-context {
         display: block;
         margin-top: 4px;
-        color: #64748b;
+        color: var(--color-neutral-500);
         font-size: 0.82rem;
       }
 
@@ -121,7 +97,7 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 6px;
-        color: #475569;
+        color: var(--color-neutral-600);
         font-size: 0.84rem;
         font-weight: 600;
       }
@@ -130,7 +106,7 @@
         width: 100%;
         height: 10px;
         overflow: hidden;
-        background: #e2e8f0;
+        background: var(--color-neutral-200);
         border-radius: 999px;
       }
 
@@ -152,16 +128,7 @@
         white-space: nowrap;
       }
 
-      @media (max-width: 700px) {
-        .actions-page {
-          width: min(560px, calc(100% - 24px));
-          padding: 20px 0;
-        }
-
-        .actions-header {
-          display: block;
-        }
-
+      @media (max-width: 480px) {
         .actions-header .btn {
           width: 100%;
           margin-top: 16px;
@@ -180,6 +147,19 @@
     </style>
   </head>
   <body data-required-role="SITE_MANAGER">
+    <div class="app-layout">
+      <aside class="sidebar" aria-label="Điều hướng chính"></aside>
+      <div class="main-content">
+        <header class="topbar">
+          <span class="topbar-title">SiteSafe</span>
+          <div class="topbar-user">
+            <div class="topbar-user-info">
+              <span class="topbar-user-name">Hệ thống quản lý</span>
+              <span class="topbar-user-role" data-current-user-role></span>
+            </div>
+          </div>
+        </header>
+        <div class="page-content">
     <main class="actions-page">
       <header class="actions-header">
         <div>
@@ -346,6 +326,9 @@
         </div>
       </section>
     </main>
+        </div>
+      </div>
+    </div>
     <script src="../../js/api.js"></script>
     <script>
       const savedActions = siteSafeApi.getCorrectiveActions();

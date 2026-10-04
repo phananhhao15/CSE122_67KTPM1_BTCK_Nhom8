@@ -4,16 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Đăng nhập | SiteSafe</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/responsive.css" />
     <style>
       :root {
-        --background: #181c24;
-        --card: #ffffff;
-        --text: #172033;
-        --muted: #64748b;
-        --border: #cbd5e1;
-        --primairy: #2563eb;
-        --primary-dark: #1d4ed8;
-        --error: #b91c1c;
+        --background: var(--color-dark);
+        --card: var(--color-surface);
+        --text: var(--color-dark);
+        --muted: var(--color-neutral-500);
+        --border: var(--color-neutral-300);
+        --primary: var(--color-primary);
+        --primary-dark: var(--color-primary-hover);
+        --error: var(--color-danger-text);
       }
 
       * {
@@ -26,7 +28,7 @@
         overflow: hidden;
         color: var(--text);
         background: var(--background);
-        font-family: Arial, sans-serif;
+        font-family: var(--font-sans);
       }
 
       .background-grid {
@@ -196,7 +198,7 @@
         min-height: 46px;
         padding: 11px 13px;
         color: var(--text);
-        background: #ffffff;
+        background: var(--color-white);
         border: 1px solid var(--border);
         border-radius: 6px;
         outline: none;
@@ -251,7 +253,7 @@
         width: 100%;
         min-height: 46px;
         margin-top: 8px;
-        color: #ffffff;
+        color: var(--color-white);
         background: var(--primary);
         border: 0;
         border-radius: 6px;
@@ -271,7 +273,7 @@
         font-size: 0.88rem;
       }
 
-      @media (max-width: 640px) {
+      @media (max-width: 480px) {
         .background-grid {
           grid-template-columns: repeat(6, 1fr);
           grid-template-rows: repeat(10, 1fr);

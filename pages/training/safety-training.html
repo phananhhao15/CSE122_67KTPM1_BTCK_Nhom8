@@ -6,16 +6,37 @@
     <title>Huấn luyện an toàn | SiteSafe</title>
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="../../css/training.css" />
+    <link rel="stylesheet" href="../../css/responsive.css" />
   </head>
   <body data-required-role="ANY">
-    <main class="training-container">
+    <div class="app-layout">
+      <aside class="sidebar" aria-label="Điều hướng chính"></aside>
+      <div class="main-content">
+        <header class="topbar">
+          <span class="topbar-title">SiteSafe</span>
+          <div class="topbar-user">
+            <div class="topbar-user-info">
+              <span class="topbar-user-name">Hệ thống quản lý</span>
+              <span class="topbar-user-role" data-current-user-role></span>
+            </div>
+          </div>
+        </header>
+        <main class="page-content">
+    <div class="training-container">
       <section class="training-card">
-        <h1>Huấn luyện an toàn lao động</h1>
-        <p>Các khóa học và tài liệu đào tạo an toàn bắt buộc cho nhân sự công trường.</p>
+        <header class="page-header">
+          <div>
+            <h1>Huấn luyện an toàn lao động</h1>
+            <p class="page-description">Các khóa học và tài liệu đào tạo an toàn bắt buộc cho nhân sự công trường.</p>
+          </div>
+        </header>
         
         <div class="training-grid" id="trainingList"></div>
       </section>
-    </main>
+    </div>
+        </main>
+      </div>
+    </div>
 
     <script src="../../js/api.js"></script>
     <script src="../../js/main.js"></script>

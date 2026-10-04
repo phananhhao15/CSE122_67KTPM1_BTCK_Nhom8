@@ -1,18 +1,51 @@
 /* Global common styles for SiteSafe shared components */
 .common-page {
-  width: min(900px, calc(100% - 32px));
+  width: min(1240px, calc(100% - var(--spacing-6) * 2));
   margin: 0 auto;
-  padding: 32px 0;
+  padding: var(--spacing-6) 0;
 }
 
 .common-card {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: var(--spacing-6);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.common-card--narrow {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.common-card--wide {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.common-card:hover,
+.common-card:focus-within {
+  border-color: var(--color-neutral-300);
+  box-shadow: var(--shadow-md);
 }
 
 .common-title {
-  color: var(--color-primary, #1e293b);
-  margin-top: 0;
+  margin: 0 0 var(--spacing-2);
+  color: var(--color-dark);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+}
+
+@media (max-width: 768px) {
+  .common-page {
+    width: min(100%, calc(100% - var(--spacing-4) * 2));
+    padding: var(--spacing-4) 0;
+  }
+
+  .common-card {
+    padding: var(--spacing-4);
+  }
 }
