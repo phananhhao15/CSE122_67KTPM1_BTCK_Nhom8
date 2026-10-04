@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SiteSafe | An toàn cho mọi công trình</title>
+    <style>
+      :root {
+        --ink: #11131d;
+        --ink-soft: #1b1d2a;
+        --orange: #ff8b2b;
+        --blue: #2563eb;
+        --white: #ffffff;
+        --muted: #a9abb8;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        color: var(--white);
+        background: var(--ink);
+        font-family: Arial, sans-serif;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .site-header {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        min-height: 92px;
+        padding: 14px 32px 14px 48px;
+        background: rgb(17 19 29 / 94%);
+      }
+
+      .brand {
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand img {
+        display: block;
+        width: 240px;
+        height: 88px;
+        padding: 0;
+        background: transparent;
+        border-radius: 0;
+        box-shadow: none;
+        object-fit: contain;
+      }
+
+      .brand-tagline {
+        display: none;
+      }
+
+      .main-nav {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 28px;
+        font-size: 0.92rem;
+        font-weight: 700;
+      }
+
+      .main-nav a {
+        position: relative;
+        padding: 10px 0;
+        color: #f8fafc;
+        text-align: center;
+        transition: color 0.2s ease;
+      }
+
+      .main-nav a::after {
+        position: absolute;
+        right: 0;
+        bottom: 2px;
+        left: 0;
+        height: 2px;
+        background: var(--orange);
+        content: "";
+        transform: scaleX(0);
+        transition: transform 0.2s ease;
+      }
+
+      .main-nav a:hover {
+        color: var(--orange);
+      }
+
+      .main-nav a:hover::after {
+        transform: scaleX(1);
+      }
+
+      .header-actions {
+        display: flex;
+        flex-shrink: 0;
+        gap: 10px;
+      }
+
+      .nav-button {
+        display: inline-flex;
+        min-width: 112px;
+        min-height: 48px;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .nav-button--signup {
+        color: #171923;
+        background: var(--orange);
+      }
+
+      .nav-button--login {
+        background: var(--ink-soft);
+      }
+
+      .menu-toggle {
+        display: none;
+        width: 44px;
+        height: 44px;
+        color: var(--white);
+        background: var(--ink-soft);
+        border: 1px solid #3a3d4d;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1.4rem;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        min-height: 630px;
+        background: var(--ink);
+      }
+
+      .hero-image {
+        min-height: 630px;
+        background-image:
+          linear-gradient(rgb(17 19 29 / 3%), rgb(17 19 29 / 12%)),
+          url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=85");
+        background-position: center;
+        background-size: cover;
+      }
+
+      .hero-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 72px clamp(32px, 7vw, 112px);
+      }
+
+      .eyebrow {
+        margin: 0 0 24px;
+        color: #f8fafc;
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 {
+        max-width: 620px;
+        margin: 0;
+        color: var(--orange);
+        font-size: clamp(2.3rem, 4.3vw, 4.2rem);
+        font-weight: 500;
+        line-height: 1.12;
+      }
+
+      .hero-cta {
+        display: inline-flex;
+        width: fit-content;
+        min-height: 52px;
+        align-items: center;
+        margin-top: 34px;
+        padding: 12px 22px;
+        color: var(--white);
+        background: #34334f;
+        border-radius: 7px;
+        font-weight: 700;
+      }
+
+      .hero-cta:hover {
+        background: var(--blue);
+      }
+
+      .hero-description {
+        max-width: 540px;
+        margin: 62px 0 0;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.8;
+      }
+
+      .feature-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background: #333543;
+        border-top: 1px solid #333543;
+      }
+
+      .feature-item {
+        min-height: 160px;
+        padding: 28px 30px;
+        background: var(--ink-soft);
+      }
+
+      .feature-item strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--orange);
+        font-size: 1.05rem;
+      }
+
+      .feature-item span {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 1180px) {
+        .site-header {
+          padding-right: 22px;
+          padding-left: 28px;
+        }
+
+        .main-nav {
+          gap: 16px;
+          font-size: 0.82rem;
+        }
+
+        .nav-button {
+          min-width: 92px;
+          padding: 10px 12px;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .site-header {
+          min-height: 76px;
+          padding: 10px 18px;
+        }
+
+        .brand img {
+          width: 190px;
+          height: 70px;
+        }
+
+        .menu-toggle {
+          display: block;
+        }
+
+        .main-nav,
+        .header-actions {
+          display: none;
+        }
+
+        .site-header.is-open {
+          flex-wrap: wrap;
+        }
+
+        .site-header.is-open .main-nav,
+        .site-header.is-open .header-actions {
+          display: flex;
+          width: 100%;
+        }
+
+        .site-header.is-open .main-nav {
+          align-items: stretch;
+          flex-direction: column;
+          gap: 0;
+        }
+
+        .site-header.is-open .main-nav a {
+          padding: 13px 0;
+          border-top: 1px solid #2b2e3d;
+          text-align: left;
+        }
+
+        .site-header.is-open .header-actions {
+          padding-top: 12px;
+        }
+
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-image {
+          min-height: 380px;
+        }
+
+        .hero-copy {
+          min-height: 500px;
+          padding: 54px 28px;
+        }
+
+        .feature-strip {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 520px) {
+        .hero-image {
+          min-height: 300px;
+        }
+
+        .hero-copy {
+          min-height: 470px;
+          padding: 42px 22px;
+        }
+
+        .hero h1 {
+          font-size: 2.3rem;
+        }
+
+        .hero-description {
+          margin-top: 42px;
+        }
+
+        .feature-strip {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header" id="siteHeader">
+      <a class="brand" href="index.html" aria-label="Trang chủ SiteSafe">
+        <img
+          src="assets/images/sitesafe-logo-dark.png"
+          alt="Logo SiteSafe"
+        />
+        <span class="brand-tagline"
+          >Đồng hành an toàn, vững bước mọi công trình.</span
+        >
+      </a>
+
+      <nav class="main-nav" aria-label="Điều hướng chính">
+        <a href="#gioi-thieu">Tổng quan</a>
+        <a href="pages/worker/worker-safety-checklist.html">Checklist an toàn</a>
+        <a href="pages/worker/worker-hazard-create.html">Báo cáo nguy cơ</a>
+        <a href="pages/safety-officer/safety-inspection-management.html">Kiểm tra hiện trường</a>
+        <a href="pages/manager/manager-corrective-actions.html">Xử lý khắc phục</a>
+        <a href="pages/manager/manager-zone-risk-map.html">Khu vực</a>
+        <a href="pages/training/safety-training.html">Huấn luyện</a>
+      </nav>
+
+      <div class="header-actions">
+        <a
+          class="nav-button nav-button--signup"
+          href="pages/auth/register.html"
+          >Đăng ký</a
+        >
+        <a class="nav-button nav-button--login" href="pages/auth/login.html"
+          >Đăng nhập</a
+        >
+      </div>
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Mở menu"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+    </header>
+
+    <main id="gioi-thieu">
+      <section class="hero">
+        <div
+          class="hero-image"
+          role="img"
+          aria-label="Công nhân đang kiểm tra an toàn tại công trường"
+        ></div>
+        <div class="hero-copy">
+          <p class="eyebrow">Nền tảng an toàn công trường</p>
+          <h1>
+            Hãy yên tâm rằng sức khỏe và sự an toàn của bạn đang được đảm bảo.
+          </h1>
+          <span class="hero-cta">Bắt đầu kiểm tra an toàn</span>
+          <p class="hero-description">
+            SiteSafe kết nối công nhân, cán bộ an toàn, quản lý công trường và
+            quản trị viên trên cùng một quy trình rõ ràng: nhận diện nguy cơ,
+            báo cáo, xử lý và theo dõi đến khi hoàn tất.
+          </p>
+        </div>
+      </section>
+
+      <section class="feature-strip" aria-label="Các chức năng chính">
+        <div class="feature-item">
+          <strong>Checklist mỗi ngày</strong>
+          <span>Kiểm tra an toàn trước khi bắt đầu ca làm việc.</span>
+        </div>
+        <div class="feature-item">
+          <strong>Báo cáo nguy cơ</strong>
+          <span>Gửi mô tả và ảnh hiện trường trong vài thao tác.</span>
+        </div>
+        <div class="feature-item">
+          <strong>Kiểm tra và xử lý</strong>
+          <span>Review nguy cơ, giao hành động và theo dõi trạng thái.</span>
+        </div>
+        <div class="feature-item">
+          <strong>Bản đồ rủi ro</strong>
+          <span>Nhìn nhanh các điểm nóng an toàn theo khu vực.</span>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const siteHeader = document.getElementById("siteHeader");
+      const menuToggle = document.getElementById("menuToggle");
+
+      menuToggle.addEventListener("click", function () {
+        const isOpen = siteHeader.classList.toggle("is-open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        menuToggle.setAttribute("aria-label", isOpen ? "Đóng menu" : "Mở menu");
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sự cố đã gửi | SiteSafe</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/worker.css" />
+    <style>
+      .hazards-page {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0;
+      }
+
+      .hazards-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .hazards-header h1 {
+        margin: 0 0 6px;
+        color: var(--color-primary);
+        font-size: clamp(1.7rem, 4vw, 2.3rem);
+      }
+
+      .hazards-header p {
+        margin: 0;
+        color: #64748b;
+      }
+
+      .hazards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .hazard-card {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .card-img-wrapper {
+        width: 100%;
+        height: 180px;
+        overflow: hidden;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        position: relative;
+        background-color: #f1f5f9;
+      }
+
+      .card-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .card-status-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px 4px 16px;
+      }
+
+      .hazard-card-content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding: 18px;
+      }
+
+      .hazard-card h2 {
+        margin: 12px 0 8px;
+        color: var(--color-primary);
+        font-size: 1.1rem;
+        line-height: 1.35;
+      }
+
+      .hazard-card p {
+        margin: 0 0 14px;
+        color: #475569;
+        font-size: 0.94rem;
+      }
+
+      .hazard-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: auto;
+        padding-top: 14px;
+        color: #64748b;
+        border-top: 1px solid var(--color-border);
+        font-size: 0.85rem;
+      }
+
+      .hazard-meta .badge {
+        flex-shrink: 0;
+      }
+
+      .saved-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .saved-actions .btn {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+      }
+
+      @media (max-width: 900px) {
+        .hazards-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 600px) {
+        .hazards-page {
+          width: min(560px, calc(100% - 24px));
+          padding: 20px 0;
+        }
+
+        .hazards-header {
+          display: block;
+        }
+
+        .hazards-header .btn {
+          width: 100%;
+          margin-top: 16px;
+          text-align: center;
+        }
+
+        .hazards-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body data-required-role="WORKER">
+    <main class="hazards-page">
+      <header class="hazards-header">
+        <div>
+          <h1>Sự cố an toàn đã gửi</h1>
+          <p>Theo dõi các nguy cơ bạn đã ghi nhận tại công trường.</p>
+        </div>
+        <a class="btn btn-warning" href="worker-hazard-create.html"
+          >Báo cáo sự cố mới</a
+        >
+      </header>
+
+      <section
+        class="hazards-grid"
+        id="hazardsGrid"
+        aria-label="Danh sách sự cố đã gửi"
+      >
+        <article class="card hazard-card">
+          <!-- Ảnh minh họa sự cố lan can thiếu bảo vệ; thay URL bằng ảnh hiện trường thực tế khi có. -->
+          <!-- Prompt AI: "Realistic construction worker inspecting an incomplete guardrail on a high-rise concrete floor, safety helmet and reflective vest, daylight, documentary photography." -->
+          <div class="card-img-wrapper">
+            <img
+              class="img-hazard"
+              src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3"
+              alt="Lan can sàn công tác chưa hoàn thiện"
+            />
+          </div>
+          <div class="card-status-bar">
+            <span class="badge badge-warning">Đang chờ</span>
+            <span>Mức cao</span>
+          </div>
+          <div class="hazard-card-content">
+            <h2>Lan can sàn công tác thiếu đoạn bảo vệ</h2>
+            <p>
+              Một đoạn lan can tại tầng 12 chưa có đủ tay vịn và tấm chắn chân.
+            </p>
+            <div class="hazard-meta">
+              <span>Khu kết cấu - 18/09/2026</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card hazard-card">
+          <!-- Ảnh minh họa sự cố dầu tràn gần kho vật tư; thay URL bằng ảnh hiện trường thực tế khi có. -->
+          <!-- Prompt AI: "Small hydraulic oil spill beside a forklift in a construction material storage area, warning cone nearby, realistic industrial safety inspection photo." -->
+          <div class="card-img-wrapper">
+            <img
+              class="img-hazard"
+              src="https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?auto=format&fit=crop&w=1000&q=80"
+              alt="Dầu tràn gần xe nâng trong kho vật tư"
+            />
+          </div>
+          <div class="card-status-bar">
+            <span class="badge badge-success">Đã duyệt</span>
+            <span>Mức vừa</span>
+          </div>
+          <div class="hazard-card-content">
+            <h2>Dầu thủy lực rò rỉ gần lối đi</h2>
+            <p>
+              Vệt dầu nhỏ cạnh máy nâng đã được vệ sinh và đặt biển cảnh báo.
+            </p>
+            <div class="hazard-meta">
+              <span>Kho vật tư - 19/09/2026</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card hazard-card">
+          <!-- Ảnh minh họa khu vực cọc khoan nhồi thiếu rào chắn; thay URL bằng ảnh hiện trường thực tế khi có. -->
+          <!-- Prompt AI: "Bridge construction site with an unprotected drilled pile work area, safety officer checking warning signs and barricades, realistic construction photography." -->
+          <div class="card-img-wrapper">
+            <img
+              class="img-hazard"
+              src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1000&q=80"
+              alt="Khu vực thi công cọc khoan nhồi"
+            />
+          </div>
+          <div class="card-status-bar">
+            <span class="badge badge-warning">Đang chờ</span>
+            <span>Mức nghiêm trọng</span>
+          </div>
+          <div class="hazard-card-content">
+            <h2>Khu vực cọc khoan nhồi thiếu biển cảnh báo</h2>
+            <p>
+              Miệng cọc đang thi công chưa có rào chắn liên tục cho người đi
+              lại.
+            </p>
+            <div class="hazard-meta">
+              <span>Mố cầu phía Đông - 20/09/2026</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card hazard-card">
+          <!-- Ảnh minh họa công nhân thiếu thiết bị bảo hộ; thay URL bằng ảnh hiện trường thực tế khi có. -->
+          <!-- Prompt AI: "Construction worker receiving personal protective equipment at a busy building site, hard hat and reflective vest visible, realistic safety inspection photography." -->
+          <div class="card-img-wrapper">
+            <img
+              class="img-hazard"
+              src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?auto=format&fit=crop&w=1000&q=80"
+              alt="Công nhân kiểm tra thiết bị bảo hộ cá nhân"
+            />
+          </div>
+          <div class="card-status-bar">
+            <span class="badge badge-success">Đã duyệt</span>
+            <span>Mức vừa</span>
+          </div>
+          <div class="hazard-card-content">
+            <h2>Thiếu kính bảo hộ tại khu vực cắt vật liệu</h2>
+            <p>
+              Đã bổ sung kính bảo hộ và nhắc nhở công nhân trước khi tiếp tục
+              công việc.
+            </p>
+            <div class="hazard-meta">
+              <span>Khu gia công - 16/09/2026</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card hazard-card">
+          <!-- Ảnh minh họa dây điện thi công đặt gần khu vực ẩm ướt; thay URL bằng ảnh hiện trường thực tế khi có. -->
+          <!-- Prompt AI: "Exposed temporary electrical cable near a damp construction work area, warning tape and safety officer inspecting the hazard, realistic documentary photography." -->
+          <div class="card-img-wrapper">
+            <img
+              class="img-hazard"
+              src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1000&q=80"
+              alt="Dây điện thi công gần khu vực ẩm ướt"
+            />
+          </div>
+          <div class="card-status-bar">
+            <span class="badge badge-warning">Đang chờ</span>
+            <span>Mức cao</span>
+          </div>
+          <div class="hazard-card-content">
+            <h2>Dây điện tạm đặt gần khu vực ẩm ướt</h2>
+            <p>
+              Dây điện chưa được treo cao và có nguy cơ tiếp xúc với nước tại
+              lối đi.
+            </p>
+            <div class="hazard-meta">
+              <span>Khu cơ điện - 20/09/2026</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card hazard-card">
+          <!-- Ảnh minh họa vật liệu xây dựng chắn lối đi; thay URL bằng ảnh hiện trường thực tế khi có. -->
+          <!-- Prompt AI: "Construction materials blocking a marked pedestrian walkway, organized building site, safety sign visible, realistic workplace safety photography." -->
+          <div class="card-img-wrapper">
+            <img
+              class="img-hazard"
+              src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=1000&q=80"
+              alt="Vật liệu xây dựng chắn lối đi bộ"
+            />
+          </div>
+          <div class="card-status-bar">
+            <span class="badge badge-success">Đã duyệt</span>
+            <span>Mức thấp</span>
+          </div>
+          <div class="hazard-card-content">
+            <h2>Vật liệu xây dựng chắn lối đi bộ</h2>
+            <p>
+              Vật liệu đã được sắp xếp lại và lối đi bộ được kẻ vạch rõ ràng.
+            </p>
+            <div class="hazard-meta">
+              <span>Khu tập kết - 15/09/2026</span>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+    <script src="../../js/api.js"></script>
+    <script>
+      function escapeHazardText(value) {
+        return String(value || "").replace(/[&<>'"]/g, function (character) {
+          return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "'": "&#39;",
+            '"': "&quot;",
+          }[character];
+        });
+      }
+
+      const savedHazards = siteSafeApi.getHazards();
+      const hazardsGrid = document.getElementById("hazardsGrid");
+      savedHazards.forEach(function (hazard) {
+        const card = document.createElement("article");
+        const statusClass =
+          hazard.status === "OPEN" ? "badge-warning" : "badge-success";
+        const statusText = hazard.status === "OPEN" ? "Đang chờ" : "Đang xử lý";
+        const riskLabels = {
+          LOW: "Mức thấp",
+          MEDIUM: "Mức vừa",
+          HIGH: "Mức cao",
+          CRITICAL: "Mức nghiêm trọng",
+        };
+        const riskText =
+          riskLabels[hazard.riskLevel] ||
+          escapeHazardText(hazard.riskLevel || "Chưa đánh giá");
+        card.className = "card hazard-card saved-hazard-card";
+        card.dataset.hazardId = hazard.id;
+        card.innerHTML = `<div class="card-img-wrapper"><img class="img-hazard" src="${escapeHazardText(hazard.image || "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1000&q=80")}" alt="Ảnh ${escapeHazardText(hazard.title)}"></div><div class="card-status-bar"><span class="badge ${statusClass}">${statusText}</span><span>${riskText}</span></div><div class="hazard-card-content"><h2>${escapeHazardText(hazard.title)}</h2><p>${escapeHazardText(hazard.description)}</p><div class="hazard-meta"><span>${escapeHazardText(hazard.reportedAt || "Mới gửi")}</span></div><div class="saved-actions"><button class="btn btn-warning edit-saved-hazard" type="button">Sửa</button><button class="btn btn-danger delete-saved-hazard" type="button">Xóa</button></div></div>`;
+        hazardsGrid.prepend(card);
+      });
+
+      document.querySelectorAll(".saved-hazard-card").forEach(function (card) {
+        const hazardId = card.dataset.hazardId;
+        card
+          .querySelector(".edit-saved-hazard")
+          .addEventListener("click", function () {
+            const hazard = siteSafeApi
+              .getHazards()
+              .find((item) => item.id === hazardId);
+            if (!hazard) return;
+            const description = prompt(
+              "Cập nhật mô tả nguy cơ:",
+              hazard.description,
+            );
+            if (description === null || !description.trim()) return;
+            siteSafeApi.saveHazard({
+              ...hazard,
+              description: description.trim(),
+            });
+            card.querySelector(".hazard-card-content p").textContent =
+              description.trim();
+          });
+
+        card
+          .querySelector(".delete-saved-hazard")
+          .addEventListener("click", function () {
+            if (!confirm("Bạn có chắc muốn xóa báo cáo này không?")) return;
+            siteSafeApi.deleteHazard(hazardId);
+            card.remove();
+          });
+      });
+    </script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/modules/worker.js"></script>
+  </body>
+</html>

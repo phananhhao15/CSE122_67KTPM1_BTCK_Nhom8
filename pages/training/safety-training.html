@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Huấn luyện an toàn | SiteSafe</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/training.css" />
+  </head>
+  <body data-required-role="ANY">
+    <main class="training-container">
+      <section class="training-card">
+        <h1>Huấn luyện an toàn lao động</h1>
+        <p>Các khóa học và tài liệu đào tạo an toàn bắt buộc cho nhân sự công trường.</p>
+        
+        <div class="training-grid" id="trainingList"></div>
+      </section>
+    </main>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/modules/training.js"></script>
+    <script>
+      const trainingList = document.getElementById("trainingList");
+      const trainings = siteSafeTraining.getTrainings();
+
+      trainingList.innerHTML = trainings.map(course => `
+        <article class="course-card">
+          <img src="${course.image}" alt="${course.title}" />
+          <div class="course-body">
+            <h3 class="course-title">${course.title}</h3>
+            <p class="course-desc">${course.description}</p>
+            <div class="course-footer">
+              <span class="badge ${course.status === 'COMPLETED' ? 'badge-success' : course.status === 'IN_PROGRESS' ? 'badge-warning' : ''}">
+                ${course.status === 'COMPLETED' ? 'Đã hoàn thành' : course.status === 'IN_PROGRESS' ? 'Đang học' : 'Chưa học'}
+              </span>
+              <small>${course.duration}</small>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    </script>
+  </body>
+</html>

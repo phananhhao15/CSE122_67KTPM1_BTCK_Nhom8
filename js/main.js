@@ -27,16 +27,18 @@ function loadSidebarMenu() {
   }
 
   const rootPrefix = getProjectRootPrefix();
-  const pagesPrefix = rootPrefix === "../" ? "" : `${rootPrefix}pages/`;
   sidebar.innerHTML = `
-    <a class="sidebar-brand" href="${pagesPrefix}index.html">SiteSafe</a>
+    <a class="sidebar-brand" href="${rootPrefix}index.html">SiteSafe</a>
 		<nav aria-label="Menu chính">
-      <a href="${pagesPrefix}worker-nhanvienhientruong/worker-safety-checklist.html">Checklist an toàn</a>
-      <a href="${pagesPrefix}worker-nhanvienhientruong/worker-hazard-create.html">Báo cáo nguy cơ</a>
-      <a href="${pagesPrefix}safety-officer-can bo an toan/safety-dashboard.html">Safety Dashboard</a>
-      <a href="${pagesPrefix}site-quanlycongtruong/manager-corrective-actions.html">Hành động khắc phục</a>
-      <a href="${pagesPrefix}safety-equipment-store.html">Cửa hàng thiết bị</a>
-      <a href="${pagesPrefix}admin-quantrivien/admin-zone-management.html">Quản lý khu vực</a>
+      <a href="${rootPrefix}pages/worker/worker-safety-checklist.html">Checklist an toàn</a>
+      <a href="${rootPrefix}pages/worker/worker-hazard-create.html">Báo cáo nguy cơ</a>
+      <a href="${rootPrefix}pages/worker/worker-my-hazards.html">Sự cố của tôi</a>
+      <a href="${rootPrefix}pages/safety-officer/safety-dashboard.html">Safety Dashboard</a>
+      <a href="${rootPrefix}pages/safety-officer/safety-inspection-management.html">Quản lý kiểm tra</a>
+      <a href="${rootPrefix}pages/manager/manager-corrective-actions.html">Hành động khắc phục</a>
+      <a href="${rootPrefix}pages/manager/manager-zone-risk-map.html">Bản đồ rủi ro</a>
+      <a href="${rootPrefix}pages/admin/admin-user-management.html">Quản lý người dùng</a>
+      <a href="${rootPrefix}pages/training/safety-training.html">Huấn luyện an toàn</a>
 		</nav>
 		<button class="sidebar-logout" type="button">Đăng xuất</button>
 	`;
@@ -72,12 +74,12 @@ function checkAuthState() {
   }
 
   if (!currentUser) {
-    window.location.href = `${getProjectRootPrefix()}login.html`;
+    window.location.href = `${getProjectRootPrefix()}pages/auth/login.html`;
     return null;
   }
 
   if (requiredRole !== "ANY" && currentUser.role !== requiredRole) {
-    window.location.href = `${getProjectRootPrefix()}pages/index.html`;
+    window.location.href = `${getProjectRootPrefix()}index.html`;
     return null;
   }
 
@@ -87,7 +89,7 @@ function checkAuthState() {
 // Xóa phiên và đưa người dùng về trang đăng nhập.
 function logoutUser() {
   localStorage.removeItem("siteSafeUser");
-  window.location.href = `${getProjectRootPrefix()}login.html`;
+  window.location.href = `${getProjectRootPrefix()}pages/auth/login.html`;
 }
 
 // Chạy các chức năng dùng chung khi trang đã sẵn sàng.
