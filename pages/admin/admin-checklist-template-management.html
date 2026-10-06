@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="../../css/admin.css" />
     <link rel="stylesheet" href="../../css/responsive.css" />
-    
   </head>
   <body data-required-role="ADMIN">
     <div class="app-layout">
@@ -20,189 +19,240 @@
           </div>
         </header>
         <div class="page-content">
-    <main class="template-page">
-      <header class="template-header">
-        <div>
-          <h1>Quản lý mẫu checklist</h1>
-          <p>Quản lý danh mục câu hỏi dùng trong các đợt kiểm tra an toàn.</p>
-        </div>
-        <a class="btn" href="admin-user-management.html">Về quản trị viên</a>
-      </header>
+          <main class="template-page">
+            <header class="template-header">
+              <div>
+                <h1>Quản lý mẫu checklist</h1>
+                <p>
+                  Quản lý danh mục câu hỏi dùng trong các đợt kiểm tra an toàn.
+                </p>
+              </div>
+              <a class="btn" href="admin-user-management.html"
+                >Về quản trị viên</a
+              >
+            </header>
 
-      <section class="template-banner" aria-label="Minh họa quản lý checklist">
-        <h2>Chuẩn hóa câu hỏi để mỗi lần kiểm tra đều rõ ràng và nhất quán.</h2>
-      </section>
+            <section
+              class="template-banner"
+              aria-label="Minh họa quản lý checklist"
+            >
+              <h2>
+                Chuẩn hóa câu hỏi để mỗi lần kiểm tra đều rõ ràng và nhất quán.
+              </h2>
+            </section>
 
-      <section class="card" aria-labelledby="template-list-title">
-        <div class="template-toolbar">
-          <div class="template-filter">
-            <label for="work-type-filter">Lọc theo loại công việc</label>
-            <select class="form-control" id="work-type-filter">
-              <option value="">Tất cả loại công việc</option>
-              <option value="Làm việc trên cao">Làm việc trên cao</option>
-              <option value="Điện thi công">Điện thi công</option>
-              <option value="Nâng hạ vật liệu">Nâng hạ vật liệu</option>
-            </select>
-          </div>
-          <button class="btn btn-success" id="addQuestionButton" type="button">
-            + Thêm mới
-          </button>
-        </div>
+            <section class="card" aria-labelledby="template-list-title">
+              <div class="template-toolbar">
+                <div class="template-filter">
+                  <label for="work-type-filter">Lọc theo loại công việc</label>
+                  <select class="form-control" id="work-type-filter">
+                    <option value="">Tất cả loại công việc</option>
+                    <option value="Làm việc trên cao">Làm việc trên cao</option>
+                    <option value="Điện thi công">Điện thi công</option>
+                    <option value="Nâng hạ vật liệu">Nâng hạ vật liệu</option>
+                  </select>
+                </div>
+                <button
+                  class="btn btn-success"
+                  id="addQuestionButton"
+                  type="button"
+                >
+                  + Thêm mới
+                </button>
+              </div>
 
-        <form class="question-form" id="questionForm">
-          <div>
-            <label for="questionInput">Nội dung câu hỏi</label>
-            <input
-              class="form-control"
-              id="questionInput"
-              type="text"
-              placeholder="Nhập câu hỏi kiểm tra"
-              required
-            />
-          </div>
-          <div>
-            <label for="workTypeInput">Loại công việc</label>
-            <select class="form-control" id="workTypeInput" required>
-              <option value="Làm việc trên cao">Làm việc trên cao</option>
-              <option value="Điện thi công">Điện thi công</option>
-              <option value="Nâng hạ vật liệu">Nâng hạ vật liệu</option>
-            </select>
-          </div>
-          <div class="form-actions">
-            <button class="btn btn-success" type="submit">Lưu</button>
-            <button class="btn" id="cancelQuestionButton" type="button">
-              Hủy
-            </button>
-          </div>
-        </form>
+              <form class="question-form" id="questionForm">
+                <div>
+                  <label for="questionInput">Nội dung câu hỏi</label>
+                  <input
+                    class="form-control"
+                    id="questionInput"
+                    type="text"
+                    placeholder="Nhập câu hỏi kiểm tra"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="workTypeInput">Loại công việc</label>
+                  <select class="form-control" id="workTypeInput" required>
+                    <option value="Làm việc trên cao">Làm việc trên cao</option>
+                    <option value="Điện thi công">Điện thi công</option>
+                    <option value="Nâng hạ vật liệu">Nâng hạ vật liệu</option>
+                  </select>
+                </div>
+                <div class="form-actions">
+                  <button class="btn btn-success" type="submit">Lưu</button>
+                  <button class="btn" id="cancelQuestionButton" type="button">
+                    Hủy
+                  </button>
+                </div>
+              </form>
 
-        <h2 id="template-list-title">Danh mục câu hỏi mẫu</h2>
-        <div class="table-wrap">
-          <table class="table template-table">
-            <thead>
-              <tr>
-                <th scope="col">Mã</th>
-                <th scope="col">Câu hỏi kiểm tra</th>
-                <th scope="col">Loại công việc</th>
-                <th scope="col">Bắt buộc</th>
-                <th scope="col">Trạng thái</th>
-                <th scope="col">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody id="questionRows">
-              <tr data-work-type="Làm việc trên cao">
-                <td>CL-001</td>
-                <td class="question-text">
-                  Trang bị dây an toàn 2 móc đúng quy định<span
-                    class="question-note"
-                    >Kiểm tra trước khi lên sàn thao tác</span
-                  >
-                </td>
-                <td>Làm việc trên cao</td>
-                <td>Có</td>
-                <td><span class="badge badge-success">Đang dùng</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-edit edit-button" type="button">
-                      Sửa</button
-                    ><button class="btn btn-danger delete-button" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-work-type="Làm việc trên cao">
-                <td>CL-002</td>
-                <td class="question-text">
-                  Sàn thao tác có rào chắn và tấm chắn chân<span
-                    class="question-note"
-                    >Không có khoảng trống nguy hiểm</span
-                  >
-                </td>
-                <td>Làm việc trên cao</td>
-                <td>Có</td>
-                <td><span class="badge badge-success">Đang dùng</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-edit edit-button" type="button">
-                      Sửa</button
-                    ><button class="btn btn-danger delete-button" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-work-type="Điện thi công">
-                <td>CL-003</td>
-                <td class="question-text">
-                  Tủ điện có aptomat chống giật và được đóng kín<span
-                    class="question-note"
-                    >Kiểm tra trước khi cấp nguồn</span
-                  >
-                </td>
-                <td>Điện thi công</td>
-                <td>Có</td>
-                <td><span class="badge badge-success">Đang dùng</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-edit edit-button" type="button">
-                      Sửa</button
-                    ><button class="btn btn-danger delete-button" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-work-type="Điện thi công">
-                <td>CL-004</td>
-                <td class="question-text">
-                  Dây nguồn không hở vỏ và được cố định gọn gàng<span
-                    class="question-note"
-                    >Không để dây nằm trên lối đi</span
-                  >
-                </td>
-                <td>Điện thi công</td>
-                <td>Có</td>
-                <td><span class="badge badge-success">Đang dùng</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-edit edit-button" type="button">
-                      Sửa</button
-                    ><button class="btn btn-danger delete-button" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-work-type="Nâng hạ vật liệu">
-                <td>CL-005</td>
-                <td class="question-text">
-                  Khu vực bên dưới tải nâng đã được rào chắn<span
-                    class="question-note"
-                    >Có tín hiệu viên hướng dẫn khi nâng</span
-                  >
-                </td>
-                <td>Nâng hạ vật liệu</td>
-                <td>Không</td>
-                <td><span class="badge badge-warning">Bản nháp</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-edit edit-button" type="button">
-                      Sửa</button
-                    ><button class="btn btn-danger delete-button" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="empty-state" id="emptyState">
-            Không có câu hỏi phù hợp.
-          </div>
-        </div>
-      </section>
-    </main>
+              <h2 id="template-list-title">Danh mục câu hỏi mẫu</h2>
+              <div class="table-wrap">
+                <table class="table template-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Mã</th>
+                      <th scope="col">Câu hỏi kiểm tra</th>
+                      <th scope="col">Loại công việc</th>
+                      <th scope="col">Bắt buộc</th>
+                      <th scope="col">Trạng thái</th>
+                      <th scope="col">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="questionRows">
+                    <tr data-work-type="Làm việc trên cao">
+                      <td>CL-001</td>
+                      <td class="question-text">
+                        Trang bị dây an toàn 2 móc đúng quy định<span
+                          class="question-note"
+                          >Kiểm tra trước khi lên sàn thao tác</span
+                        >
+                      </td>
+                      <td>Làm việc trên cao</td>
+                      <td>Có</td>
+                      <td>
+                        <span class="badge badge-success">Đang dùng</span>
+                      </td>
+                      <td>
+                        <div class="action-buttons">
+                          <button
+                            class="btn btn-edit edit-button"
+                            type="button"
+                          >
+                            Sửa</button
+                          ><button
+                            class="btn btn-danger delete-button"
+                            type="button"
+                          >
+                            Xóa
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr data-work-type="Làm việc trên cao">
+                      <td>CL-002</td>
+                      <td class="question-text">
+                        Sàn thao tác có rào chắn và tấm chắn chân<span
+                          class="question-note"
+                          >Không có khoảng trống nguy hiểm</span
+                        >
+                      </td>
+                      <td>Làm việc trên cao</td>
+                      <td>Có</td>
+                      <td>
+                        <span class="badge badge-success">Đang dùng</span>
+                      </td>
+                      <td>
+                        <div class="action-buttons">
+                          <button
+                            class="btn btn-edit edit-button"
+                            type="button"
+                          >
+                            Sửa</button
+                          ><button
+                            class="btn btn-danger delete-button"
+                            type="button"
+                          >
+                            Xóa
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr data-work-type="Điện thi công">
+                      <td>CL-003</td>
+                      <td class="question-text">
+                        Tủ điện có aptomat chống giật và được đóng kín<span
+                          class="question-note"
+                          >Kiểm tra trước khi cấp nguồn</span
+                        >
+                      </td>
+                      <td>Điện thi công</td>
+                      <td>Có</td>
+                      <td>
+                        <span class="badge badge-success">Đang dùng</span>
+                      </td>
+                      <td>
+                        <div class="action-buttons">
+                          <button
+                            class="btn btn-edit edit-button"
+                            type="button"
+                          >
+                            Sửa</button
+                          ><button
+                            class="btn btn-danger delete-button"
+                            type="button"
+                          >
+                            Xóa
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr data-work-type="Điện thi công">
+                      <td>CL-004</td>
+                      <td class="question-text">
+                        Dây nguồn không hở vỏ và được cố định gọn gàng<span
+                          class="question-note"
+                          >Không để dây nằm trên lối đi</span
+                        >
+                      </td>
+                      <td>Điện thi công</td>
+                      <td>Có</td>
+                      <td>
+                        <span class="badge badge-success">Đang dùng</span>
+                      </td>
+                      <td>
+                        <div class="action-buttons">
+                          <button
+                            class="btn btn-edit edit-button"
+                            type="button"
+                          >
+                            Sửa</button
+                          ><button
+                            class="btn btn-danger delete-button"
+                            type="button"
+                          >
+                            Xóa
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr data-work-type="Nâng hạ vật liệu">
+                      <td>CL-005</td>
+                      <td class="question-text">
+                        Khu vực bên dưới tải nâng đã được rào chắn<span
+                          class="question-note"
+                          >Có tín hiệu viên hướng dẫn khi nâng</span
+                        >
+                      </td>
+                      <td>Nâng hạ vật liệu</td>
+                      <td>Không</td>
+                      <td><span class="badge badge-warning">Bản nháp</span></td>
+                      <td>
+                        <div class="action-buttons">
+                          <button
+                            class="btn btn-edit edit-button"
+                            type="button"
+                          >
+                            Sửa</button
+                          ><button
+                            class="btn btn-danger delete-button"
+                            type="button"
+                          >
+                            Xóa
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="empty-state" id="emptyState">
+                  Không có câu hỏi phù hợp.
+                </div>
+              </div>
+            </section>
+          </main>
         </div>
       </div>
     </div>
@@ -353,7 +403,7 @@
           ),
         );
       });
-
+      kdjlasdjlka;
       questionRows.querySelectorAll("tr").forEach(bindRowActions);
       workTypeFilter.addEventListener("change", applyWorkTypeFilter);
     </script>
