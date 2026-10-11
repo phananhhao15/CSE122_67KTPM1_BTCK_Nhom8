@@ -1,0 +1,107 @@
+[
+  {
+    "id": "USR-001",
+    "fullName": "Nguyễn Minh Anh",
+    "email": "admin@sitesafe.test",
+    "password": "password123",
+    "role": "ADMIN",
+    "roleLabel": "Quản trị viên",
+    "phone": "0901234567",
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80",
+    "status": "ACTIVE",
+    "lastLogin": "2026-09-24T08:30:00.000Z",
+    "createdAt": "2026-01-10T00:00:00.000Z"
+  },
+  {
+    "id": "USR-002",
+    "fullName": "Trần Huy Hoàng",
+    "email": "antoan.hoang@sitesafe.test",
+    "password": "password123",
+    "role": "SAFETY_OFFICER",
+    "roleLabel": "Cán bộ an toàn",
+    "phone": "0912345678",
+    "avatar": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=120&q=80",
+    "status": "ACTIVE",
+    "lastLogin": "2026-09-24T08:15:00.000Z",
+    "createdAt": "2026-01-12T00:00:00.000Z"
+  },
+  {
+    "id": "USR-003",
+    "fullName": "Phạm Minh Quân",
+    "email": "quan.pm@sitesafe.test",
+    "password": "password123",
+    "role": "SITE_MANAGER",
+    "roleLabel": "Quản lý công trường",
+    "phone": "0923456789",
+    "avatar": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=120&q=80",
+    "status": "ACTIVE",
+    "lastLogin": "2026-09-23T17:40:00.000Z",
+    "createdAt": "2026-01-15T00:00:00.000Z"
+  },
+  {
+    "id": "USR-004",
+    "fullName": "Trần Quốc Huy",
+    "email": "huy.tq@sitesafe.test",
+    "password": "password123",
+    "role": "WORKER",
+    "roleLabel": "Công nhân hiện trường",
+    "phone": "0934567890",
+    "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80",
+    "status": "ACTIVE",
+    "lastLogin": "2026-09-24T07:55:00.000Z",
+    "createdAt": "2026-02-01T00:00:00.000Z"
+  },
+  {
+    "id": "USR-005",
+    "fullName": "Phan Anh Hào",
+    "email": "hao.pa@sitesafe.test",
+    "password": "password123",
+    "role": "WORKER",
+    "roleLabel": "Công nhân hiện trường",
+    "phone": "0945678901",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80",
+    "status": "ACTIVE",
+    "lastLogin": "2026-09-24T08:00:00.000Z",
+    "createdAt": "2026-02-05T00:00:00.000Z"
+  },
+  {
+    "id": "USR-006",
+    "fullName": "Đoàn Thanh Sơn",
+    "email": "son.dt@sitesafe.test",
+    "password": "password123",
+    "role": "SITE_MANAGER",
+    "roleLabel": "Quản lý công trường",
+    "phone": "0956789012",
+    "avatar": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=120&q=80",
+    "status": "ACTIVE",
+    "lastLogin": "2026-09-23T16:30:00.000Z",
+    "createdAt": "2026-02-10T00:00:00.000Z"
+  },
+  {
+    "id": "USR-007",
+    "fullName": "Võ Thành Long",
+    "email": "long.vt@sitesafe.test",
+    "password": "password123",
+    "role": "SAFETY_OFFICER",
+    "roleLabel": "Cán bộ an toàn",
+    "phone": "0967890123",
+    "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=120&q=80",
+    "status": "ACTIVE",
+    "lastLogin": "2026-09-24T07:30:00.000Z",
+    "createdAt": "2026-02-15T00:00:00.000Z"
+  },
+  {
+    "id": "USR-008",
+    "fullName": "Bùi Văn Dũng",
+    "email": "dung.bv@sitesafe.test",
+    "password": "password123",
+    "role": "WORKER",
+    "roleLabel": "Công nhân hiện trường",
+    "phone": "0978901234",
+    "avatar": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=120&q=80",
+    "status": "ACTIVE",
+    "lastLogin": "2026-09-23T07:45:00.000Z",
+    "createdAt": "2026-02-20T00:00:00.000Z"
+  }
+]
+
