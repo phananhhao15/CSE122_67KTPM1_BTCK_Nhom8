@@ -1,0 +1,93 @@
+{
+  "templates": [
+    {
+      "id": "CL-001",
+      "question": "Dây cứu sinh được neo chắc chắn vào điểm cố định",
+      "note": "Kiểm tra móc khóa an toàn và dây treo trước khi leo cao",
+      "workType": "Làm việc trên cao",
+      "isRequired": true,
+      "status": "ACTIVE"
+    },
+    {
+      "id": "CL-002",
+      "question": "Sàn thao tác có rào chắn và tấm chắn chân",
+      "note": "Không có khoảng trống nguy hiểm, tay vịn chịu tải tốt",
+      "workType": "Làm việc trên cao",
+      "isRequired": true,
+      "status": "ACTIVE"
+    },
+    {
+      "id": "CL-003",
+      "question": "Tủ điện có aptomat chống giật và được đóng kín",
+      "note": "Kiểm tra trước khi cấp nguồn và nối đất vỏ kim loại",
+      "workType": "Điện thi công",
+      "isRequired": true,
+      "status": "ACTIVE"
+    },
+    {
+      "id": "CL-004",
+      "question": "Dây nguồn không hở vỏ và được cố định gọn gàng",
+      "note": "Không để dây nằm trên lối đi hoặc khu vực đọng nước",
+      "workType": "Điện thi công",
+      "isRequired": true,
+      "status": "ACTIVE"
+    },
+    {
+      "id": "CL-005",
+      "question": "Khu vực bên dưới tải nâng đã được rào chắn",
+      "note": "Có tín hiệu viên hướng dẫn khi nâng hạ cẩu tháp",
+      "workType": "Nâng hạ vật liệu",
+      "isRequired": false,
+      "status": "DRAFT"
+    },
+    {
+      "id": "CL-006",
+      "question": "Công nhân trang bị đầy đủ bảo hộ cá nhân (mũ, giày, áo phản quang)",
+      "note": "Bắt buộc 100% nhân sự vào công trường",
+      "workType": "An toàn chung",
+      "isRequired": true,
+      "status": "ACTIVE"
+    },
+    {
+      "id": "CL-007",
+      "question": "Miệng hố đào sâu trên 1.5m có rào chắn liên tục và đèn cảnh báo ban đêm",
+      "note": "Bố trí thang lên xuống an toàn",
+      "workType": "Đào đất & Hố móng",
+      "isRequired": true,
+      "status": "ACTIVE"
+    }
+  ],
+  "dailyTemplates": [
+    {
+      "id": "DAILY-DEFAULT",
+      "title": "Checklist an toàn hằng ngày trước ca",
+      "items": [
+        { "id": "item-1", "text": "Khu vực làm việc sạch sẽ, không có vật cản lối thoát hiểm." },
+        { "id": "item-2", "text": "Trang bị bảo hộ cá nhân (mũ, giày, áo phản quang) đạt chuẩn." },
+        { "id": "item-3", "text": "Dụng cụ, thiết bị cầm tay đã được kiểm tra an toàn trước khi dùng." },
+        { "id": "item-4", "text": "Hệ thống điện tạm, dây dẫn không bị hở hoặc ẩm ướt." },
+        { "id": "item-5", "text": "Đã nắm rõ hướng dẫn công việc và phương án ứng phó khẩn cấp trong ca." }
+      ]
+    }
+  ],
+  "submissions": [
+    {
+      "id": "CHK-001",
+      "checkDate": "2026-09-24",
+      "workZone": "LM-STR",
+      "zoneName": "Khu kết cấu và giàn giáo",
+      "submittedBy": "huy.tq@sitesafe.test",
+      "submittedByName": "Trần Quốc Huy",
+      "submittedAt": "2026-09-24T06:45:00.000Z",
+      "status": "PASSED",
+      "items": [
+        { "id": "item-1", "result": "pass" },
+        { "id": "item-2", "result": "pass" },
+        { "id": "item-3", "result": "pass" },
+        { "id": "item-4", "result": "pass" },
+        { "id": "item-5", "result": "pass" }
+      ]
+    }
+  ]
+}
+
