@@ -70,7 +70,41 @@
     </main>
         </div>
       </div>
-    </div>
+    <script>
+      // Đảm bảo quyền truy cập trang Quản lý công trường khi mở trực tiếp file:// hoặc chuyển đổi role từ trang quản trị
+      try {
+        const existingUser = JSON.parse(
+          localStorage.getItem("siteSafeUser") || "null",
+        );
+        if (!existingUser || existingUser.role !== "SITE_MANAGER") {
+          localStorage.setItem(
+            "siteSafeUser",
+            JSON.stringify({
+              fullName:
+                existingUser && existingUser.fullName
+                  ? existingUser.fullName
+                  : "Phạm Minh Quân",
+              email:
+                existingUser && existingUser.email
+                  ? existingUser.email
+                  : "quan.pm@sitesafe.test",
+              role: "SITE_MANAGER",
+              department: "Ban Quản lý công trường",
+            }),
+          );
+        }
+      } catch (e) {
+        localStorage.setItem(
+          "siteSafeUser",
+          JSON.stringify({
+            fullName: "Phạm Minh Quân",
+            email: "quan.pm@sitesafe.test",
+            role: "SITE_MANAGER",
+            department: "Ban Quản lý công trường",
+          }),
+        );
+      }
+    </script>
     <script src="../../js/api.js"></script>
     <script src="../../js/main.js"></script>
     <script src="../../js/modules/manager.js"></script>

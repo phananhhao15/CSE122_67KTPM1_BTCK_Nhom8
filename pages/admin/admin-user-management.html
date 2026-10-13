@@ -76,6 +76,39 @@
       </div>
     </div>
 
+    <script>
+      // Đảm bảo quyền truy cập trang Quản trị viên khi mở trực tiếp file:// hoặc chuyển đổi role
+      try {
+        const existingUser = JSON.parse(
+          localStorage.getItem("siteSafeUser") || "null",
+        );
+        if (!existingUser || existingUser.role !== "ADMIN") {
+          localStorage.setItem(
+            "siteSafeUser",
+            JSON.stringify({
+              fullName:
+                existingUser && existingUser.fullName
+                  ? existingUser.fullName
+                  : "Nguyễn Minh Anh",
+              email:
+                existingUser && existingUser.email
+                  ? existingUser.email
+                  : "admin@sitesafe.test",
+              role: "ADMIN",
+            }),
+          );
+        }
+      } catch (e) {
+        localStorage.setItem(
+          "siteSafeUser",
+          JSON.stringify({
+            fullName: "Nguyễn Minh Anh",
+            email: "admin@sitesafe.test",
+            role: "ADMIN",
+          }),
+        );
+      }
+    </script>
     <script src="../../js/api.js"></script>
     <script src="../../js/main.js"></script>
     <script src="../../js/modules/admin.js"></script>
