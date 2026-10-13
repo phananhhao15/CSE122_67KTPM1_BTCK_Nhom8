@@ -1,0 +1,63 @@
+[
+  {
+    "id": "PPE-001",
+    "name": "Mũ bảo hộ ABS có núm vặn",
+    "category": "Bảo hộ cá nhân",
+    "price": 185000,
+    "stock": 24,
+    "seller": "Bảo hộ Thành Công",
+    "art": "ppe",
+    "description": "Chất liệu ABS chịu lực cao, lót xốp giảm chấn, núm vặn tăng đơ chỉnh vòng đầu tiện lợi."
+  },
+  {
+    "id": "PPE-002",
+    "name": "Áo phản quang lưới 2 túi",
+    "category": "Bảo hộ cá nhân",
+    "price": 95000,
+    "stock": 42,
+    "seller": "Đồ bảo hộ Minh Phát",
+    "art": "ppe",
+    "description": "Vải lưới thoáng khí, dải phản quang xám 5cm phát sáng mạnh trong đêm, có túi đựng bộ đàm."
+  },
+  {
+    "id": "HGT-001",
+    "name": "Dây đai an toàn toàn thân 2 móc",
+    "category": "Làm việc trên cao",
+    "price": 890000,
+    "stock": 8,
+    "seller": "Thiết bị công nghiệp An Tâm",
+    "art": "height",
+    "description": "Đai toàn thân kết hợp bộ giảm xóc, 2 móc thép lớn mạ kẽm chịu tải 22kN tiêu chuẩn CE."
+  },
+  {
+    "id": "WRN-001",
+    "name": "Cọc tiêu giao thông phản quang",
+    "category": "Cảnh báo công trường",
+    "price": 125000,
+    "stock": 30,
+    "seller": "Bảo hộ Thành Công",
+    "art": "warning",
+    "description": "Nhựa PVC dẻo chịu va đập không vỡ, đế cao su chống đổ, màng phản quang cao cấp."
+  },
+  {
+    "id": "WRN-002",
+    "name": "Biển báo công trường đang thi công",
+    "category": "Cảnh báo công trường",
+    "price": 240000,
+    "stock": 15,
+    "seller": "Vật tư xây dựng Hưng Thịnh",
+    "art": "warning",
+    "description": "Tôn tráng kẽm sơn tĩnh điện, dán decal phản quang 3M, khung thép hộp chữ A vững chắc."
+  },
+  {
+    "id": "AID-001",
+    "name": "Tủ sơ cứu công trường 30 người",
+    "category": "Sơ cứu",
+    "price": 760000,
+    "stock": 6,
+    "seller": "Y tế công nghiệp An Tâm",
+    "art": "first-aid",
+    "description": "Đầy đủ danh mục vật tư y tế theo Thông tư 19/2016/TT-BYT, vỏ nhôm kính khóa an toàn."
+  }
+]
+
