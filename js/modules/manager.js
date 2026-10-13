@@ -204,19 +204,34 @@
   // Tạo số liệu tổng quan cho báo cáo từ dữ liệu thực tế.
   function getSafetySummary() {
     const hazards = getApi().getHazards();
-    const actions = getCorrectiveActions();
-    const completedActions = actions.filter(
-      (action) => action.status === "COMPLETED" || action.progress === 100,
+    const zones = getApi().getZones();
+    let totalHazards = 0;
+    let criticalHazards = 0;
+
+    zones.forEach((zone) => {
+      const count = Number(zone.hazardsCount) || 0;
+      totalHazards += count;
+      if (zone.riskLevel === "CRITICAL") criticalHazards += count;
+    });
+
+    if (totalHazards === 0) {
+      totalHazards = hazards.length;
+      criticalHazards = hazards.filter((h) => h.riskLevel === "CRITICAL").length;
+    }
+
+    const openCount = hazards.filter(
+      (h) => h.status === "OPEN" || h.status === "IN_PROGRESS",
     ).length;
+    const completedCount = Math.max(0, totalHazards - openCount);
+    const completionRate = totalHazards
+      ? Math.round((completedCount / totalHazards) * 100)
+      : 0;
+
     return {
-      totalHazards: hazards.length,
-      criticalHazards: hazards.filter(
-        (hazard) => hazard.riskLevel === "CRITICAL",
-      ).length,
-      completedActions,
-      completionRate: actions.length
-        ? Math.round((completedActions / actions.length) * 100)
-        : 0,
+      totalHazards,
+      criticalHazards,
+      completedActions: completedCount,
+      completionRate,
     };
   }
 
