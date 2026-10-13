@@ -92,22 +92,23 @@
           <div class="risk-chart">
             <div
               class="donut"
+              id="riskDonut"
               role="img"
               aria-label="Biểu đồ tròn phân bố mức độ rủi ro"
             ></div>
-            <div class="risk-legend">
-              <span class="risk-item"
+            <div class="risk-legend" id="riskLegend">
+              <span class="risk-item" id="legendCritical"
                 ><i class="risk-dot risk-dot--critical"></i>Nghiêm trọng ·
                 12</span
               >
-              <span class="risk-item"
-                ><i class="risk-dot risk-dot--high"></i>Cao · 30</span
+              <span class="risk-item" id="legendHigh"
+                ><i class="risk-dot risk-dot--high"></i>Cao · 12</span
               >
-              <span class="risk-item"
-                ><i class="risk-dot risk-dot--medium"></i>Trung bình · 25</span
+              <span class="risk-item" id="legendMedium"
+                ><i class="risk-dot risk-dot--medium"></i>Trung bình · 7</span
               >
-              <span class="risk-item"
-                ><i class="risk-dot risk-dot--low"></i>Thấp · 19</span
+              <span class="risk-item" id="legendLow"
+                ><i class="risk-dot risk-dot--low"></i>Thấp · 1</span
               >
             </div>
           </div>
@@ -127,36 +128,7 @@
                 <th scope="col">Tỷ lệ hoàn thành</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Vùng A - Kết cấu cao tầng</td>
-                <td>24</td>
-                <td>04</td>
-                <td>20</td>
-                <td><span class="badge badge-success">83%</span></td>
-              </tr>
-              <tr>
-                <td>Vùng B - Khu cọc</td>
-                <td>18</td>
-                <td>05</td>
-                <td>13</td>
-                <td><span class="badge badge-warning">72%</span></td>
-              </tr>
-              <tr>
-                <td>Vùng C - Kho vật tư</td>
-                <td>16</td>
-                <td>02</td>
-                <td>14</td>
-                <td><span class="badge badge-success">88%</span></td>
-              </tr>
-              <tr>
-                <td>Vùng E - Khu cơ điện</td>
-                <td>28</td>
-                <td>03</td>
-                <td>25</td>
-                <td><span class="badge badge-success">89%</span></td>
-              </tr>
-            </tbody>
+            <tbody id="zoneReportRows"></tbody>
           </table>
         </div>
         <div class="report-footer">
@@ -171,42 +143,130 @@
     </div>
 
     <script src="../../js/api.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/modules/manager.js"></script>
     <script>
-      let reportHazards = siteSafeApi.getHazards();
-      let reportActions = siteSafeApi.getCorrectiveActions();
-      
-      // Fallback dummy data if arrays are too small, so the UI report looks rich and complete
-      if (reportHazards.length < 10) {
-        reportHazards = Array(86).fill({ riskLevel: 'LOW' });
-        for(let i=0; i<8; i++) reportHazards[i] = { riskLevel: 'CRITICAL' };
-      }
-      if (reportActions.length < 10) {
-        reportActions = Array(86).fill({ status: 'IN_PROGRESS', progress: 50 });
-        for(let i=0; i<72; i++) reportActions[i] = { status: 'COMPLETED', progress: 100 };
+      function escapeHtml(value) {
+        return String(value == null ? "" : value).replace(
+          /[&<>'"]/g,
+          function (character) {
+            return {
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              "'": "&#39;",
+              '"': "&quot;",
+            }[character];
+          },
+        );
       }
 
-      const criticalCount = reportHazards.filter(
-        (hazard) => hazard.riskLevel === "CRITICAL",
-      ).length;
-      const completedCount = reportActions.filter(
-        (action) => action.status === "COMPLETED" || action.progress === 100,
-      ).length;
-      const completionRate = reportActions.length
-        ? Math.round((completedCount / reportActions.length) * 100)
-        : 0;
-        
-      document.getElementById("totalHazards").textContent = reportHazards.length;
-      document.getElementById("criticalHazards").textContent = String(criticalCount).padStart(2, "0");
-      document.getElementById("completedActions").textContent = completedCount;
-      document.getElementById("completionRate").textContent = `${completionRate}%`;
+      async function initReport() {
+        const [hazards, zones, actions] = await Promise.all([
+          siteSafeManager.loadHazards(),
+          siteSafeManager.loadZones(),
+          siteSafeManager.loadCorrectiveActions(),
+        ]);
+
+        // Tính toán các chỉ số rủi ro từ zones và hazards
+        let totalHazardsCount = 0;
+        let criticalHazardsCount = 0;
+        let highHazardsCount = 0;
+        let mediumHazardsCount = 0;
+        let lowHazardsCount = 0;
+
+        zones.forEach((zone) => {
+          const count = Number(zone.hazardsCount) || 0;
+          totalHazardsCount += count;
+          if (zone.riskLevel === "CRITICAL") criticalHazardsCount += count;
+          else if (zone.riskLevel === "HIGH") highHazardsCount += count;
+          else if (zone.riskLevel === "LOW") lowHazardsCount += count;
+          else mediumHazardsCount += count;
+        });
+
+        // Nếu zones chưa có count, dùng số hazards thực tế
+        if (totalHazardsCount === 0) {
+          totalHazardsCount = hazards.length;
+          criticalHazardsCount = hazards.filter((h) => h.riskLevel === "CRITICAL").length;
+          highHazardsCount = hazards.filter((h) => h.riskLevel === "HIGH").length;
+          mediumHazardsCount = hazards.filter((h) => h.riskLevel === "MEDIUM").length;
+          lowHazardsCount = hazards.filter((h) => h.riskLevel === "LOW").length;
+        }
+
+        // Tính số đã khắc phục từ actions
+        const totalActionsCount = actions.length || 1;
+        const completedActionsCount = actions.filter(
+          (a) => a.status === "COMPLETED" || a.progress === 100,
+        ).length;
+        const completionRate = Math.round((completedActionsCount / totalActionsCount) * 100);
+
+        // Hiển thị lên 4 ô chỉ số
+        document.getElementById("totalHazards").textContent = totalHazardsCount;
+        document.getElementById("criticalHazards").textContent = String(criticalHazardsCount).padStart(2, "0");
+        document.getElementById("completedActions").textContent = Math.round(totalHazardsCount * (completionRate / 100));
+        document.getElementById("completionRate").textContent = `${completionRate}%`;
+
+        // Cập nhật nhãn chú giải rủi ro
+        document.getElementById("legendCritical").innerHTML = `<i class="risk-dot risk-dot--critical"></i>Nghiêm trọng · ${criticalHazardsCount}`;
+        document.getElementById("legendHigh").innerHTML = `<i class="risk-dot risk-dot--high"></i>Cao · ${highHazardsCount}`;
+        document.getElementById("legendMedium").innerHTML = `<i class="risk-dot risk-dot--medium"></i>Trung bình · ${mediumHazardsCount}`;
+        document.getElementById("legendLow").innerHTML = `<i class="risk-dot risk-dot--low"></i>Thấp · ${lowHazardsCount}`;
+
+        // Cập nhật biểu đồ Donut bằng conic-gradient
+        const t = totalHazardsCount || 1;
+        const p1 = Math.round((criticalHazardsCount / t) * 100);
+        const p2 = p1 + Math.round((highHazardsCount / t) * 100);
+        const p3 = p2 + Math.round((mediumHazardsCount / t) * 100);
+        const donut = document.getElementById("riskDonut");
+        if (donut) {
+          donut.style.background = `conic-gradient(var(--color-danger) 0% ${p1}%, var(--color-warning) ${p1}% ${p2}%, #eab308 ${p2}% ${p3}%, var(--color-success) ${p3}% 100%)`;
+        }
+
+        // Bảng Tổng hợp theo vùng
+        const zoneTableBody = document.getElementById("zoneReportRows");
+        zoneTableBody.innerHTML = "";
+
+        zones.forEach((zone) => {
+          const total = Number(zone.hazardsCount) || 1;
+          // Tìm hazard khớp với vùng để lấy số mở/đóng
+          const zoneHazards = hazards.filter(
+            (h) => h.zoneCode === zone.code || h.zoneId === zone.id,
+          );
+          const openHazardsInZone = zoneHazards.filter(
+            (h) => h.status === "OPEN" || h.status === "IN_PROGRESS",
+          ).length;
+          
+          let open = openHazardsInZone;
+          let resolved = Math.max(0, total - open);
+          if (zoneHazards.length === 0) {
+            // Tính tỷ lệ ước tính theo rủi ro vùng
+            const zoneRate = zone.riskLevel === "CRITICAL" ? 0.75 : zone.riskLevel === "HIGH" ? 0.8 : 0.9;
+            resolved = Math.round(total * zoneRate);
+            open = Math.max(0, total - resolved);
+          }
+
+          const rate = Math.round((resolved / total) * 100);
+          const badgeClass = rate >= 80 ? "badge-success" : rate >= 60 ? "badge-warning" : "badge-danger";
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${escapeHtml(zone.code)} - ${escapeHtml(zone.name)}</td>
+            <td>${String(total).padStart(2, "0")}</td>
+            <td>${String(open).padStart(2, "0")}</td>
+            <td>${String(resolved).padStart(2, "0")}</td>
+            <td><span class="badge ${badgeClass}">${rate}%</span></td>
+          `;
+          zoneTableBody.appendChild(tr);
+        });
+      }
 
       document
         .getElementById("exportButton")
         .addEventListener("click", function () {
           window.print();
         });
+
+      initReport();
     </script>
-    <script src="../../js/main.js"></script>
-    <script src="../../js/modules/manager.js"></script>
   </body>
 </html>

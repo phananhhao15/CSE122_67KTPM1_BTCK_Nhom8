@@ -67,112 +67,7 @@
                 <th scope="col">Thao tác</th>
               </tr>
             </thead>
-            <tbody id="user-rows">
-              <tr data-role="ADMIN">
-                <td>
-                  <div class="user-cell">
-                    <img
-                      class="user-avatar"
-                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
-                      alt="Avatar Nguyễn Minh Anh"
-                    />
-                    <div>
-                      <span class="user-name">Nguyễn Minh Anh</span
-                      ><span class="user-id">USR-001</span>
-                    </div>
-                  </div>
-                </td>
-                <td>admin@sitesafe.test</td>
-                <td><span class="badge role-admin">Quản trị viên</span></td>
-                <td><span class="badge badge-success">Đang hoạt động</span></td>
-                <td>24/09/2026, 08:30</td>
-                <td>
-                  <div class="user-actions">
-                    <button class="btn edit-user" type="button">Sửa</button
-                    ><button class="btn btn-danger" type="button">Khóa</button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-role="SAFETY_OFFICER">
-                <td>
-                  <div class="user-cell">
-                    <img
-                      class="user-avatar"
-                      src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=120&q=80"
-                      alt="Avatar Trần Huy Hoàng"
-                    />
-                    <div>
-                      <span class="user-name">Trần Huy Hoàng</span
-                      ><span class="user-id">USR-002</span>
-                    </div>
-                  </div>
-                </td>
-                <td>antoan.hoang@sitesafe.test</td>
-                <td><span class="badge role-safety">Cán bộ an toàn</span></td>
-                <td><span class="badge badge-success">Đang hoạt động</span></td>
-                <td>24/09/2026, 08:15</td>
-                <td>
-                  <div class="user-actions">
-                    <button class="btn edit-user" type="button">Sửa</button
-                    ><button class="btn btn-danger" type="button">Khóa</button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-role="SITE_MANAGER">
-                <td>
-                  <div class="user-cell">
-                    <img
-                      class="user-avatar"
-                      src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=120&q=80"
-                      alt="Avatar Phạm Minh Quân"
-                    />
-                    <div>
-                      <span class="user-name">Phạm Minh Quân</span
-                      ><span class="user-id">USR-003</span>
-                    </div>
-                  </div>
-                </td>
-                <td>quan.pm@sitesafe.test</td>
-                <td>
-                  <span class="badge role-manager">Quản lý công trường</span>
-                </td>
-                <td><span class="badge badge-success">Đang hoạt động</span></td>
-                <td>23/09/2026, 17:40</td>
-                <td>
-                  <div class="user-actions">
-                    <button class="btn edit-user" type="button">Sửa</button
-                    ><button class="btn btn-danger" type="button">Khóa</button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-role="WORKER">
-                <td>
-                  <div class="user-cell">
-                    <img
-                      class="user-avatar"
-                      src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
-                      alt="Avatar Trần Quốc Huy"
-                    />
-                    <div>
-                      <span class="user-name">Trần Quốc Huy</span
-                      ><span class="user-id">USR-004</span>
-                    </div>
-                  </div>
-                </td>
-                <td>huy.tq@sitesafe.test</td>
-                <td>
-                  <span class="badge role-worker">Công nhân hiện trường</span>
-                </td>
-                <td><span class="badge badge-success">Đang hoạt động</span></td>
-                <td>24/09/2026, 07:55</td>
-                <td>
-                  <div class="user-actions">
-                    <button class="btn edit-user" type="button">Sửa</button
-                    ><button class="btn btn-danger" type="button">Khóa</button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
+            <tbody id="user-rows"></tbody>
           </table>
         </div>
       </section>
@@ -182,9 +77,15 @@
     </div>
 
     <script src="../../js/api.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/modules/admin.js"></script>
     <script>
       const roleFilter = document.getElementById("role-filter");
       const userRows = document.getElementById("user-rows");
+
+      function showCustomPrompt(message, defaultValue = "") {
+        return Promise.resolve(window.prompt(message, defaultValue));
+      }
 
       const roleNames = {
         ADMIN: "Quản trị viên",
@@ -263,7 +164,18 @@
 
       function createUserRow(user) {
         const row = document.createElement("tr");
-        row.innerHTML = `<td><div class="user-cell"><img class="user-avatar" src="${defaultAvatar}" alt="Avatar" /><div><span class="user-name">${escapeHtml(user.fullName)}</span><span class="user-id">${escapeHtml(user.id)}</span></div></div></td><td>${escapeHtml(user.email)}</td><td></td><td></td><td>Mới cập nhật</td><td><div class="user-actions"><button class="btn edit-user" type="button">Sửa</button><button class="btn btn-danger lock-user" type="button">Khóa</button></div></td>`;
+        const avatarSrc = user.avatar || defaultAvatar;
+        const lastLoginText = user.lastLogin
+          ? new Date(user.lastLogin).toLocaleString("vi-VN", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          : "Mới cập nhật";
+
+        row.innerHTML = `<td><div class="user-cell"><img class="user-avatar" src="${escapeHtml(avatarSrc)}" alt="Avatar" /><div><span class="user-name">${escapeHtml(user.fullName)}</span><span class="user-id">${escapeHtml(user.id)}</span></div></div></td><td>${escapeHtml(user.email)}</td><td></td><td></td><td>${escapeHtml(lastLoginText)}</td><td><div class="user-actions"><button class="btn edit-user" type="button">Sửa</button><button class="btn btn-danger lock-user" type="button">Khóa</button></div></td>`;
         row.querySelector(".user-avatar").alt = `Avatar ${user.fullName}`;
         applyRowRole(row, user.role);
         row.dataset.status = user.status || "ACTIVE";
@@ -299,22 +211,15 @@
         );
       }
 
-      // Khởi tạo: gộp dữ liệu đã lưu vào các hàng mẫu có sẵn.
-      userRows.querySelectorAll("tr").forEach(decorateRow);
-      siteSafeApi.getUsers().forEach(function (user) {
-        const existingRow = Array.from(userRows.querySelectorAll("tr")).find(
-          (row) => getRowId(row) === user.id,
-        );
-        if (!existingRow) {
+      // Khởi tạo: Lấy dữ liệu từ file assets/data/users.json và render động
+      async function initUsers() {
+        userRows.innerHTML = "";
+        const users = await siteSafeAdmin.loadUsers();
+        users.forEach(function (user) {
           createUserRow(user);
-          return;
-        }
-        if (user.role) applyRowRole(existingRow, user.role);
-        if (user.fullName)
-          existingRow.querySelector(".user-name").textContent = user.fullName;
-        if (user.email) existingRow.children[1].textContent = user.email;
-        applyRowStatus(existingRow, user.status);
-      });
+        });
+        applyRoleFilter();
+      }
 
       roleFilter.addEventListener("change", applyRoleFilter);
 
@@ -325,7 +230,10 @@
         const row = button.closest("tr");
 
         if (button.classList.contains("lock-user")) {
-          applyRowStatus(row, row.dataset.status === "INACTIVE" ? "ACTIVE" : "INACTIVE");
+          applyRowStatus(
+            row,
+            row.dataset.status === "INACTIVE" ? "ACTIVE" : "INACTIVE",
+          );
           persistRow(row);
           return;
         }
@@ -336,7 +244,10 @@
             row.querySelector(".user-name").textContent,
           );
           if (name === null) return;
-          const email = await showCustomPrompt("Email người dùng:", getRowEmail(row));
+          const email = await showCustomPrompt(
+            "Email người dùng:",
+            getRowEmail(row),
+          );
           if (email === null) return;
           const cleanName = name.trim();
           const cleanEmail = email.trim();
@@ -350,7 +261,7 @@
           }
           row.querySelector(".user-name").textContent = cleanName;
           row.children[1].textContent = cleanEmail;
-          persistRow(row); // giữ nguyên trạng thái khóa hiện tại
+          persistRow(row);
           return;
         }
 
@@ -397,8 +308,8 @@
           createUserRow(user);
           applyRoleFilter();
         });
+
+      initUsers();
     </script>
-    <script src="../../js/main.js"></script>
-    <script src="../../js/modules/admin.js"></script>
   </body>
 </html>

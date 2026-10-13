@@ -92,17 +92,23 @@
         );
       }
 
-      function renderTrainings() {
-        const trainings = siteSafeTraining.getTrainings();
+      async function renderTrainings() {
+        const trainings = await siteSafeTraining.loadTrainings();
         trainingEmpty.hidden = trainings.length > 0;
         trainingList.innerHTML = trainings
           .map(function (course) {
             const info = statusInfo[course.status] || statusInfo.NOT_STARTED;
-            const bgImage = course.image ? `url('${escapeHtml(course.image)}'), ` : '';
+            const progress =
+              typeof course.progress === "number"
+                ? course.progress
+                : info.progress;
+            const bgImage = course.image
+              ? `url('${escapeHtml(course.image)}'), `
+              : "";
             return `
         <article class="course-card">
           <div class="course-thumbnail" style="background-image: ${bgImage}linear-gradient(135deg, var(--color-primary) 0%, #334155 100%); background-size: cover; background-position: center;">
-            <span class="course-badge">${escapeHtml(course.level || 'Cơ bản')}</span>
+            <span class="course-badge">${escapeHtml(course.level || "Cơ bản")}</span>
           </div>
           <div class="course-content">
             <h3>${escapeHtml(course.title)}</h3>
@@ -110,10 +116,10 @@
             <div class="progress-container">
               <div class="progress-info">
                 <span>${info.label}</span>
-                <span>${info.progress}%</span>
+                <span>${progress}%</span>
               </div>
-              <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${info.progress}">
-                <div class="progress-fill" style="width: ${info.progress}%; ${info.progress === 100 ? 'background: var(--color-success);' : 'background: var(--color-warning);'}"></div>
+              <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}">
+                <div class="progress-fill" style="width: ${progress}%; ${progress === 100 ? "background: var(--color-success);" : "background: var(--color-warning);"}"></div>
               </div>
             </div>
             <div class="course-action">
@@ -137,14 +143,14 @@
         true,
       );
 
-      trainingList.addEventListener("click", function (event) {
+      trainingList.addEventListener("click", async function (event) {
         const button = event.target.closest("[data-course-id]");
         if (!button) return;
         siteSafeTraining.updateTrainingStatus(
           button.dataset.courseId,
           button.dataset.nextStatus,
         );
-        renderTrainings();
+        await renderTrainings();
       });
 
       renderTrainings();
