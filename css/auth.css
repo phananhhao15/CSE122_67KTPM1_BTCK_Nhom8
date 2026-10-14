@@ -1,0 +1,749 @@
+/* ==========================================================================
+   SiteSafe Auth Styles (Hào phụ trách)
+   Tiền tố bắt buộc: .auth-
+   Không ghi đè selector toàn cục (body, button, card...).
+   Kế thừa và sử dụng biến/class từ style.css.
+   Responsive chuẩn tại: 375px (Mobile), 768px (Tablet), 1280px (Desktop).
+   ========================================================================== */
+
+/* 1. LAYOUT NỀN CÔNG TRƯỜNG CHO AUTH */
+.auth-login-wrapper {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background-color: #0b1120;
+  overflow-x: hidden;
+  font-family: inherit;
+}
+
+/* Lưới nền công trường đa ảnh */
+.auth-background-grid {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  gap: 12px;
+  padding: 16px;
+  background-image: url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1800&q=80");
+  background-position: center;
+  background-size: cover;
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.auth-background-card {
+  min-width: 0;
+  min-height: 0;
+  border-radius: 12px;
+  background-position: center;
+  background-size: cover;
+  filter: saturate(0.85) brightness(0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.auth-bg-card--one {
+  grid-column: 1 / 4;
+  grid-row: 1 / 4;
+  background-image: url("../../assets/images/anhdangnhap2.png");
+}
+
+.auth-bg-card--two {
+  grid-column: 4 / 8;
+  grid-row: 1 / 3;
+  background-image: url("../../assets/images/anhlogin.png");
+}
+
+.auth-bg-card--three {
+  grid-column: 8 / 13;
+  grid-row: 1 / 4;
+  background-image: url("../../assets/images/anhdangnhap.png");
+}
+
+.auth-bg-card--four {
+  grid-column: 1 / 5;
+  grid-row: 4 / 7;
+  background-image: url("../../assets/images/nen.png");
+}
+
+.auth-bg-card--five {
+  grid-column: 9 / 13;
+  grid-row: 4 / 8;
+  background-image: url("../../assets/images/anhdangnhap1.png");
+}
+
+.auth-bg-card--six {
+  grid-column: 2 / 7;
+  grid-row: 7 / 9;
+  background-image: url("../../assets/images/anhlogin.png");
+}
+
+.auth-background-shade {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(15, 23, 42, 0.76) 0%, rgba(11, 17, 32, 0.95) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 2. CARD FORM XÁC THỰC CHÍNH */
+.auth-card {
+  position: relative;
+  z-index: 10;
+  width: min(480px, 100%);
+  padding: 36px 32px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
+}
+
+.auth-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  margin-bottom: 24px;
+}
+
+.auth-brand-logo {
+  max-width: 240px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+
+.auth-brand-tagline {
+  font-size: 0.8125rem;
+  color: #64748b;
+  font-weight: 500;
+  text-align: center;
+}
+
+.auth-heading {
+  margin: 0 0 8px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(1.6rem, 3vw, 1.95rem);
+  font-weight: 800;
+  color: #0f172a;
+  text-align: center;
+  letter-spacing: -0.035em;
+  line-height: 1.25;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.auth-subheading {
+  margin: 0 0 24px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.92rem;
+  color: #64748b;
+  text-align: center;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+/* 3. LAYOUT CHIA ĐÔI CHO REGISTER (SPLIT LAYOUT) */
+.auth-split-layout {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  background: #ffffff;
+}
+
+.auth-split-banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px;
+  background: #0f172a url("https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80") center/cover no-repeat;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.auth-split-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.94) 0%, rgba(30, 41, 59, 0.82) 100%);
+  z-index: 1;
+}
+
+.auth-banner-header,
+.auth-banner-content {
+  position: relative;
+  z-index: 2;
+}
+
+.auth-banner-logo {
+  max-width: 160px;
+  height: 52px;
+  object-fit: contain;
+  display: block;
+}
+
+.auth-banner-title {
+  margin: 0 0 16px;
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.25;
+  color: #ffffff;
+}
+
+.auth-banner-title span {
+  color: var(--color-warning);
+}
+
+.auth-banner-desc {
+  margin: 0 0 32px;
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  max-width: 480px;
+}
+
+.auth-banner-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-banner-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: #e2e8f0;
+}
+
+.auth-feature-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.auth-split-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+  background: #ffffff;
+  overflow-y: auto;
+}
+
+.auth-split-form-container {
+  width: min(480px, 100%);
+}
+
+/* 4. FORM GROUPS, INPUTS, LABELS */
+.auth-form-group {
+  margin-bottom: 18px;
+}
+
+.auth-form-group:last-child {
+  margin-bottom: 0;
+}
+
+.auth-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.auth-label-required {
+  color: #dc2626;
+  margin-left: 4px;
+}
+
+.auth-input,
+.auth-select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-input:focus,
+.auth-select:focus {
+  outline: none;
+  border-color: var(--color-warning);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.auth-input.is-invalid,
+.auth-select.is-invalid {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+/* Ô nhập mật khẩu có nút Toggle */
+.auth-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-password-wrapper .auth-input {
+  padding-right: 44px;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 1.05rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.auth-password-toggle:hover {
+  background: #f1f5f9;
+  color: var(--color-primary);
+}
+
+/* Thông báo lỗi dưới từng field */
+.auth-field-error {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.8125rem;
+  color: #dc2626;
+  line-height: 1.35;
+}
+
+/* 5. NÚT THAO TÁC (BUTTONS) & TRẠNG THÁI LOADING */
+.auth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 20px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+}
+
+.auth-btn-primary {
+  color: #ffffff;
+  background-color: var(--color-warning);
+  border-color: var(--color-warning);
+  box-shadow: 0 2px 6px rgba(249, 115, 22, 0.25);
+}
+
+.auth-btn-primary:hover {
+  background-color: #ea580c;
+  border-color: #ea580c;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+}
+
+.auth-btn-secondary {
+  color: var(--color-primary);
+  background-color: #f1f5f9;
+  border-color: var(--color-border);
+}
+
+.auth-btn-secondary:hover {
+  background-color: #e2e8f0;
+}
+
+.auth-btn-link {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-warning);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.auth-btn-link:hover {
+  text-decoration: underline;
+  color: #ea580c;
+}
+
+/* Spinner trạng thái loading (Ẩn sẵn, bật bằng class .auth-btn--loading) */
+.auth-btn-spinner {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: authSpin 0.75s linear infinite;
+  box-sizing: border-box;
+}
+
+@keyframes authSpin {
+  to { transform: rotate(360deg); }
+}
+
+.auth-btn-text-default {
+  display: inline;
+}
+
+.auth-btn-text-loading {
+  display: none;
+}
+
+/* Kích hoạt trạng thái loading qua class */
+.auth-btn--loading {
+  pointer-events: none;
+  opacity: 0.85;
+  cursor: wait;
+}
+
+.auth-btn--loading .auth-btn-spinner {
+  display: inline-block;
+}
+
+.auth-btn--loading .auth-btn-text-default {
+  display: none;
+}
+
+.auth-btn--loading .auth-btn-text-loading {
+  display: inline;
+}
+
+/* 6. VÙNG THÔNG BÁO CHUNG (ALERTS) */
+.auth-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  box-sizing: border-box;
+}
+
+.auth-alert-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.auth-alert-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.auth-alert-action {
+  margin-top: 6px;
+}
+
+.auth-alert-action button {
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.auth-alert-action button:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.auth-alert--error {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #ef4444;
+}
+
+.auth-alert--success {
+  background-color: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  border-left: 4px solid #22c55e;
+}
+
+.auth-alert--info {
+  background-color: #f0f9ff;
+  color: #075985;
+  border: 1px solid #bae6fd;
+  border-left: 4px solid #0ea5e9;
+}
+
+.auth-alert--warning {
+  background-color: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #f59e0b;
+}
+
+/* 7. QUICK-FILL DEMO ACCOUNTS */
+.auth-demo-box {
+  margin-top: 24px;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border: 1px dashed var(--color-border);
+  border-radius: 10px;
+}
+
+.auth-demo-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.auth-demo-chips {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.auth-demo-chip {
+  padding: 7px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.auth-demo-chip:hover {
+  background: #f1f5f9;
+  border-color: var(--color-warning);
+  color: var(--color-primary);
+}
+
+.auth-demo-chip--active {
+  background: #fff7ed;
+  border-color: var(--color-warning);
+  color: #c2410c;
+  font-weight: 700;
+}
+
+/* 8. MÀN HÌNH TRẠNG THÁI THÀNH CÔNG (SUCCESS STATE BOX) */
+.auth-state-box {
+  text-align: center;
+  padding: 24px 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  margin-bottom: 20px;
+}
+
+.auth-state-icon {
+  font-size: 2.8rem;
+  margin-bottom: 12px;
+}
+
+.auth-state-title {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.auth-state-desc {
+  margin: 0 0 20px;
+  font-size: 0.88rem;
+  color: #64748b;
+  line-height: 1.55;
+}
+
+/* 9. ĐIỀU HƯỚNG DƯỚI ĐÁY FORM (FOOTER NAV) */
+.auth-footer-nav {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.875rem;
+  color: #64748b;
+  text-align: center;
+}
+
+.auth-footer-nav a {
+  color: var(--color-warning);
+  font-weight: 700;
+  text-decoration: none;
+  margin-left: 4px;
+}
+
+.auth-footer-nav a:hover {
+  text-decoration: underline;
+  color: #ea580c;
+}
+
+/* 10. RESPONSIVE BREAKPOINTS (375px / 768px / 1280px) */
+
+/* Desktop lớn (<= 1280px) */
+@media (max-width: 1280px) {
+  .auth-split-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .auth-split-banner {
+    padding: 40px 32px;
+  }
+
+  .auth-split-main {
+    padding: 40px 24px;
+  }
+}
+
+/* Tablet (<= 768px) */
+@media (max-width: 768px) {
+  .auth-split-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-split-banner {
+    min-height: 220px;
+    padding: 32px 24px;
+  }
+
+  .auth-banner-features {
+    display: none;
+  }
+
+  .auth-banner-desc {
+    margin-bottom: 0;
+  }
+
+  .auth-split-main {
+    padding: 36px 20px;
+  }
+
+  .auth-card {
+    padding: 28px 20px;
+  }
+
+  .auth-background-grid {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .auth-bg-card--one {
+    grid-column: 1 / 4;
+    grid-row: 1 / 3;
+  }
+
+  .auth-bg-card--two {
+    grid-column: 4 / 7;
+    grid-row: 1 / 3;
+  }
+
+  .auth-bg-card--three {
+    grid-column: 1 / 4;
+    grid-row: 3 / 6;
+  }
+
+  .auth-bg-card--four {
+    grid-column: 4 / 7;
+    grid-row: 3 / 6;
+  }
+
+  .auth-bg-card--five {
+    grid-column: 1 / 4;
+    grid-row: 8 / 11;
+  }
+
+  .auth-bg-card--six {
+    grid-column: 4 / 7;
+    grid-row: 8 / 11;
+  }
+
+  .auth-demo-chips {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile nhỏ (<= 375px) */
+@media (max-width: 375px) {
+  .auth-login-wrapper {
+    padding: 16px 12px;
+  }
+
+  .auth-card {
+    padding: 22px 16px;
+    border-radius: 12px;
+  }
+
+  .auth-heading {
+    font-size: 1.3rem;
+  }
+
+  .auth-brand-logo {
+    max-width: 200px;
+    height: 70px;
+  }
+
+  .auth-split-banner {
+    padding: 24px 16px;
+  }
+
+  .auth-split-main {
+    padding: 24px 14px;
+  }
+
+  .auth-btn {
+    min-height: 44px;
+    font-size: 0.875rem;
+  }
+}
