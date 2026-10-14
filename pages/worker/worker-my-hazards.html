@@ -1,403 +1,643 @@
 <!doctype html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sự cố đã gửi | SiteSafe</title>
-    <link rel="stylesheet" href="../../css/style.css" />
-    <link rel="stylesheet" href="../../css/worker.css" />
-    <link rel="stylesheet" href="../../css/responsive.css" />
-    <style>
-      .hazards-page {
-        width: min(1180px, calc(100% - 32px));
-        margin: 0 auto;
-        padding: 32px 0;
-      }
 
-      .hazards-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 24px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Danh sách các báo cáo nguy cơ an toàn công trường do bạn ghi nhận tại SiteSafe." />
+  <title>Sự cố đã gửi | SiteSafe</title>
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/worker.css" />
+  <link rel="stylesheet" href="../../css/responsive.css" />
+</head>
 
-      .hazards-header h1 {
-        margin: 0 0 6px;
-        color: var(--color-primary);
-        font-size: clamp(1.7rem, 4vw, 2.3rem);
-      }
+<body data-required-role="WORKER">
+  <div class="app-layout">
+    <!-- Sidebar tự động sinh bởi js/main.js -->
+    <aside class="sidebar" aria-label="Điều hướng chính"></aside>
 
-      .hazards-header p {
-        margin: 0;
-        color: #64748b;
-      }
-
-      .hazards-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 20px;
-      }
-
-      .hazard-card {
-        display: flex;
-        min-width: 0;
-        flex-direction: column;
-        padding: 0;
-        overflow: hidden;
-      }
-
-      .card-img-wrapper {
-        width: 100%;
-        height: 180px;
-        overflow: hidden;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        position: relative;
-        background-color: #f1f5f9;
-      }
-
-      .card-img-wrapper img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-      }
-
-      .card-status-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 16px 4px 16px;
-      }
-
-      .hazard-card-content {
-        display: flex;
-        flex: 1;
-        flex-direction: column;
-        padding: 18px;
-      }
-
-      .hazard-card h2 {
-        margin: 12px 0 8px;
-        color: var(--color-primary);
-        font-size: 1.1rem;
-        line-height: 1.35;
-      }
-
-      .hazard-card p {
-        margin: 0 0 14px;
-        color: #475569;
-        font-size: 0.94rem;
-      }
-
-      .hazard-meta {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        margin-top: auto;
-        padding-top: 14px;
-        color: #64748b;
-        border-top: 1px solid var(--color-border);
-        font-size: 0.85rem;
-      }
-
-      .hazard-meta .badge {
-        flex-shrink: 0;
-      }
-
-      .saved-actions {
-        display: flex;
-        gap: 8px;
-        margin-top: 14px;
-      }
-
-      .saved-actions .btn {
-        padding: 6px 10px;
-        font-size: 0.85rem;
-      }
-
-      @media (max-width: 900px) {
-        .hazards-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-
-      @media (max-width: 600px) {
-        .hazards-page {
-          width: min(560px, calc(100% - 24px));
-          padding: 20px 0;
-        }
-
-        .hazards-header {
-          display: block;
-        }
-
-        .hazards-header .btn {
-          width: 100%;
-          margin-top: 16px;
-          text-align: center;
-        }
-
-        .hazards-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
-  </head>
-  <body data-required-role="WORKER">
-    <div class="app-layout">
-      <aside class="sidebar" aria-label="Điều hướng chính"></aside>
-      <div class="main-content">
-        <header class="topbar">
-          <span class="topbar-title">SiteSafe</span>
-          <div class="topbar-user">
-            <span class="topbar-user-role" data-current-user-role></span>
-          </div>
-        </header>
-        <div class="page-content">
-    <main class="hazards-page">
-      <header class="hazards-header">
-        <div>
-          <h1>Sự cố an toàn đã gửi</h1>
-          <p>Theo dõi các nguy cơ bạn đã ghi nhận tại công trường.</p>
+    <div class="main-content">
+      <!-- Topbar người dùng -->
+      <header class="topbar">
+        <span class="topbar-title">SiteSafe</span>
+        <div class="topbar-user">
+          <span class="topbar-user-role" data-current-user-role></span>
         </div>
-        <a class="btn btn-warning" href="worker-hazard-create.html"
-          >Báo cáo sự cố mới</a
-        >
       </header>
 
-      <section
-        class="hazards-grid"
-        id="hazardsGrid"
-        aria-label="Danh sách sự cố đã gửi"
-      >
-        <article class="card hazard-card">
-          <!-- Ảnh minh họa sự cố lan can thiếu bảo vệ; thay URL bằng ảnh hiện trường thực tế khi có. -->
-          <!-- Prompt AI: "Realistic construction worker inspecting an incomplete guardrail on a high-rise concrete floor, safety helmet and reflective vest, daylight, documentary photography." -->
-          <div class="card-img-wrapper">
-            <img
-              class="img-hazard"
-              src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3"
-              alt="Lan can sàn công tác chưa hoàn thiện"
-            />
-          </div>
-          <div class="card-status-bar">
-            <span class="badge badge-warning">Đang chờ</span>
-            <span>Mức cao</span>
-          </div>
-          <div class="hazard-card-content">
-            <h2>Lan can sàn công tác thiếu đoạn bảo vệ</h2>
-            <p>
-              Một đoạn lan can tại tầng 12 chưa có đủ tay vịn và tấm chắn chân.
-            </p>
-            <div class="hazard-meta">
-              <span>Khu kết cấu - 18/09/2026</span>
+      <div class="page-content">
+        <main class="worker-page-container">
+          <!-- Header trang -->
+          <header class="worker-header">
+            <div>
+              <h1 class="worker-header__title">Sự cố an toàn đã gửi</h1>
+              <p class="worker-header__desc">
+                Theo dõi tiến độ kiểm tra, sửa đổi nội dung và giám sát các nguy cơ do bạn ghi nhận tại công trường.
+              </p>
             </div>
-          </div>
-        </article>
+            <div class="worker-header__actions">
+              <a class="btn btn-warning" id="goToCreateHazardTopBtn" href="worker-hazard-create.html">+ Báo cáo sự cố mới</a>
+            </div>
+          </header>
 
-        <article class="card hazard-card">
-          <!-- Ảnh minh họa sự cố dầu tràn gần kho vật tư; thay URL bằng ảnh hiện trường thực tế khi có. -->
-          <!-- Prompt AI: "Small hydraulic oil spill beside a forklift in a construction material storage area, warning cone nearby, realistic industrial safety inspection photo." -->
-          <div class="card-img-wrapper">
-            <img
-              class="img-hazard"
-              src="https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?auto=format&fit=crop&w=1000&q=80"
-              alt="Dầu tràn gần xe nâng trong kho vật tư"
-            />
-          </div>
-          <div class="card-status-bar">
-            <span class="badge badge-success">Đã duyệt</span>
-            <span>Mức vừa</span>
-          </div>
-          <div class="hazard-card-content">
-            <h2>Dầu thủy lực rò rỉ gần lối đi</h2>
-            <p>
-              Vệt dầu nhỏ cạnh máy nâng đã được vệ sinh và đặt biển cảnh báo.
-            </p>
-            <div class="hazard-meta">
-              <span>Kho vật tư - 19/09/2026</span>
+          <!-- Thanh thống kê nhanh theo trạng thái -->
+          <section class="worker-stats-bar" aria-label="Thống kê sự cố của tôi">
+            <div class="worker-stat-card" data-stat-card="total">
+              <div class="worker-stat-icon">📋</div>
+              <div class="worker-stat-content">
+                <span class="worker-stat-num" id="statTotal" data-stat="total">4</span>
+                <span class="worker-stat-label">Tổng báo cáo</span>
+              </div>
             </div>
-          </div>
-        </article>
+            <div class="worker-stat-card" data-stat-card="open">
+              <div class="worker-stat-icon worker-stat-icon--warning">⏳</div>
+              <div class="worker-stat-content">
+                <span class="worker-stat-num" id="statOpen" data-stat="open">3</span>
+                <span class="worker-stat-label">Đang chờ duyệt</span>
+              </div>
+            </div>
+            <div class="worker-stat-card" data-stat-card="in-progress">
+              <div class="worker-stat-icon worker-stat-icon--danger">⚡</div>
+              <div class="worker-stat-content">
+                <span class="worker-stat-num" id="statInProgress" data-stat="in-progress">0</span>
+                <span class="worker-stat-label">Đang khắc phục</span>
+              </div>
+            </div>
+            <div class="worker-stat-card" data-stat-card="resolved">
+              <div class="worker-stat-icon worker-stat-icon--success">✓</div>
+              <div class="worker-stat-content">
+                <span class="worker-stat-num" id="statResolved" data-stat="resolved">1</span>
+                <span class="worker-stat-label">Đã giải quyết</span>
+              </div>
+            </div>
+          </section>
 
-        <article class="card hazard-card">
-          <!-- Ảnh minh họa khu vực cọc khoan nhồi thiếu rào chắn; thay URL bằng ảnh hiện trường thực tế khi có. -->
-          <!-- Prompt AI: "Bridge construction site with an unprotected drilled pile work area, safety officer checking warning signs and barricades, realistic construction photography." -->
-          <div class="card-img-wrapper">
-            <img
-              class="img-hazard"
-              src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1000&q=80"
-              alt="Khu vực thi công cọc khoan nhồi"
-            />
-          </div>
-          <div class="card-status-bar">
-            <span class="badge badge-warning">Đang chờ</span>
-            <span>Mức nghiêm trọng</span>
-          </div>
-          <div class="hazard-card-content">
-            <h2>Khu vực cọc khoan nhồi thiếu biển cảnh báo</h2>
-            <p>
-              Miệng cọc đang thi công chưa có rào chắn liên tục cho người đi
-              lại.
-            </p>
-            <div class="hazard-meta">
-              <span>Mố cầu phía Đông - 20/09/2026</span>
-            </div>
-          </div>
-        </article>
+          <!-- Thanh tìm kiếm, bộ lọc & sắp xếp -->
+          <section class="worker-filter-bar" aria-label="Bộ lọc sự cố">
+            <div class="worker-filter-group">
+              <!-- Ô tìm kiếm -->
+              <input class="worker-search-input" id="searchInput" data-filter="keyword" type="search"
+                placeholder="🔍 Tìm theo tiêu đề, mô tả hoặc tên phân khu..." />
 
-        <article class="card hazard-card">
-          <!-- Ảnh minh họa công nhân thiếu thiết bị bảo hộ; thay URL bằng ảnh hiện trường thực tế khi có. -->
-          <!-- Prompt AI: "Construction worker receiving personal protective equipment at a busy building site, hard hat and reflective vest visible, realistic safety inspection photography." -->
-          <div class="card-img-wrapper">
-            <img
-              class="img-hazard"
-              src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?auto=format&fit=crop&w=1000&q=80"
-              alt="Công nhân kiểm tra thiết bị bảo hộ cá nhân"
-            />
-          </div>
-          <div class="card-status-bar">
-            <span class="badge badge-success">Đã duyệt</span>
-            <span>Mức vừa</span>
-          </div>
-          <div class="hazard-card-content">
-            <h2>Thiếu kính bảo hộ tại khu vực cắt vật liệu</h2>
-            <p>
-              Đã bổ sung kính bảo hộ và nhắc nhở công nhân trước khi tiếp tục
-              công việc.
-            </p>
-            <div class="hazard-meta">
-              <span>Khu gia công - 16/09/2026</span>
-            </div>
-          </div>
-        </article>
+              <!-- Lọc theo Trạng thái -->
+              <select class="worker-filter-select" id="statusFilter" data-filter="status" aria-label="Lọc theo trạng thái">
+                <option value="">Tất cả trạng thái</option>
+                <option value="OPEN">Đang chờ duyệt (OPEN)</option>
+                <option value="IN_PROGRESS">Đang xử lý (IN_PROGRESS)</option>
+                <option value="RESOLVED">Đã khắc phục (RESOLVED)</option>
+              </select>
 
-        <article class="card hazard-card">
-          <!-- Ảnh minh họa dây điện thi công đặt gần khu vực ẩm ướt; thay URL bằng ảnh hiện trường thực tế khi có. -->
-          <!-- Prompt AI: "Exposed temporary electrical cable near a damp construction work area, warning tape and safety officer inspecting the hazard, realistic documentary photography." -->
-          <div class="card-img-wrapper">
-            <img
-              class="img-hazard"
-              src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1000&q=80"
-              alt="Dây điện thi công gần khu vực ẩm ướt"
-            />
-          </div>
-          <div class="card-status-bar">
-            <span class="badge badge-warning">Đang chờ</span>
-            <span>Mức cao</span>
-          </div>
-          <div class="hazard-card-content">
-            <h2>Dây điện tạm đặt gần khu vực ẩm ướt</h2>
-            <p>
-              Dây điện chưa được treo cao và có nguy cơ tiếp xúc với nước tại
-              lối đi.
-            </p>
-            <div class="hazard-meta">
-              <span>Khu cơ điện - 20/09/2026</span>
-            </div>
-          </div>
-        </article>
+              <!-- Lọc theo Mức độ rủi ro -->
+              <select class="worker-filter-select" id="riskFilter" data-filter="riskLevel" aria-label="Lọc theo mức độ rủi ro">
+                <option value="">Tất cả mức độ</option>
+                <option value="CRITICAL">Mức nghiêm trọng (CRITICAL)</option>
+                <option value="HIGH">Mức cao (HIGH)</option>
+                <option value="MEDIUM">Mức vừa (MEDIUM)</option>
+                <option value="LOW">Mức thấp (LOW)</option>
+              </select>
 
-        <article class="card hazard-card">
-          <!-- Ảnh minh họa vật liệu xây dựng chắn lối đi; thay URL bằng ảnh hiện trường thực tế khi có. -->
-          <!-- Prompt AI: "Construction materials blocking a marked pedestrian walkway, organized building site, safety sign visible, realistic workplace safety photography." -->
-          <div class="card-img-wrapper">
-            <img
-              class="img-hazard"
-              src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=1000&q=80"
-              alt="Vật liệu xây dựng chắn lối đi bộ"
-            />
-          </div>
-          <div class="card-status-bar">
-            <span class="badge badge-success">Đã duyệt</span>
-            <span>Mức thấp</span>
-          </div>
-          <div class="hazard-card-content">
-            <h2>Vật liệu xây dựng chắn lối đi bộ</h2>
-            <p>
-              Vật liệu đã được sắp xếp lại và lối đi bộ được kẻ vạch rõ ràng.
-            </p>
-            <div class="hazard-meta">
-              <span>Khu tập kết - 15/09/2026</span>
+              <!-- Lọc theo Phân khu (Zone) -->
+              <select class="worker-filter-select" id="zoneFilter" data-filter="zone" aria-label="Lọc theo phân khu">
+                <option value="">Tất cả phân khu</option>
+                <option value="ZONE-001">Tòa A - Khối tháp 25 tầng</option>
+                <option value="ZONE-002">Kho vật tư và nhiên liệu</option>
+                <option value="ZONE-003">Khu điều hành và hạ tầng</option>
+                <option value="ZONE-004">Mố cầu phía Đông</option>
+                <option value="ZONE-005">Khu tập kết phế liệu</option>
+                <option value="ZONE-006">Khu cơ điện và trạm biến áp</option>
+              </select>
+
+              <!-- Chọn sắp xếp -->
+              <select class="worker-sort-select" id="sortSelect" data-action="sort" aria-label="Sắp xếp danh sách">
+                <option value="newest" selected>Mới nhất trước</option>
+                <option value="oldest">Cũ nhất trước</option>
+                <option value="risk-desc">Mức độ rủi ro: Cao → Thấp</option>
+                <option value="status">Theo trạng thái xử lý</option>
+              </select>
             </div>
+
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <!-- Nút chuyển chế độ xem (Grid / Table) -->
+              <div class="worker-view-toggle" role="group" aria-label="Chuyển chế độ hiển thị">
+                <button class="worker-view-btn worker-view-btn--active" id="viewGridBtn" data-action="view-grid" type="button" title="Chế độ Thẻ (Grid)">
+                  ⊞ Thẻ
+                </button>
+                <button class="worker-view-btn" id="viewTableBtn" data-action="view-table" type="button" title="Chế độ Bảng (Table)">
+                  ☰ Bảng
+                </button>
+              </div>
+
+              <!-- Nút đặt lại lọc -->
+              <button class="worker-filter-reset" id="resetFilterBtn" data-action="reset-filters" type="button">Đặt lại lọc</button>
+            </div>
+          </section>
+
+          <!-- Khối trạng thái Loading (Bật/tắt bằng class is-hidden) -->
+          <div class="worker-state worker-state--loading is-hidden" id="loadingState" data-state="loading" role="status">
+            <div class="worker-spinner"></div>
+            <h2 class="worker-state__title">Đang đồng bộ dữ liệu sự cố...</h2>
+            <p class="worker-state__desc">Hệ thống đang truy xuất danh sách sự cố đã lưu trong cơ sở dữ liệu dùng chung.</p>
           </div>
-        </article>
-      </section>
-    </main>
-        </div>
+
+          <!-- Khối trạng thái Error (Bật/tắt bằng class is-hidden) -->
+          <div class="worker-state worker-state--error is-hidden" id="errorState" data-state="error" role="alert">
+            <div class="worker-state__icon">⚠️</div>
+            <h2 class="worker-state__title">Không thể tải danh sách sự cố</h2>
+            <p class="worker-state__desc" id="errorMessage">Đã có lỗi xảy ra trong quá trình truy vấn dữ liệu.</p>
+            <button class="worker-btn-retry" id="retryBtn" data-action="retry-hazards" type="button">🔄 Thử lại ngay</button>
+          </div>
+
+          <!-- Khối trạng thái Empty (Bật/tắt bằng class is-hidden) -->
+          <div class="worker-state worker-state--empty is-hidden" id="emptyState" data-state="empty">
+            <div class="worker-state__icon">🦺</div>
+            <h2 class="worker-state__title" id="emptyTitle">Chưa có báo cáo nguy cơ nào</h2>
+            <p class="worker-state__desc" id="emptyDesc">
+              Bạn chưa ghi nhận nguy cơ nào hoặc không có sự cố nào khớp với bộ lọc hiện tại.
+            </p>
+            <a class="btn btn-warning" id="emptyCtaBtn" href="worker-hazard-create.html">+ Gửi báo cáo nguy cơ mới</a>
+          </div>
+
+          <!-- 1. CHẾ ĐỘ THẺ (GRID VIEW) -->
+          <section class="worker-grid" id="hazardsGrid" data-component="hazards-grid" aria-label="Danh sách thẻ sự cố">
+            <!-- Thẻ mẫu 1 (HZ-101) -->
+            <article class="worker-hazard-card" id="card_HZ-101" data-hazard-id="HZ-101">
+              <div class="worker-card-thumb-wrap">
+                <img class="worker-card-thumb" src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=800&q=80" alt="Lan can sàn công tác tầng 12 thiếu thanh chắn chân" loading="lazy" />
+                <div class="worker-card-badges">
+                  <span class="badge badge-warning">Đang chờ duyệt</span>
+                  <span class="badge badge-danger">Mức cao</span>
+                </div>
+              </div>
+              <div class="worker-card-body">
+                <span class="worker-card-zone">Tòa A - Khối tháp 25 tầng</span>
+                <h3 class="worker-card-title">Lan can sàn công tác tầng 12 thiếu thanh chắn chân</h3>
+                <p class="worker-card-desc">Một đoạn lan can tại góc phía Đông tầng 12 chưa lắp đủ tay vịn phụ và tấm chắn chân, nguy cơ đá gạch rơi xuống dưới.</p>
+                <div class="worker-card-meta">
+                  <span>📅 12/10/2026</span>
+                  <span>Mã: HZ-101</span>
+                </div>
+              </div>
+              <div class="worker-card-actions">
+                <button class="worker-card-btn worker-card-btn--detail" data-action="view-detail" data-id="HZ-101" type="button">👁️ Chi tiết</button>
+                <button class="worker-card-btn worker-card-btn--edit" data-action="edit-hazard" data-id="HZ-101" type="button">✎ Sửa</button>
+                <button class="worker-card-btn worker-card-btn--delete" data-action="delete-hazard" data-id="HZ-101" type="button" title="Xóa sự cố">🗑️</button>
+              </div>
+            </article>
+
+            <!-- Thẻ mẫu 2 (HZ-102) -->
+            <article class="worker-hazard-card" id="card_HZ-102" data-hazard-id="HZ-102">
+              <div class="worker-card-thumb-wrap">
+                <img class="worker-card-thumb" src="https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?auto=format&fit=crop&w=800&q=80" alt="Dầu thủy lực rò rỉ gần lối đi xe nâng" loading="lazy" />
+                <div class="worker-card-badges">
+                  <span class="badge badge-success">Đã khắc phục</span>
+                  <span class="badge badge-primary">Mức vừa</span>
+                </div>
+              </div>
+              <div class="worker-card-body">
+                <span class="worker-card-zone">Kho vật tư và nhiên liệu</span>
+                <h3 class="worker-card-title">Dầu thủy lực rò rỉ gần lối đi xe nâng</h3>
+                <p class="worker-card-desc">Vệt dầu nhỏ loang gần máy nâng tại cửa kho B, đã được vệ sinh rải cát tạm thời và cắm nón cảnh báo trơn trượt.</p>
+                <div class="worker-card-meta">
+                  <span>📅 10/10/2026</span>
+                  <span>Mã: HZ-102</span>
+                </div>
+              </div>
+              <div class="worker-card-actions">
+                <button class="worker-card-btn worker-card-btn--detail" data-action="view-detail" data-id="HZ-102" type="button">👁️ Chi tiết</button>
+                <button class="worker-card-btn worker-card-btn--edit" data-action="edit-hazard" data-id="HZ-102" type="button">✎ Sửa</button>
+                <button class="worker-card-btn worker-card-btn--delete" data-action="delete-hazard" data-id="HZ-102" type="button" title="Xóa sự cố">🗑️</button>
+              </div>
+            </article>
+
+            <!-- Thẻ mẫu 3 (HZ-103) -->
+            <article class="worker-hazard-card" id="card_HZ-103" data-hazard-id="HZ-103">
+              <div class="worker-card-thumb-wrap">
+                <img class="worker-card-thumb" src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=80" alt="Miệng hố cọc khoan nhồi thiếu rào chắn liên tục" loading="lazy" />
+                <div class="worker-card-badges">
+                  <span class="badge badge-warning">Đang chờ duyệt</span>
+                  <span class="badge badge-danger">Nghiêm trọng</span>
+                </div>
+              </div>
+              <div class="worker-card-body">
+                <span class="worker-card-zone">Mố cầu phía Đông</span>
+                <h3 class="worker-card-title">Miệng hố cọc khoan nhồi thiếu rào chắn liên tục</h3>
+                <p class="worker-card-desc">Khu vực miệng cọc P-18 vừa khoan xong chỉ có dây cảnh báo trùng, thiếu rào chắn cứng chống ngã ban đêm.</p>
+                <div class="worker-card-meta">
+                  <span>📅 13/10/2026</span>
+                  <span>Mã: HZ-103</span>
+                </div>
+              </div>
+              <div class="worker-card-actions">
+                <button class="worker-card-btn worker-card-btn--detail" data-action="view-detail" data-id="HZ-103" type="button">👁️ Chi tiết</button>
+                <button class="worker-card-btn worker-card-btn--edit" data-action="edit-hazard" data-id="HZ-103" type="button">✎ Sửa</button>
+                <button class="worker-card-btn worker-card-btn--delete" data-action="delete-hazard" data-id="HZ-103" type="button" title="Xóa sự cố">🗑️</button>
+              </div>
+            </article>
+
+            <!-- Thẻ mẫu 4 (HZ-104) -->
+            <article class="worker-hazard-card" id="card_HZ-104" data-hazard-id="HZ-104">
+              <div class="worker-card-thumb-wrap">
+                <img class="worker-card-thumb" src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80" alt="Dây điện máy hàn tiếp xúc vũng nước mưa" loading="lazy" />
+                <div class="worker-card-badges">
+                  <span class="badge badge-warning">Đang chờ duyệt</span>
+                  <span class="badge badge-danger">Nghiêm trọng</span>
+                </div>
+              </div>
+              <div class="worker-card-body">
+                <span class="worker-card-zone">Khu cơ điện & trạm biến áp</span>
+                <h3 class="worker-card-title">Dây điện máy hàn tiếp xúc vũng nước mưa</h3>
+                <p class="worker-card-desc">Đoạn cáp máy hàn bị rách vỏ cách điện nằm vắt ngang vũng nước đọng gần khu MEP, tiềm ẩn nguy cơ phóng điện giật.</p>
+                <div class="worker-card-meta">
+                  <span>📅 14/10/2026</span>
+                  <span>Mã: HZ-104</span>
+                </div>
+              </div>
+              <div class="worker-card-actions">
+                <button class="worker-card-btn worker-card-btn--detail" data-action="view-detail" data-id="HZ-104" type="button">👁️ Chi tiết</button>
+                <button class="worker-card-btn worker-card-btn--edit" data-action="edit-hazard" data-id="HZ-104" type="button">✎ Sửa</button>
+                <button class="worker-card-btn worker-card-btn--delete" data-action="delete-hazard" data-id="HZ-104" type="button" title="Xóa sự cố">🗑️</button>
+              </div>
+            </article>
+          </section>
+
+          <!-- 2. CHẾ ĐỘ BẢNG (TABLE VIEW - ẨN MẶC ĐỊNH) -->
+          <section class="worker-table-wrap is-hidden" id="hazardsTableWrap" aria-label="Bảng dữ liệu sự cố">
+            <table class="worker-table" id="hazardsTable">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 90px;">Mã</th>
+                  <th scope="col">Tiêu đề & Nội dung nguy cơ</th>
+                  <th scope="col">Khu vực</th>
+                  <th scope="col">Mức rủi ro</th>
+                  <th scope="col">Trạng thái</th>
+                  <th scope="col">Ngày gửi</th>
+                  <th scope="col" style="text-align: right; width: 140px;">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="hazardsTableBody">
+                <tr id="tablerow_HZ-101">
+                  <td><strong>HZ-101</strong></td>
+                  <td>
+                    <span class="worker-table-title">Lan can sàn công tác tầng 12 thiếu thanh chắn chân</span>
+                    <span class="worker-table-desc">Góc phía Đông tầng 12 chưa lắp đủ tay vịn phụ và tấm chắn chân...</span>
+                  </td>
+                  <td>Tòa A - Khối tháp 25 tầng</td>
+                  <td><span class="badge badge-danger">Mức cao</span></td>
+                  <td><span class="badge badge-warning">Đang chờ duyệt</span></td>
+                  <td>12/10/2026</td>
+                  <td style="text-align: right;">
+                    <button class="btn" style="padding: 4px 8px; font-size: 0.8rem;" data-action="view-detail" data-id="HZ-101">👁️</button>
+                    <button class="btn btn-warning" style="padding: 4px 8px; font-size: 0.8rem;" data-action="edit-hazard" data-id="HZ-101">✎</button>
+                    <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.8rem;" data-action="delete-hazard" data-id="HZ-101">🗑️</button>
+                  </td>
+                </tr>
+                <tr id="tablerow_HZ-102">
+                  <td><strong>HZ-102</strong></td>
+                  <td>
+                    <span class="worker-table-title">Dầu thủy lực rò rỉ gần lối đi xe nâng</span>
+                    <span class="worker-table-desc">Vệt dầu nhỏ loang gần máy nâng tại cửa kho B...</span>
+                  </td>
+                  <td>Kho vật tư và nhiên liệu</td>
+                  <td><span class="badge badge-primary">Mức vừa</span></td>
+                  <td><span class="badge badge-success">Đã khắc phục</span></td>
+                  <td>10/10/2026</td>
+                  <td style="text-align: right;">
+                    <button class="btn" style="padding: 4px 8px; font-size: 0.8rem;" data-action="view-detail" data-id="HZ-102">👁️</button>
+                    <button class="btn btn-warning" style="padding: 4px 8px; font-size: 0.8rem;" data-action="edit-hazard" data-id="HZ-102">✎</button>
+                    <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.8rem;" data-action="delete-hazard" data-id="HZ-102">🗑️</button>
+                  </td>
+                </tr>
+                <tr id="tablerow_HZ-103">
+                  <td><strong>HZ-103</strong></td>
+                  <td>
+                    <span class="worker-table-title">Miệng hố cọc khoan nhồi thiếu rào chắn liên tục</span>
+                    <span class="worker-table-desc">Khu vực miệng cọc P-18 vừa khoan xong chỉ có dây cảnh báo trùng...</span>
+                  </td>
+                  <td>Mố cầu phía Đông</td>
+                  <td><span class="badge badge-danger">Nghiêm trọng</span></td>
+                  <td><span class="badge badge-warning">Đang chờ duyệt</span></td>
+                  <td>13/10/2026</td>
+                  <td style="text-align: right;">
+                    <button class="btn" style="padding: 4px 8px; font-size: 0.8rem;" data-action="view-detail" data-id="HZ-103">👁️</button>
+                    <button class="btn btn-warning" style="padding: 4px 8px; font-size: 0.8rem;" data-action="edit-hazard" data-id="HZ-103">✎</button>
+                    <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.8rem;" data-action="delete-hazard" data-id="HZ-103">🗑️</button>
+                  </td>
+                </tr>
+                <tr id="tablerow_HZ-104">
+                  <td><strong>HZ-104</strong></td>
+                  <td>
+                    <span class="worker-table-title">Dây điện máy hàn tiếp xúc vũng nước mưa</span>
+                    <span class="worker-table-desc">Đoạn cáp máy hàn bị rách vỏ cách điện nằm vắt ngang vũng nước đọng...</span>
+                  </td>
+                  <td>Khu cơ điện và trạm biến áp</td>
+                  <td><span class="badge badge-danger">Nghiêm trọng</span></td>
+                  <td><span class="badge badge-warning">Đang chờ duyệt</span></td>
+                  <td>14/10/2026</td>
+                  <td style="text-align: right;">
+                    <button class="btn" style="padding: 4px 8px; font-size: 0.8rem;" data-action="view-detail" data-id="HZ-104">👁️</button>
+                    <button class="btn btn-warning" style="padding: 4px 8px; font-size: 0.8rem;" data-action="edit-hazard" data-id="HZ-104">✎</button>
+                    <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.8rem;" data-action="delete-hazard" data-id="HZ-104">🗑️</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Thanh phân trang và Nút "Xem thêm" -->
+          <section class="worker-pagination-wrap" id="paginationContainer" aria-label="Điều hướng phân trang">
+            <span class="worker-pagination-info" id="paginationInfo" data-pagination="info">
+              Hiển thị 4 / 4 sự cố đã gửi
+            </span>
+            <button class="worker-btn-load-more" id="loadMoreBtn" data-action="load-more" type="button">
+              <span>+ Xem thêm sự cố</span>
+            </button>
+            <nav class="worker-pagination-nav" id="paginationNav" aria-label="Phân trang">
+              <button class="worker-page-btn" id="prevPageBtn" data-action="prev-page" type="button" disabled aria-label="Trang trước">«</button>
+              <button class="worker-page-btn worker-page-btn--active" data-page="1" type="button">1</button>
+              <button class="worker-page-btn" data-page="2" type="button">2</button>
+              <button class="worker-page-btn" id="nextPageBtn" data-action="next-page" type="button" aria-label="Trang sau">»</button>
+            </nav>
+          </section>
+        </main>
       </div>
     </div>
-    <script src="../../js/api.js"></script>
-    <script>
-      function escapeHazardText(value) {
-        return String(value || "").replace(/[&<>'"]/g, function (character) {
-          return {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            "'": "&#39;",
-            '"': "&quot;",
-          }[character];
+  </div>
+
+  <!-- 1. Modal Chi tiết Sự cố & Lịch sử trạng thái -->
+  <div class="worker-modal-backdrop is-hidden" id="detailModal" data-modal="detail" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
+    <div class="worker-modal worker-modal--large">
+      <div class="worker-modal__header">
+        <h3 class="worker-modal__title" id="detailModalTitle">Chi tiết báo cáo nguy cơ</h3>
+        <button class="worker-modal__close" id="closeDetailModalBtn" data-action="close-modal" type="button" aria-label="Đóng cửa sổ">✕</button>
+      </div>
+      <div class="worker-modal__body" id="detailModalBody">
+        <!-- Ảnh minh họa sự cố -->
+        <img class="worker-detail-img" id="detailImage" src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=800&q=80" alt="Hình ảnh hiện trường sự cố" />
+
+        <!-- Grid thông tin sự cố -->
+        <div class="worker-detail-grid">
+          <div class="worker-detail-box">
+            <div class="worker-detail-label">Khu vực thi công</div>
+            <div class="worker-detail-value" id="detailZone">Tòa A - Khối tháp 25 tầng (Kết cấu & giàn giáo)</div>
+          </div>
+          <div class="worker-detail-box">
+            <div class="worker-detail-label">Mức độ rủi ro</div>
+            <div class="worker-detail-value" id="detailRisk">
+              <span class="badge badge-danger">Mức cao (HIGH)</span>
+            </div>
+          </div>
+          <div class="worker-detail-box">
+            <div class="worker-detail-label">Trạng thái xử lý</div>
+            <div class="worker-detail-value" id="detailStatus">
+              <span class="badge badge-warning">Đang chờ duyệt (OPEN)</span>
+            </div>
+          </div>
+          <div class="worker-detail-box">
+            <div class="worker-detail-label">Thời gian ghi nhận</div>
+            <div class="worker-detail-value" id="detailDate">12/10/2026 08:30</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <h4 style="margin: 0 0 6px; font-size: 0.92rem; color: var(--color-primary);">Nội dung chi tiết hiện trường:</h4>
+          <p id="detailDescription" style="margin: 0; color: #475569; line-height: 1.5; font-size: 0.9rem;">
+            Một đoạn lan can tại góc phía Đông tầng 12 chưa lắp đủ tay vịn phụ và tấm chắn chân, nguy cơ đá gạch rơi xuống dưới.
+          </p>
+        </div>
+
+        <!-- VÙNG LỊCH SỬ TRẠNG THÁI (STATUS AUDIT TIMELINE) -->
+        <section class="worker-history-section" id="hazardHistorySection" aria-labelledby="historySectionTitle">
+          <h4 class="worker-history-title" id="historySectionTitle">
+            <span>📜 Lịch sử xử lý & cập nhật trạng thái</span>
+          </h4>
+          <div class="worker-timeline" id="hazardHistoryList">
+            <div class="worker-timeline-item">
+              <div class="worker-timeline-dot"></div>
+              <div class="worker-timeline-content">
+                <div class="worker-timeline-time">12/10/2026 08:30</div>
+                <div class="worker-timeline-title">Báo cáo nguy cơ được khởi tạo (OPEN)</div>
+                <div class="worker-timeline-desc">Công nhân Phan Anh Hào ghi nhận nguy cơ lan can thiếu thanh chắn chân tầng 12.</div>
+              </div>
+            </div>
+            <div class="worker-timeline-item">
+              <div class="worker-timeline-dot worker-timeline-dot--primary"></div>
+              <div class="worker-timeline-content">
+                <div class="worker-timeline-time">12/10/2026 09:15</div>
+                <div class="worker-timeline-title">Cán bộ an toàn tiếp nhận xử lý (IN_PROGRESS)</div>
+                <div class="worker-timeline-desc">Cán bộ Trần Huy Hoàng đã cử đội giàn giáo lắp đặt bổ sung lưới che và thanh nẹp chân.</div>
+              </div>
+            </div>
+            <div class="worker-timeline-item">
+              <div class="worker-timeline-dot worker-timeline-dot--success"></div>
+              <div class="worker-timeline-content">
+                <div class="worker-timeline-time">12/10/2026 11:00</div>
+                <div class="worker-timeline-title">Nghiệm thu an toàn & Hoàn tất (RESOLVED)</div>
+                <div class="worker-timeline-desc">Đã nghiệm thu hiện trường đạt chuẩn theo QCVN 18:2021/BXD, cho phép tiếp tục thao tác.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="worker-modal__footer">
+        <button class="btn" id="closeDetailBtn" data-action="close-modal" type="button">Đóng</button>
+        <button class="btn btn-warning" id="openEditFromDetailBtn" data-action="open-edit-from-detail" type="button">✎ Chỉnh sửa báo cáo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Modal Cập nhật Thông tin Sự cố -->
+  <div class="worker-modal-backdrop is-hidden" id="editModal" data-modal="edit" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+    <div class="worker-modal">
+      <div class="worker-modal__header">
+        <h3 class="worker-modal__title" id="editModalTitle">Cập nhật thông tin sự cố</h3>
+        <button class="worker-modal__close" id="closeEditModalBtn" data-action="close-modal" type="button" aria-label="Đóng cửa sổ">✕</button>
+      </div>
+      <form id="editHazardForm" data-component="edit-form" novalidate>
+        <div class="worker-modal__body">
+          <input type="hidden" id="editHazardId" name="id" />
+
+          <div class="worker-form-group">
+            <label class="worker-label" for="editTitle">
+              <span>Tiêu đề sự cố <span class="worker-label-required">*</span></span>
+            </label>
+            <input class="worker-form-control" id="editTitle" name="title" data-field="title" type="text" required />
+          </div>
+
+          <div class="worker-form-group">
+            <label class="worker-label" for="editDescription">
+              <span>Mô tả chi tiết <span class="worker-label-required">*</span></span>
+            </label>
+            <textarea class="worker-form-control" id="editDescription" name="description" data-field="description" rows="4" required></textarea>
+          </div>
+
+          <div class="worker-form-group">
+            <label class="worker-label" for="editZone">
+              <span>Khu vực phát hiện</span>
+            </label>
+            <select class="worker-form-control" id="editZone" name="zone" data-field="zone">
+              <option value="ZONE-001">Tòa A - Khối tháp 25 tầng</option>
+              <option value="ZONE-002">Kho vật tư và nhiên liệu</option>
+              <option value="ZONE-003">Khu điều hành và hạ tầng</option>
+              <option value="ZONE-004">Mố cầu phía Đông</option>
+              <option value="ZONE-005">Khu tập kết phế liệu</option>
+              <option value="ZONE-006">Khu cơ điện và trạm biến áp</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="worker-form-group">
+              <label class="worker-label" for="editRiskLevel">Mức độ rủi ro</label>
+              <select class="worker-form-control" id="editRiskLevel" name="riskLevel" data-field="riskLevel">
+                <option value="LOW">Mức thấp</option>
+                <option value="MEDIUM">Mức vừa</option>
+                <option value="HIGH">Mức cao</option>
+                <option value="CRITICAL">Mức nghiêm trọng</option>
+              </select>
+            </div>
+
+            <div class="worker-form-group">
+              <label class="worker-label" for="editStatus">Trạng thái xử lý</label>
+              <select class="worker-form-control" id="editStatus" name="status" data-field="status">
+                <option value="OPEN">Đang chờ duyệt (OPEN)</option>
+                <option value="IN_PROGRESS">Đang xử lý (IN_PROGRESS)</option>
+                <option value="RESOLVED">Đã khắc phục (RESOLVED)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="worker-modal__footer">
+          <button class="btn" id="cancelEditBtn" data-action="close-modal" type="button">Hủy bỏ</button>
+          <button class="btn btn-warning" id="saveEditBtn" data-action="save-edit" type="submit">Lưu thay đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Modal Xác nhận Xóa sự cố -->
+  <div class="worker-modal-backdrop is-hidden" id="deleteModal" data-modal="delete" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+    <div class="worker-modal" style="width: min(440px, 100%);">
+      <div class="worker-modal__header">
+        <h3 class="worker-modal__title" id="deleteModalTitle" style="color: #dc2626;">Xác nhận xóa sự cố</h3>
+        <button class="worker-modal__close" id="closeDeleteModalBtn" data-action="close-modal" type="button" aria-label="Đóng cửa sổ">✕</button>
+      </div>
+      <div class="worker-modal__body">
+        <p style="margin: 0 0 10px; color: var(--color-text);">
+          Bạn có chắc chắn muốn xóa vĩnh viễn báo cáo này không?
+        </p>
+        <p id="deleteHazardName" style="font-weight: 700; color: var(--color-primary); background: #f1f5f9; padding: 10px; border-radius: 6px; margin: 0;">
+          Lan can sàn công tác tầng 12 thiếu thanh chắn chân
+        </p>
+        <p style="font-size: 0.82rem; color: #dc2626; margin: 10px 0 0;">
+          * Thao tác này sẽ xóa bản ghi khỏi hệ thống dữ liệu chung SiteSafe.
+        </p>
+      </div>
+      <div class="worker-modal__footer">
+        <button class="btn" id="cancelDeleteBtn" data-action="close-modal" type="button">Hủy</button>
+        <button class="btn btn-danger" id="confirmDeleteBtn" data-action="confirm-delete" type="button">Xóa báo cáo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Toast thông báo nhanh -->
+  <div class="worker-toast is-hidden" id="workerToast" data-component="toast" role="status">
+    <span id="toastIcon">✓</span>
+    <span id="toastText">Thao tác thành công</span>
+  </div>
+
+  <!-- Nạp đúng thứ tự bắt buộc: api.js -> main.js -> auth.js -> worker.js -->
+  <script src="../../js/api.js"></script>
+  <script src="../../js/main.js"></script>
+  <script src="../../js/modules/auth.js"></script>
+  <script src="../../js/modules/worker.js"></script>
+
+  <!-- Script hỗ trợ tương tác giao diện (Chưa viết nghiệp vụ lưu/gửi logic) -->
+  <script>
+    (function () {
+      "use strict";
+
+      // Chuyển đổi View Grid / Table
+      const viewGridBtn = document.getElementById("viewGridBtn");
+      const viewTableBtn = document.getElementById("viewTableBtn");
+      const hazardsGrid = document.getElementById("hazardsGrid");
+      const hazardsTableWrap = document.getElementById("hazardsTableWrap");
+
+      if (viewGridBtn && viewTableBtn && hazardsGrid && hazardsTableWrap) {
+        viewGridBtn.addEventListener("click", function () {
+          viewGridBtn.classList.add("worker-view-btn--active");
+          viewTableBtn.classList.remove("worker-view-btn--active");
+          hazardsGrid.classList.remove("is-hidden");
+          hazardsTableWrap.classList.add("is-hidden");
+        });
+
+        viewTableBtn.addEventListener("click", function () {
+          viewTableBtn.classList.add("worker-view-btn--active");
+          viewGridBtn.classList.remove("worker-view-btn--active");
+          hazardsTableWrap.classList.remove("is-hidden");
+          hazardsGrid.classList.add("is-hidden");
         });
       }
 
-      const savedHazards = siteSafeApi.getHazards();
-      const hazardsGrid = document.getElementById("hazardsGrid");
-      savedHazards.forEach(function (hazard) {
-        const card = document.createElement("article");
-        const statusClass =
-          hazard.status === "OPEN" ? "badge-warning" : "badge-success";
-        const statusText = hazard.status === "OPEN" ? "Đang chờ" : "Đang xử lý";
-        const riskLabels = {
-          LOW: "Mức thấp",
-          MEDIUM: "Mức vừa",
-          HIGH: "Mức cao",
-          CRITICAL: "Mức nghiêm trọng",
-        };
-        const riskText =
-          riskLabels[hazard.riskLevel] ||
-          escapeHazardText(hazard.riskLevel || "Chưa đánh giá");
-        card.className = "card hazard-card saved-hazard-card";
-        card.dataset.hazardId = hazard.id;
-        card.innerHTML = `<div class="card-img-wrapper"><img class="img-hazard" src="${escapeHazardText(hazard.image || "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1000&q=80")}" alt="Ảnh ${escapeHazardText(hazard.title)}"></div><div class="card-status-bar"><span class="badge ${statusClass}">${statusText}</span><span>${riskText}</span></div><div class="hazard-card-content"><h2>${escapeHazardText(hazard.title)}</h2><p>${escapeHazardText(hazard.description)}</p><div class="hazard-meta"><span>${escapeHazardText(hazard.reportedAt || "Mới gửi")}</span></div><div class="saved-actions"><button class="btn btn-warning edit-saved-hazard" type="button">Sửa</button><button class="btn btn-danger delete-saved-hazard" type="button">Xóa</button></div></div>`;
-        hazardsGrid.prepend(card);
+      // Xử lý mở/đóng Modal Chi tiết, Sửa, Xóa
+      const detailModal = document.getElementById("detailModal");
+      const editModal = document.getElementById("editModal");
+      const deleteModal = document.getElementById("deleteModal");
+      const editTitle = document.getElementById("editTitle");
+      const editDescription = document.getElementById("editDescription");
+      const deleteHazardName = document.getElementById("deleteHazardName");
+
+      function closeModal(modal) {
+        if (modal) modal.classList.add("is-hidden");
+      }
+
+      function openModal(modal) {
+        if (modal) modal.classList.remove("is-hidden");
+      }
+
+      document.addEventListener("click", function (e) {
+        const target = e.target.closest("[data-action]");
+        if (!target) return;
+
+        const action = target.getAttribute("data-action");
+        const id = target.getAttribute("data-id");
+
+        if (action === "view-detail") {
+          openModal(detailModal);
+        } else if (action === "edit-hazard") {
+          if (editTitle) editTitle.value = "Lan can sàn công tác tầng 12 thiếu thanh chắn chân";
+          if (editDescription) editDescription.value = "Một đoạn lan can tại góc phía Đông tầng 12 chưa lắp đủ tay vịn phụ và tấm chắn chân...";
+          openModal(editModal);
+        } else if (action === "delete-hazard") {
+          if (deleteHazardName) deleteHazardName.textContent = id || "Sự cố được chọn";
+          openModal(deleteModal);
+        } else if (action === "close-modal") {
+          const backdrop = target.closest(".worker-modal-backdrop");
+          closeModal(backdrop);
+        } else if (action === "open-edit-from-detail") {
+          closeModal(detailModal);
+          openModal(editModal);
+        } else if (action === "reset-filters") {
+          const search = document.getElementById("searchInput");
+          const status = document.getElementById("statusFilter");
+          const risk = document.getElementById("riskFilter");
+          const zone = document.getElementById("zoneFilter");
+          const sort = document.getElementById("sortSelect");
+          if (search) search.value = "";
+          if (status) status.value = "";
+          if (risk) risk.value = "";
+          if (zone) zone.value = "";
+          if (sort) sort.value = "newest";
+        }
       });
 
-      document.querySelectorAll(".saved-hazard-card").forEach(function (card) {
-        const hazardId = card.dataset.hazardId;
-        card
-          .querySelector(".edit-saved-hazard")
-          .addEventListener("click", async function () {
-            const hazard = siteSafeApi
-              .getHazards()
-              .find((item) => item.id === hazardId);
-            if (!hazard) return;
-            const description = await showCustomPrompt(
-              "Cập nhật mô tả nguy cơ:",
-              hazard.description,
-            );
-            if (description === null || !description.trim()) return;
-            siteSafeApi.saveHazard({
-              ...hazard,
-              description: description.trim(),
-            });
-            card.querySelector(".hazard-card-content p").textContent =
-              description.trim();
-          });
-
-        card
-          .querySelector(".delete-saved-hazard")
-          .addEventListener("click", function () {
-            if (!confirm("Bạn có chắc muốn xóa báo cáo này không?")) return;
-            siteSafeApi.deleteHazard(hazardId);
-            card.remove();
-          });
+      // Đóng modal khi bấm ra ngoài backdrop
+      [detailModal, editModal, deleteModal].forEach(function (m) {
+        if (!m) return;
+        m.addEventListener("click", function (e) {
+          if (e.target === m) closeModal(m);
+        });
       });
-    </script>
-    <script src="../../js/main.js"></script>
-    <script src="../../js/modules/worker.js"></script>
-  </body>
+    })();
+  </script>
+</body>
+
 </html>
