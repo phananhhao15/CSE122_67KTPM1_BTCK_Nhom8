@@ -281,17 +281,91 @@
   <script src="../../js/modules/auth.js"></script>
   <script src="../../js/modules/worker.js"></script>
 
-  <!-- Script hỗ trợ tương tác giao diện (Chưa viết nghiệp vụ lưu/gửi logic) -->
+  <!-- Script nghiệp vụ Worker Hazard Create (Hào phụ trách) -->
   <script>
     (function () {
       "use strict";
 
-      // Upload ảnh preview demo
+      // =====================================================================
+      // 0. ROUTE GUARD: Chỉ WORKER được truy cập
+      // =====================================================================
+      const currentUser = (window.requireAuth || window.siteSafeAuth.requireAuth)(["WORKER"]);
+      if (!currentUser) return;
+
+      const worker = window.siteSafeWorker;
+      const api = window.siteSafeApi;
+
+      // =====================================================================
+      // 1. TRẠNG THÁI TRANG
+      // =====================================================================
+      const hazardFormEl = document.getElementById("hazardForm");
+
+      function showPageState(stateId) {
+        ["pageLoadingState", "pageErrorState", "pageEmptyState", "pageSuccessState"].forEach(function (id) {
+          const el = document.getElementById(id);
+          if (el) el.classList.add("is-hidden");
+        });
+        if (hazardFormEl) hazardFormEl.classList.add("is-hidden");
+
+        if (stateId) {
+          const target = document.getElementById(stateId);
+          if (target) target.classList.remove("is-hidden");
+        } else {
+          if (hazardFormEl) hazardFormEl.classList.remove("is-hidden");
+        }
+      }
+
+      function showPageError(msg) {
+        const el = document.getElementById("pageErrorMessage");
+        if (el) el.textContent = msg || "Đã có lỗi xảy ra khi truy vấn danh sách khu vực.";
+        showPageState("pageErrorState");
+      }
+
+      // =====================================================================
+      // 2. LOAD ZONES TỪ API → Populate select#hazardZone
+      // =====================================================================
+      function populateZoneSelect(zones) {
+        const sel = document.getElementById("hazardZone");
+        if (!sel) return;
+        sel.innerHTML = '<option value="">-- Chọn khu vực phát hiện nguy cơ --</option>';
+        zones.forEach(function (z) {
+          const opt = document.createElement("option");
+          opt.value = z.id;
+          opt.textContent = z.name || z.id;
+          sel.appendChild(opt);
+        });
+      }
+
+      // =====================================================================
+      // 3. TỰ ĐIỀN TỪ QUERY STRING (?zone=...&zoneName=...&ref=...&refTitle=...)
+      // =====================================================================
+      function applyQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        const zoneId = params.get("zone");
+        const refTitle = params.get("refTitle") || "";
+
+        // Tự chọn zone
+        if (zoneId) {
+          const sel = document.getElementById("hazardZone");
+          if (sel) sel.value = zoneId;
+        }
+
+        // Tự điền tiêu đề nếu đến từ mục "Không đạt"
+        if (refTitle) {
+          const titleEl = document.getElementById("hazardTitle");
+          if (titleEl && !titleEl.value) {
+            titleEl.value = "Không đạt: " + refTitle;
+          }
+        }
+      }
+
+      // =====================================================================
+      // 4. IMAGE UPLOAD PREVIEW
+      // =====================================================================
       const uploadInput = document.getElementById("hazardImage");
       const previewWrap = document.getElementById("previewWrap");
       const imagePreview = document.getElementById("imagePreview");
       const removeImgBtn = document.getElementById("removeImgBtn");
-      const uploadBox = document.getElementById("uploadBox");
 
       if (uploadInput && previewWrap && imagePreview) {
         uploadInput.addEventListener("change", function () {
@@ -305,7 +379,6 @@
             reader.readAsDataURL(file);
           }
         });
-
         if (removeImgBtn) {
           removeImgBtn.addEventListener("click", function (e) {
             e.stopPropagation();
@@ -316,44 +389,377 @@
         }
       }
 
-      // Xử lý bật/tắt khối AI Panel Demo
-      const classifyBtn = document.getElementById("classifyAiBtn");
-      const aiPanel = document.getElementById("aiPanel");
-      const aiLoading = document.getElementById("aiLoading");
-      const aiResultContent = document.getElementById("aiResultContent");
-      const aiAcceptBtn = document.getElementById("aiAcceptBtn");
-      const aiAppliedNotice = document.getElementById("aiAppliedNotice");
-      const hazardCategory = document.getElementById("hazardCategory");
-      const hazardRiskLevel = document.getElementById("hazardRiskLevel");
-      const aiDismissBtn = document.getElementById("aiDismissBtn");
-
-      if (classifyBtn && aiPanel) {
-        classifyBtn.addEventListener("click", function () {
-          aiPanel.classList.remove("is-hidden");
-          if (aiLoading && aiResultContent) {
-            aiLoading.classList.remove("is-hidden");
-            aiResultContent.classList.add("is-hidden");
-            setTimeout(function () {
-              aiLoading.classList.add("is-hidden");
-              aiResultContent.classList.remove("is-hidden");
-            }, 600);
-          }
+      // Upload box click → trigger file input
+      const uploadBox = document.getElementById("uploadBox");
+      if (uploadBox && uploadInput) {
+        uploadBox.addEventListener("click", function (e) {
+          if (e.target !== uploadInput) uploadInput.click();
+        });
+        uploadBox.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); uploadInput.click(); }
         });
       }
 
+      // =====================================================================
+      // 5. AI-1 HAZARD CLASSIFIER
+      // =====================================================================
+      let lastAiResult = null;
+
+      const aiPanel = document.getElementById("aiPanel");
+      const aiLoading = document.getElementById("aiLoading");
+      const aiResultContent = document.getElementById("aiResultContent");
+      const aiConfidenceBadge = document.getElementById("aiConfidenceBadge");
+      const aiCategoryText = document.getElementById("aiCategoryText");
+      const aiRiskBadge = document.getElementById("aiRiskBadge");
+      const aiKeywordsTags = document.getElementById("aiKeywordsTags");
+      const aiReasonsList = document.getElementById("aiReasonsList");
+      const aiStandardRef = document.getElementById("aiStandardRef");
+      const aiActionsList = document.getElementById("aiActionsList");
+      const aiAppliedNotice = document.getElementById("aiAppliedNotice");
+      const aiStepText = document.getElementById("aiStepText");
+
+      // Các bước loading giả lập
+      const AI_STEPS = [
+        "Đang trích xuất từ khóa và đối chiếu quy chuẩn QCVN 18:2021/BXD...",
+        "Đang phân tích nhóm nguy cơ tiềm ẩn...",
+        "Đang đánh giá mức độ rủi ro theo tiêu chuẩn...",
+        "Đang tổng hợp khuyến nghị xử lý...",
+      ];
+
+      function showAiLoading() {
+        if (aiPanel) aiPanel.classList.remove("is-hidden");
+        if (aiLoading) aiLoading.classList.remove("is-hidden");
+        if (aiResultContent) aiResultContent.classList.add("is-hidden");
+        if (aiAppliedNotice) aiAppliedNotice.classList.add("is-hidden");
+
+        let stepIdx = 0;
+        const stepInterval = setInterval(function () {
+          stepIdx = (stepIdx + 1) % AI_STEPS.length;
+          if (aiStepText) aiStepText.textContent = AI_STEPS[stepIdx];
+        }, 350);
+        return stepInterval;
+      }
+
+      function showAiResult(result) {
+        lastAiResult = result;
+        if (aiLoading) aiLoading.classList.add("is-hidden");
+        if (aiResultContent) aiResultContent.classList.remove("is-hidden");
+
+        // Cập nhật badge confidence
+        if (aiConfidenceBadge) aiConfidenceBadge.textContent = "Độ tin cậy: " + (result.confidence || 0) + "%";
+
+        // Category
+        if (aiCategoryText) aiCategoryText.textContent = result.category || "Chung / Khác";
+
+        // Risk badge
+        if (aiRiskBadge) {
+          aiRiskBadge.textContent = (result.riskLevelLabel || result.riskLevel || "Chưa xác định") + " (" + (result.riskLevel || "") + ")";
+          aiRiskBadge.className = "badge " + (worker.getRiskBadgeClass(result.riskLevel) || "");
+        }
+
+        // Keywords tags
+        if (aiKeywordsTags) {
+          const kws = result.matchedKeywords || [];
+          aiKeywordsTags.innerHTML = kws.map(function (kw) {
+            return '<span class="worker-ai-tag">' + worker.escapeHtml(kw) + '</span>';
+          }).join("") || '<span class="worker-ai-tag">Phân tích tổng quát</span>';
+        }
+
+        // Reasons
+        if (aiReasonsList) {
+          const reasons = result.explanation || [result.summary || ""];
+          aiReasonsList.innerHTML = reasons.map(function (r) {
+            return "<li>" + worker.escapeHtml(r) + "</li>";
+          }).join("");
+        }
+
+        // Standard ref
+        if (aiStandardRef) aiStandardRef.textContent = "Căn cứ: " + (result.standardRef || "Nội quy an toàn lao động chung SiteSafe");
+
+        // Recommended actions
+        if (aiActionsList) {
+          const actions = result.recommendedActions || [];
+          aiActionsList.innerHTML = actions.map(function (a) {
+            return "<li>" + worker.escapeHtml(a) + "</li>";
+          }).join("") || "<li>Báo ngay Cán bộ an toàn để kiểm tra hiện trường.</li>";
+        }
+      }
+
+      function showAiFallback(errMsg) {
+        // Hiển thị kết quả dự phòng khi AI lỗi – không chặn submit form
+        const fallback = {
+          category: "Chung / Khác",
+          categoryCode: "GENERAL",
+          riskLevel: "MEDIUM",
+          riskLevelLabel: "Mức vừa",
+          confidence: 0,
+          summary: "Không thể phân tích tự động: " + (errMsg || "Lỗi không xác định"),
+          matchedKeywords: [],
+          standardRef: "Nội quy an toàn lao động chung SiteSafe",
+          explanation: ["AI không thể phân tích mô tả này. Vui lòng tự chọn phân loại và mức rủi ro."],
+          recommendedActions: ["Liên hệ cán bộ an toàn để được hỗ trợ phân loại nguy cơ."],
+        };
+        showAiResult(fallback);
+        if (aiConfidenceBadge) aiConfidenceBadge.textContent = "⚠️ Lỗi AI – chọn thủ công";
+      }
+
+      // Nút "⚡ AI-1 Phân loại nguy cơ"
+      const classifyBtn = document.getElementById("classifyAiBtn");
+      if (classifyBtn) {
+        classifyBtn.addEventListener("click", function () {
+          const descVal = (document.getElementById("hazardDescription") || {}).value || "";
+          const titleVal = (document.getElementById("hazardTitle") || {}).value || "";
+          const zoneEl = document.getElementById("hazardZone");
+          const zoneId = zoneEl ? zoneEl.value : "";
+
+          if (!descVal.trim() && !titleVal.trim()) {
+            const descErr = document.getElementById("descError");
+            if (descErr) { descErr.textContent = "Nhập mô tả trước khi phân loại AI."; descErr.classList.remove("is-hidden"); }
+            return;
+          }
+
+          // Disable nút để tránh spam
+          classifyBtn.disabled = true;
+          const stepInterval = showAiLoading();
+
+          // Timeout fallback nếu AI quá chậm (3 giây)
+          const fallbackTimer = setTimeout(function () {
+            clearInterval(stepInterval);
+            showAiFallback("Phân loại AI quá thời gian chờ.");
+            classifyBtn.disabled = false;
+          }, 3000);
+
+          worker.classifyHazard({ description: descVal, title: titleVal, zoneId: zoneId })
+            .then(function (result) {
+              clearTimeout(fallbackTimer);
+              clearInterval(stepInterval);
+              showAiResult(result);
+              classifyBtn.disabled = false;
+            })
+            .catch(function (err) {
+              clearTimeout(fallbackTimer);
+              clearInterval(stepInterval);
+              showAiFallback(err && err.message ? err.message : String(err));
+              classifyBtn.disabled = false;
+            });
+        });
+      }
+
+      // Nút "✓ Áp dụng gợi ý AI"
+      const aiAcceptBtn = document.getElementById("aiAcceptBtn");
       if (aiAcceptBtn) {
         aiAcceptBtn.addEventListener("click", function () {
-          if (hazardCategory) hazardCategory.value = "Điện thi công";
-          if (hazardRiskLevel) hazardRiskLevel.value = "CRITICAL";
+          if (!lastAiResult) return;
+          const catEl = document.getElementById("hazardCategory");
+          const riskEl = document.getElementById("hazardRiskLevel");
+          if (catEl) catEl.value = lastAiResult.category || "Chung / Khác";
+          if (riskEl) riskEl.value = lastAiResult.riskLevel || "MEDIUM";
+          // Gợi ý tiêu đề nếu ô đang trống
+          const titleEl = document.getElementById("hazardTitle");
+          if (titleEl && !titleEl.value.trim() && lastAiResult.suggestedTitle) {
+            titleEl.value = lastAiResult.suggestedTitle;
+          }
           if (aiAppliedNotice) aiAppliedNotice.classList.remove("is-hidden");
         });
       }
 
+      // Nút "✎ Tùy chỉnh thông số" → Mở form để chỉnh tay
+      const aiEditBtn = document.getElementById("aiEditBtn");
+      if (aiEditBtn) {
+        aiEditBtn.addEventListener("click", function () {
+          // Áp dụng gợi ý để dễ chỉnh, rồi cuộn xuống form
+          if (lastAiResult) {
+            const catEl = document.getElementById("hazardCategory");
+            const riskEl = document.getElementById("hazardRiskLevel");
+            if (catEl) catEl.value = lastAiResult.category || "Chung / Khác";
+            if (riskEl) riskEl.value = lastAiResult.riskLevel || "MEDIUM";
+          }
+          const catEl = document.getElementById("hazardCategory");
+          if (catEl) { catEl.focus(); catEl.scrollIntoView({ behavior: "smooth", block: "center" }); }
+        });
+      }
+
+      // Nút "✕ Từ chối"
+      const aiDismissBtn = document.getElementById("aiDismissBtn");
       if (aiDismissBtn && aiPanel) {
         aiDismissBtn.addEventListener("click", function () {
           aiPanel.classList.add("is-hidden");
+          lastAiResult = null;
         });
       }
+
+      // Nút "🔄 Phân loại lại"
+      const aiReclassifyBtn = document.getElementById("aiReclassifyBtn");
+      if (aiReclassifyBtn && classifyBtn) {
+        aiReclassifyBtn.addEventListener("click", function () {
+          classifyBtn.click();
+        });
+      }
+
+      // =====================================================================
+      // 6. FORM VALIDATION
+      // =====================================================================
+      function validateHazardForm() {
+        let valid = true;
+
+        // Zone
+        const zoneVal = (document.getElementById("hazardZone") || {}).value;
+        const zoneErr = document.getElementById("zoneError");
+        if (!zoneVal) {
+          if (zoneErr) zoneErr.classList.remove("is-hidden");
+          valid = false;
+        } else {
+          if (zoneErr) zoneErr.classList.add("is-hidden");
+        }
+
+        // Title
+        const titleVal = ((document.getElementById("hazardTitle") || {}).value || "").trim();
+        const titleErr = document.getElementById("titleError");
+        if (!titleVal) {
+          if (titleErr) titleErr.classList.remove("is-hidden");
+          valid = false;
+        } else {
+          if (titleErr) titleErr.classList.add("is-hidden");
+        }
+
+        // Description
+        const descVal = ((document.getElementById("hazardDescription") || {}).value || "").trim();
+        const descErr = document.getElementById("descError");
+        if (!descVal) {
+          if (descErr) { descErr.textContent = "Vui lòng nhập mô tả chi tiết nguy cơ"; descErr.classList.remove("is-hidden"); }
+          valid = false;
+        } else {
+          if (descErr) descErr.classList.add("is-hidden");
+        }
+
+        return valid;
+      }
+
+      // =====================================================================
+      // 7. SUBMIT HAZARD FORM
+      // =====================================================================
+      let isSubmitting = false;
+
+      function setSubmitLoading(isLoading) {
+        const btn = document.getElementById("submitHazardBtn");
+        const spinner = document.getElementById("submitSpinner");
+        const btnText = document.getElementById("submitBtnText");
+        if (!btn) return;
+        isSubmitting = isLoading;
+        btn.disabled = isLoading;
+        if (spinner) spinner.classList.toggle("is-hidden", !isLoading);
+        if (btnText) btnText.textContent = isLoading ? "Đang gửi..." : "Gửi báo cáo nguy cơ";
+      }
+
+      if (hazardFormEl) {
+        hazardFormEl.addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (isSubmitting) return; // Chặn double-submit
+          if (!validateHazardForm()) return;
+
+          setSubmitLoading(true);
+
+          try {
+            const zoneEl = document.getElementById("hazardZone");
+            const zoneId = zoneEl ? zoneEl.value : "";
+            const zoneName = zoneEl && zoneEl.options[zoneEl.selectedIndex] ? zoneEl.options[zoneEl.selectedIndex].text : "";
+            const titleVal = ((document.getElementById("hazardTitle") || {}).value || "").trim();
+            const descVal = ((document.getElementById("hazardDescription") || {}).value || "").trim();
+            const catEl = document.getElementById("hazardCategory");
+            const catVal = catEl ? catEl.value : "Chung / Khác";
+            const riskEl = document.getElementById("hazardRiskLevel");
+            const riskVal = riskEl ? riskEl.value : "MEDIUM";
+
+            // Đọc ảnh (base64 nếu đã chọn)
+            let imageDataUrl = "";
+            if (imagePreview && imagePreview.src && imagePreview.src.startsWith("data:")) {
+              imageDataUrl = imagePreview.src;
+            }
+
+            const hazardData = {
+              title: titleVal,
+              description: descVal,
+              zoneId: zoneId,
+              zoneName: zoneName,
+              category: catVal,
+              riskLevel: riskVal,
+              status: "OPEN",
+              reportedBy: currentUser.email,
+              reporterName: currentUser.fullName || currentUser.email,
+              reportedAt: new Date().toISOString(),
+              image: imageDataUrl || null,
+              // Metadata AI nếu đã phân loại
+              aiClassified: lastAiResult ? true : false,
+              aiCategory: lastAiResult ? lastAiResult.category : null,
+              aiRiskLevel: lastAiResult ? lastAiResult.riskLevel : null,
+              aiConfidence: lastAiResult ? lastAiResult.confidence : null,
+            };
+
+            const saved = worker.reportHazard(hazardData);
+
+            // Hiển thị thành công
+            const successDescEl = document.getElementById("successDesc");
+            if (successDescEl) {
+              successDescEl.textContent = "Báo cáo sự cố \"" + titleVal + "\" tại " + zoneName + " đã được lưu (Mã: " + (saved.id || "N/A") + ").";
+            }
+            showPageState("pageSuccessState");
+          } catch (err) {
+            showPageError("Không thể gửi báo cáo: " + (err && err.message ? err.message : String(err)));
+          } finally {
+            setSubmitLoading(false);
+          }
+        });
+      }
+
+      // =====================================================================
+      // 8. NÚT "Gửi báo cáo mới khác"
+      // =====================================================================
+      const createAnotherBtn = document.getElementById("createAnotherBtn");
+      if (createAnotherBtn) {
+        createAnotherBtn.addEventListener("click", function () {
+          if (hazardFormEl) hazardFormEl.reset();
+          if (imagePreview) imagePreview.src = "";
+          if (previewWrap) previewWrap.classList.add("is-hidden");
+          if (aiPanel) aiPanel.classList.add("is-hidden");
+          if (aiAppliedNotice) aiAppliedNotice.classList.add("is-hidden");
+          lastAiResult = null;
+          isSubmitting = false;
+          showPageState(null);
+          // Re-apply zone từ query string nếu có
+          applyQueryParams();
+        });
+      }
+
+      // =====================================================================
+      // 9. NÚT RETRY
+      // =====================================================================
+      const retryBtn = document.getElementById("pageRetryBtn");
+      if (retryBtn) {
+        retryBtn.addEventListener("click", function () { loadPage(); });
+      }
+
+      // =====================================================================
+      // 10. TẢI DỮ LIỆU TRANG
+      // =====================================================================
+      function loadPage() {
+        showPageState("pageLoadingState");
+        try {
+          const zones = worker.getZones();
+          if (!zones || zones.length === 0) {
+            showPageState("pageEmptyState");
+            return;
+          }
+          populateZoneSelect(zones);
+          showPageState(null);
+          applyQueryParams(); // Tự điền sau khi đã có options
+        } catch (err) {
+          showPageError("Lỗi tải dữ liệu: " + (err && err.message ? err.message : String(err)));
+        }
+      }
+
+      // Khởi chạy
+      loadPage();
+
     })();
   </script>
 </body>

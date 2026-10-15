@@ -407,36 +407,170 @@
   <script src="../../js/modules/auth.js"></script>
   <script src="../../js/modules/worker.js"></script>
 
-  <!-- Script hỗ trợ tương tác giao diện (Chưa viết nghiệp vụ lưu/gửi logic) -->
+  <!-- Script nghiệp vụ Worker Safety Checklist (Hào phụ trách) -->
   <script>
     (function () {
       "use strict";
 
-      // Đặt ngày hiện tại mặc định
-      const checkDate = document.getElementById("checkDate");
-      if (checkDate && !checkDate.value) {
-        checkDate.value = new Date().toISOString().split("T")[0];
+      // =====================================================================
+      // 0. ROUTE GUARD: Chỉ WORKER được truy cập
+      // =====================================================================
+      const currentUser = (window.requireAuth || window.siteSafeAuth.requireAuth)(["WORKER"]);
+      if (!currentUser) return; // Đã bị redirect bởi requireAuth
+
+      const worker = window.siteSafeWorker;
+      const api = window.siteSafeApi;
+
+      // =====================================================================
+      // 1. TRẠNG THÁI TRANG – Helper bật/tắt các khối UI
+      // =====================================================================
+      function showState(stateId) {
+        ["checklistLoadingState", "checklistErrorState", "checklistEmptyState", "checklistSuccessState"].forEach(function (id) {
+          const el = document.getElementById(id);
+          if (el) el.classList.add("is-hidden");
+        });
+        const form = document.getElementById("checklistForm");
+        const progress = document.getElementById("checklistProgressWrapper");
+        if (form) form.classList.add("is-hidden");
+        if (progress) progress.classList.add("is-hidden");
+
+        if (stateId) {
+          const target = document.getElementById(stateId);
+          if (target) target.classList.remove("is-hidden");
+        } else {
+          // stateId = null → Hiển thị form
+          if (form) form.classList.remove("is-hidden");
+          if (progress) progress.classList.remove("is-hidden");
+        }
       }
 
-      // Xử lý UI chọn trạng thái Đạt / Không đạt / N/A, cập nhật progress bar
-      const form = document.getElementById("checklistForm");
-      if (!form) return;
+      function showError(msg) {
+        const el = document.getElementById("checklistErrorMessage");
+        if (el) el.textContent = msg || "Đã có lỗi xảy ra khi truy vấn danh sách câu hỏi kiểm tra.";
+        showState("checklistErrorState");
+      }
 
-      const progressFill = document.getElementById("checklistProgressFill");
-      const progressText = document.getElementById("checklistProgressText");
-      const progressCount = document.getElementById("checklistProgressCount");
-      const passCountText = document.getElementById("passCountText");
-      const failCountText = document.getElementById("failCountText");
-      const naCountText = document.getElementById("naCountText");
-      const failAlertBox = document.getElementById("failAlertBox");
+      // =====================================================================
+      // 2. KHỞI TẠO NGÀY MẶC ĐỊNH
+      // =====================================================================
+      const checkDateEl = document.getElementById("checkDate");
+      if (checkDateEl && !checkDateEl.value) {
+        checkDateEl.value = new Date().toISOString().split("T")[0];
+      }
 
+      // =====================================================================
+      // 3. LOAD ZONES TỪ API → Populate select#workZone
+      // =====================================================================
+      function populateZoneSelect(zones) {
+        const sel = document.getElementById("workZone");
+        if (!sel) return;
+        sel.innerHTML = '<option value="">-- Chọn khu vực thi công --</option>';
+        zones.forEach(function (z) {
+          const opt = document.createElement("option");
+          opt.value = z.id;
+          opt.textContent = z.name || z.id;
+          sel.appendChild(opt);
+        });
+        // Chọn mặc định option đầu tiên nếu chỉ có 1
+        if (zones.length === 1) sel.value = zones[0].id;
+      }
+
+      // =====================================================================
+      // 4. RENDER CHECKLIST ITEMS TỪ API → tbody#checklistTableBody
+      // =====================================================================
+      function renderChecklistItems(items) {
+        const tbody = document.getElementById("checklistTableBody");
+        if (!tbody) return;
+        if (!items || items.length === 0) {
+          showState("checklistEmptyState");
+          return;
+        }
+
+        tbody.innerHTML = "";
+        items.forEach(function (item) {
+          const id = worker.escapeHtml(item.id);
+          const title = worker.escapeHtml(item.title || item.name || "(Chưa có tiêu đề)");
+          const workType = worker.escapeHtml(item.workType || item.category || "");
+          const tr = document.createElement("tr");
+          tr.className = "worker-checklist-row";
+          tr.id = "row_" + id;
+          tr.setAttribute("data-item-id", id);
+          tr.innerHTML = `
+            <td>
+              <div class="worker-checklist-item-title">${title}</div>
+              ${workType ? `<span class="worker-checklist-item-type">${workType}</span>` : ""}
+            </td>
+            <td style="text-align: right;">
+              <div class="worker-choice-group" data-choice-group="${id}">
+                <label class="worker-choice-btn worker-choice-btn--pass" data-choice="PASS">
+                  <input type="radio" name="status_${id}" value="PASS" data-action="choose-status" data-item="${id}" />
+                  <span>✓ Đạt</span>
+                </label>
+                <label class="worker-choice-btn worker-choice-btn--fail" data-choice="FAIL">
+                  <input type="radio" name="status_${id}" value="FAIL" data-action="choose-status" data-item="${id}" />
+                  <span>✕ Không đạt</span>
+                </label>
+                <label class="worker-choice-btn worker-choice-btn--na" data-choice="NA">
+                  <input type="radio" name="status_${id}" value="NA" data-action="choose-status" data-item="${id}" />
+                  <span>— N/A</span>
+                </label>
+              </div>
+              <div class="worker-item-expand is-hidden" id="expand_${id}" data-expand-for="${id}">
+                <textarea class="worker-item-notes-textarea" id="note_${id}" data-item-note="${id}" placeholder="Nhập ghi chú hiện trường cho mục này..."></textarea>
+                <div class="worker-item-photo-bar">
+                  <label class="worker-item-photo-btn" for="photo_${id}">
+                    📷 Đính kèm ảnh minh chứng
+                    <input type="file" id="photo_${id}" data-item-photo="${id}" accept="image/*" class="is-hidden" />
+                  </label>
+                  <span class="worker-item-photo-preview is-hidden" id="photoPreview_${id}">✓ Đã chọn ảnh</span>
+                  <a class="worker-btn-create-hazard is-hidden" id="createHazardBtn_${id}"
+                     href="#" data-action="create-hazard-from-item" data-item-id="${id}"
+                     data-item-title="${title}">
+                    ⚡ Tạo hazard từ mục này
+                  </a>
+                </div>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // Cập nhật href cho các nút "Tạo hazard" sau khi render (cần biết zone hiện tại)
+        updateHazardLinks();
+        updateProgressUI();
+      }
+
+      // Cập nhật href của các nút "Tạo hazard" với query string zone + ref
+      function updateHazardLinks() {
+        const zoneEl = document.getElementById("workZone");
+        const zoneId = zoneEl ? zoneEl.value : "";
+        const zoneText = zoneEl && zoneEl.options[zoneEl.selectedIndex] ? zoneEl.options[zoneEl.selectedIndex].text : "";
+
+        document.querySelectorAll("[data-action='create-hazard-from-item']").forEach(function (btn) {
+          const itemId = btn.getAttribute("data-item-id");
+          const itemTitle = btn.getAttribute("data-item-title") || "";
+          const params = new URLSearchParams();
+          if (zoneId) { params.set("zone", zoneId); params.set("zoneName", zoneText); }
+          params.set("ref", itemId);
+          params.set("refTitle", itemTitle);
+          btn.href = "worker-hazard-create.html?" + params.toString();
+        });
+
+        // Cập nhật link "Báo cáo nguy cơ này ngay" trong failAlertBox
+        const alertBtn = document.getElementById("reportAlertHazardBtn");
+        if (alertBtn && zoneId) {
+          const p = new URLSearchParams({ zone: zoneId, zoneName: zoneText });
+          alertBtn.href = "worker-hazard-create.html?" + p.toString();
+        }
+      }
+
+      // =====================================================================
+      // 5. PROGRESS BAR
+      // =====================================================================
       function updateProgressUI() {
         const rows = document.querySelectorAll(".worker-checklist-row");
         const total = rows.length;
-        let answered = 0;
-        let pass = 0;
-        let fail = 0;
-        let na = 0;
+        let answered = 0, pass = 0, fail = 0, na = 0;
 
         rows.forEach(function (row) {
           const checked = row.querySelector('input[type="radio"]:checked');
@@ -449,65 +583,275 @@
         });
 
         const percent = total > 0 ? Math.round((answered / total) * 100) : 0;
-        if (progressFill) progressFill.style.width = percent + "%";
-        if (progressText) progressText.textContent = percent + "%";
-        if (progressCount) progressCount.textContent = answered + "/" + total + " mục";
-        if (passCountText) passCountText.textContent = "Đạt: " + pass;
-        if (failCountText) failCountText.textContent = "Không đạt: " + fail;
-        if (naCountText) naCountText.textContent = "N/A: " + na;
+        const fill = document.getElementById("checklistProgressFill");
+        const text = document.getElementById("checklistProgressText");
+        const count = document.getElementById("checklistProgressCount");
+        const passEl = document.getElementById("passCountText");
+        const failEl = document.getElementById("failCountText");
+        const naEl = document.getElementById("naCountText");
+        const failAlert = document.getElementById("failAlertBox");
 
-        if (failAlertBox) {
-          if (fail > 0) {
-            failAlertBox.classList.remove("is-hidden");
-          } else {
-            failAlertBox.classList.add("is-hidden");
+        if (fill) { fill.style.width = percent + "%"; }
+        if (text) text.textContent = percent + "%";
+        if (count) count.textContent = answered + "/" + total + " mục";
+        if (passEl) passEl.textContent = "Đạt: " + pass;
+        if (failEl) failEl.textContent = "Không đạt: " + fail;
+        if (naEl) naEl.textContent = "N/A: " + na;
+
+        const bar = document.getElementById("checklistProgressBar");
+        if (bar) { bar.setAttribute("aria-valuenow", percent); }
+
+        if (failAlert) {
+          failAlert.classList.toggle("is-hidden", fail === 0);
+        }
+
+        return { total, answered, pass, fail, na };
+      }
+
+      // =====================================================================
+      // 6. XỬ LÝ FORM CHANGE (chọn trạng thái, upload ảnh, đổi zone)
+      // =====================================================================
+      const form = document.getElementById("checklistForm");
+      if (form) {
+        form.addEventListener("change", function (e) {
+          // Chọn trạng thái Đạt/Không đạt/N/A
+          if (e.target && e.target.type === "radio" && e.target.dataset.action === "choose-status") {
+            const row = e.target.closest(".worker-checklist-row");
+            if (!row) return;
+
+            // Visual selection
+            row.querySelectorAll(".worker-choice-btn").forEach(function (lbl) {
+              lbl.classList.remove("is-selected");
+            });
+            const parentLabel = e.target.closest(".worker-choice-btn");
+            if (parentLabel) parentLabel.classList.add("is-selected");
+
+            // Expand box ghi chú (mở khi bất kỳ lựa chọn nào)
+            const itemId = row.getAttribute("data-item-id");
+            const expandBox = document.getElementById("expand_" + itemId);
+            const hazardBtn = document.getElementById("createHazardBtn_" + itemId);
+
+            if (expandBox) expandBox.classList.remove("is-hidden");
+
+            if (e.target.value === "FAIL") {
+              row.classList.add("worker-checklist-row--fail");
+              if (hazardBtn) hazardBtn.classList.remove("is-hidden");
+            } else {
+              row.classList.remove("worker-checklist-row--fail");
+              if (hazardBtn) hazardBtn.classList.add("is-hidden");
+            }
+
+            updateProgressUI();
+            // Ẩn lỗi items nếu còn hiện
+            const itemsErr = document.getElementById("itemsError");
+            if (itemsErr) itemsErr.classList.add("is-hidden");
           }
+
+          // Preview ảnh khi chọn file
+          if (e.target && e.target.type === "file" && e.target.dataset.itemPhoto) {
+            const itemId = e.target.getAttribute("data-item-photo");
+            const preview = document.getElementById("photoPreview_" + itemId);
+            if (preview && e.target.files && e.target.files[0]) {
+              preview.textContent = "✓ Đã chọn: " + e.target.files[0].name;
+              preview.classList.remove("is-hidden");
+            }
+          }
+
+          // Đổi zone → cập nhật lại href hazard links
+          if (e.target && e.target.id === "workZone") {
+            updateHazardLinks();
+          }
+        });
+      }
+
+      // =====================================================================
+      // 7. SUBMIT FORM
+      // =====================================================================
+      let isSubmitting = false;
+
+      function setSubmitLoading(isLoading) {
+        const btn = document.getElementById("submitChecklistBtn");
+        const spinner = document.getElementById("checklistSpinner");
+        const btnText = document.getElementById("checklistBtnText");
+        if (!btn) return;
+        isSubmitting = isLoading;
+        btn.disabled = isLoading;
+        if (spinner) spinner.classList.toggle("is-hidden", !isLoading);
+        if (btnText) btnText.textContent = isLoading ? "Đang lưu..." : "Nộp kết quả checklist";
+      }
+
+      function validateForm() {
+        let valid = true;
+
+        // Kiểm tra ngày
+        const dateVal = (document.getElementById("checkDate") || {}).value;
+        const dateErr = document.getElementById("dateError");
+        if (!dateVal) {
+          if (dateErr) dateErr.classList.remove("is-hidden");
+          valid = false;
+        } else {
+          if (dateErr) dateErr.classList.add("is-hidden");
+        }
+
+        // Kiểm tra zone
+        const zoneVal = (document.getElementById("workZone") || {}).value;
+        const zoneErr = document.getElementById("zoneCheckError");
+        if (!zoneVal) {
+          if (zoneErr) zoneErr.classList.remove("is-hidden");
+          valid = false;
+        } else {
+          if (zoneErr) zoneErr.classList.add("is-hidden");
+        }
+
+        // Kiểm tra tất cả mục đã được đánh giá
+        const rows = document.querySelectorAll(".worker-checklist-row");
+        let allAnswered = true;
+        rows.forEach(function (row) {
+          if (!row.querySelector('input[type="radio"]:checked')) {
+            allAnswered = false;
+          }
+        });
+
+        const itemsErr = document.getElementById("itemsError");
+        if (!allAnswered) {
+          if (itemsErr) {
+            itemsErr.textContent = "⚠️ Vui lòng đánh giá tất cả " + rows.length + " hạng mục trước khi nộp.";
+            itemsErr.classList.remove("is-hidden");
+          }
+          valid = false;
+        } else {
+          if (itemsErr) itemsErr.classList.add("is-hidden");
+        }
+
+        return valid;
+      }
+
+      if (form) {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (isSubmitting) return; // Chặn double-submit
+          if (!validateForm()) return;
+
+          setSubmitLoading(true);
+
+          try {
+            // Thu thập kết quả từng mục
+            const rows = document.querySelectorAll(".worker-checklist-row");
+            const items = [];
+            rows.forEach(function (row) {
+              const itemId = row.getAttribute("data-item-id");
+              const checked = row.querySelector('input[type="radio"]:checked');
+              const noteEl = document.getElementById("note_" + itemId);
+              const photoEl = document.getElementById("photo_" + itemId);
+              items.push({
+                itemId: itemId,
+                status: checked ? checked.value : "NA",
+                note: noteEl ? noteEl.value.trim() : "",
+                hasPhoto: photoEl && photoEl.files && photoEl.files.length > 0,
+              });
+            });
+
+            const zoneEl = document.getElementById("workZone");
+            const zoneId = zoneEl ? zoneEl.value : "";
+            const zoneName = zoneEl && zoneEl.options[zoneEl.selectedIndex] ? zoneEl.options[zoneEl.selectedIndex].text : "";
+            const dateVal = (document.getElementById("checkDate") || {}).value;
+            const shiftEl = document.getElementById("workShift");
+            const shiftVal = shiftEl ? shiftEl.value : "";
+
+            const { total, pass, fail, na } = updateProgressUI();
+            const progress = total > 0 ? Math.round(((pass + fail + na) / total) * 100) : 0;
+
+            const resultRecord = {
+              workerId: currentUser.id,
+              workerEmail: currentUser.email,
+              workerName: currentUser.fullName || currentUser.email,
+              zoneId: zoneId,
+              zoneName: zoneName,
+              date: dateVal,
+              shift: shiftVal,
+              items: items,
+              summary: { total, pass, fail, na, progress },
+              submittedAt: new Date().toISOString(),
+            };
+
+            // Gọi API lưu kết quả
+            const saved = worker.submitChecklist(resultRecord);
+
+            // Hiển thị trạng thái thành công
+            const successDesc = document.getElementById("checklistSuccessDesc");
+            if (successDesc) {
+              const failCount = items.filter(function (i) { return i.status === "FAIL"; }).length;
+              const failNote = failCount > 0 ? ` Có ${failCount} mục không đạt – vui lòng báo ngay cán bộ an toàn.` : "";
+              successDesc.textContent =
+                `Kết quả kiểm tra ca ${shiftVal} ngày ${dateVal} tại "${zoneName}" đã được ghi nhận (${pass}/${total} mục Đạt).${failNote}`;
+            }
+            showState("checklistSuccessState");
+          } catch (err) {
+            showError("Không thể lưu kết quả: " + (err && err.message ? err.message : String(err)));
+          } finally {
+            setSubmitLoading(false);
+          }
+        });
+      }
+
+      // =====================================================================
+      // 8. NÚT "Thực hiện ca kiểm tra mới"
+      // =====================================================================
+      const doAnotherBtn = document.getElementById("doAnotherChecklistBtn");
+      if (doAnotherBtn) {
+        doAnotherBtn.addEventListener("click", function () {
+          // Reset form
+          if (form) form.reset();
+          if (checkDateEl) checkDateEl.value = new Date().toISOString().split("T")[0];
+          // Ẩn tất cả expand boxes
+          document.querySelectorAll(".worker-item-expand").forEach(function (el) { el.classList.add("is-hidden"); });
+          document.querySelectorAll(".worker-btn-create-hazard").forEach(function (el) { el.classList.add("is-hidden"); });
+          document.querySelectorAll(".worker-choice-btn").forEach(function (el) { el.classList.remove("is-selected"); });
+          document.querySelectorAll(".worker-checklist-row--fail").forEach(function (el) { el.classList.remove("worker-checklist-row--fail"); });
+          document.querySelectorAll(".worker-item-photo-preview").forEach(function (el) { el.classList.add("is-hidden"); });
+          updateProgressUI();
+          showState(null); // Hiển thị lại form
+        });
+      }
+
+      // =====================================================================
+      // 9. NÚT RETRY
+      // =====================================================================
+      const retryBtn = document.getElementById("checklistRetryBtn");
+      if (retryBtn) {
+        retryBtn.addEventListener("click", function () {
+          loadPage();
+        });
+      }
+
+      // =====================================================================
+      // 10. TẢI DỮ LIỆU TRANG (Zones + Checklist Items)
+      // =====================================================================
+      function loadPage() {
+        showState("checklistLoadingState");
+
+        try {
+          // Load zones
+          const zones = worker.getZones();
+          populateZoneSelect(Array.isArray(zones) ? zones : []);
+
+          // Load checklist items
+          const items = worker.getChecklists();
+          if (!items || items.length === 0) {
+            showState("checklistEmptyState");
+            return;
+          }
+
+          renderChecklistItems(items);
+          showState(null); // Hiển thị form
+        } catch (err) {
+          showError("Lỗi tải dữ liệu: " + (err && err.message ? err.message : String(err)));
         }
       }
 
-      form.addEventListener("change", function (e) {
-        if (e.target && e.target.type === "radio") {
-          const row = e.target.closest(".worker-checklist-row");
-          if (!row) return;
+      // Khởi chạy
+      loadPage();
 
-          // Toggle visual class cho buttons trong nhóm
-          const labels = row.querySelectorAll(".worker-choice-btn");
-          labels.forEach(function (lbl) {
-            lbl.classList.remove("is-selected");
-          });
-          const parentLabel = e.target.closest(".worker-choice-btn");
-          if (parentLabel) parentLabel.classList.add("is-selected");
-
-          // Xử lý hiển thị phần mở rộng ghi chú và nút Tạo hazard khi Không đạt (FAIL)
-          const itemId = row.getAttribute("data-item-id");
-          const expandBox = document.getElementById("expand_" + itemId);
-          const hazardBtn = document.getElementById("createHazardBtn_" + itemId);
-
-          if (expandBox) {
-            expandBox.classList.remove("is-hidden");
-          }
-
-          if (e.target.value === "FAIL") {
-            row.classList.add("worker-checklist-row--fail");
-            if (hazardBtn) hazardBtn.classList.remove("is-hidden");
-          } else {
-            row.classList.remove("worker-checklist-row--fail");
-            if (hazardBtn) hazardBtn.classList.add("is-hidden");
-          }
-
-          updateProgressUI();
-        }
-
-        // Preview ảnh khi chọn file
-        if (e.target && e.target.type === "file") {
-          const itemId = e.target.getAttribute("data-item-photo");
-          const preview = document.getElementById("photoPreview_" + itemId);
-          if (preview && e.target.files && e.target.files[0]) {
-            preview.textContent = "✓ Đã chọn: " + e.target.files[0].name;
-            preview.classList.remove("is-hidden");
-          }
-        }
-      });
     })();
   </script>
 </body>
