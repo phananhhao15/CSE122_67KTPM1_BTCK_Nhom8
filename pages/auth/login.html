@@ -114,14 +114,26 @@
   <script src="../../js/main.js"></script>
   <script src="../../js/modules/auth.js"></script>
 
-  <!-- Script trợ giúp giao diện cơ bản (chưa viết logic đăng nhập) -->
+  <!-- Script đăng nhập đầy đủ: UI + Logic kết nối siteSafeAuth -->
   <script>
     (function () {
       "use strict";
 
-      // Nút ẩn/hiện mật khẩu (UI interaction)
-      const toggleBtn = document.getElementById("togglePasswordBtn");
-      const passInput = document.getElementById("loginPassword");
+      // ── Phần tử DOM ──────────────────────────────────────────────
+      const loginForm      = document.getElementById("loginForm");
+      const emailInput     = document.getElementById("loginEmail");
+      const passInput      = document.getElementById("loginPassword");
+      const roleSelect     = document.getElementById("loginRole");
+      const submitBtn      = document.getElementById("loginSubmitBtn");
+      const toggleBtn      = document.getElementById("togglePasswordBtn");
+      const alertBox       = document.getElementById("loginAlert");
+      const alertIcon      = document.getElementById("loginAlertIcon");
+      const alertMessage   = document.getElementById("loginAlertMessage");
+      const alertAction    = document.getElementById("loginAlertAction");
+      const emailError     = document.getElementById("loginEmailError");
+      const passwordError  = document.getElementById("loginPasswordError");
+
+      // ── Nút ẩn/hiện mật khẩu ────────────────────────────────────
       if (toggleBtn && passInput) {
         toggleBtn.addEventListener("click", function () {
           const isPass = passInput.type === "password";
@@ -130,6 +142,102 @@
           toggleBtn.setAttribute("aria-label", isPass ? "Ẩn mật khẩu" : "Hiện mật khẩu");
         });
       }
+
+      // ── Tiện ích hiển thị ────────────────────────────────────────
+      function setLoading(on) {
+        submitBtn.disabled = on;
+        submitBtn.classList.toggle("auth-btn--loading", on);
+      }
+
+      function showAlert(msg, type) {
+        alertBox.className = "auth-alert auth-alert--" + (type || "error");
+        alertIcon.textContent = type === "success" ? "✓" : "⚠️";
+        alertMessage.textContent = msg;
+        alertAction.style.display = "none";
+        alertBox.style.display = "flex";
+        alertBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function clearAlert() {
+        alertBox.style.display = "none";
+        emailError.style.display = "none";
+        passwordError.style.display = "none";
+        emailInput.classList.remove("is-invalid");
+        passInput.classList.remove("is-invalid");
+      }
+
+      function showFieldError(inputEl, errorEl, msg) {
+        inputEl.classList.add("is-invalid");
+        errorEl.textContent = msg;
+        errorEl.style.display = "block";
+      }
+
+      // ── Validate phía client trước khi gọi API ───────────────────
+      function validateForm() {
+        let ok = true;
+        clearAlert();
+        if (!emailInput.value.trim()) {
+          showFieldError(emailInput, emailError, "Vui lòng nhập email hoặc tên đăng nhập.");
+          ok = false;
+        }
+        if (!passInput.value.trim()) {
+          showFieldError(passInput, passwordError, "Vui lòng nhập mật khẩu.");
+          ok = false;
+        }
+        return ok;
+      }
+
+      // ── Map role → trang đích ───────────────────────────────────
+      function getRedirectUrl(role) {
+        // login.html nằm tại pages/auth/ → dùng ../ để về pages/ rồi đi tới trang đích
+        switch ((role || "").toUpperCase()) {
+          case "WORKER":         return "../worker/worker-safety-checklist.html";
+          case "SAFETY_OFFICER": return "../safety-officer/safety-dashboard.html";
+          case "SITE_MANAGER":   return "../manager/manager-corrective-actions.html";
+          case "ADMIN":          return "../admin/admin-user-management.html";
+          default:               return "../worker/worker-safety-checklist.html";
+        }
+      }
+
+      // ── Xử lý submit form đăng nhập ─────────────────────────────
+      loginForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        if (!validateForm()) {
+          emailInput.value.trim() === "" ? emailInput.focus() : passInput.focus();
+          return;
+        }
+
+        setLoading(true);
+        try {
+          const sessionUser = await window.siteSafeAuth.login({
+            emailOrUsername: emailInput.value.trim(),
+            password:        passInput.value.trim(),
+            role:            roleSelect.value || "",
+          });
+
+          showAlert("Đăng nhập thành công! Đang chuyển hướng...", "success");
+
+          setTimeout(function () {
+            const dest = getRedirectUrl(sessionUser.role);
+            window.location.href = dest;
+          }, 600);
+        } catch (err) {
+          setLoading(false);
+          showAlert(err.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
+          passInput.value = "";
+          passInput.focus();
+        }
+      });
+
+      // ── Kiểm tra nếu đã đăng nhập → redirect ngay ───────────────
+      (function checkAlreadyLoggedIn() {
+        if (!window.siteSafeAuth) return;
+        const user = window.siteSafeAuth.getCurrentUser();
+        if (user && user.role) {
+          window.location.replace(getRedirectUrl(user.role));
+        }
+      })();
+
     })();
   </script>
 </body>
