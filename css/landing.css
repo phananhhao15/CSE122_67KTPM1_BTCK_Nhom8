@@ -3,8 +3,8 @@
    Modern, industrial-grade UI · CSS Grid + Flexbox · Responsive
    ============================================================ */
 
-/* ---------- 0. Google Fonts ---------- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+/* ---------- 0. Google Fonts ----------
+   Font Inter (400-800, hỗ trợ tiếng Việt) được nạp bằng thẻ <link> trong index.html */
 
 /* ---------- 1. Design Tokens ---------- */
 :root {
@@ -20,8 +20,8 @@
   --bg-card: #161933;
   --bg-card-hover: #1c2040;
   --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --text-secondary: #cbd5e1;
+  --text-muted: #a9b6c9;
   --border-color: rgba(255, 255, 255, 0.07);
   --border-hover: rgba(255, 255, 255, 0.14);
   --white: #ffffff;
@@ -38,7 +38,7 @@
   --container-max: 1280px;
 
   /* Typography */
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family: 'Inter', system-ui, sans-serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -78,14 +78,40 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   color: var(--text-primary);
   background-color: var(--bg-color);
   font-family: var(--font-family);
   font-size: var(--font-size-base);
+  font-weight: 400;
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* main giãn ra để footer luôn nằm sát đáy, không để lộ khoảng trống */
+main {
+  flex: 1 0 auto;
+}
+
+.site-footer {
+  flex-shrink: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-family);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
 }
 
 a {
@@ -339,7 +365,7 @@ ul, ol {
   min-height: 500px;
   background-image:
     linear-gradient(135deg, rgba(11, 14, 26, 0.2) 0%, rgba(11, 14, 26, 0.05) 50%, rgba(11, 14, 26, 0.3) 100%),
-    url('/assets/images/ảnh phần index.jpg');
+    url('../assets/images/ảnh phần index.jpg');
   background-position: center;
   background-size: cover;
 }
@@ -391,11 +417,9 @@ ul, ol {
   color: var(--accent-color);
 }
 
+/* Chỉ giữ một cụm từ màu cam ("an toàn") trong tiêu đề; "sức khỏe" dùng màu chữ thường */
 .hero h1 .text-gradient {
-  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: inherit;
 }
 
 .hero-description {
@@ -452,9 +476,9 @@ ul, ol {
   gap: 10px;
   min-height: 52px;
   padding: 14px 28px;
-  color: var(--text-primary);
-  background: transparent;
-  border: 1px solid var(--border-color);
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.55);
   border-radius: var(--radius-md);
   font-family: var(--font-family);
   font-size: var(--font-size-base);
@@ -465,8 +489,8 @@ ul, ol {
 
 .btn-outline:hover {
   color: var(--white);
-  background: rgba(255, 255, 255, 0.04);
-  border-color: var(--border-hover);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: var(--white);
   transform: translateY(-1px);
 }
 
@@ -1354,5 +1378,198 @@ ul, ol {
 
   .worker-card {
     padding: 20px 18px;
+  }
+}
+
+/* ---------- 12. Cỡ chữ, độ tương phản và responsive bổ sung ---------- */
+
+/* Chữ nội dung tối thiểu 14px; nhãn và badge tối thiểu 12px */
+.worker-role,
+.site-location,
+.site-progress-label,
+.site-stat-label,
+.worker-shift,
+.footer-copyright {
+  font-size: var(--font-size-sm);
+}
+
+.hero-stat-label,
+.footer-heading,
+.section-badge,
+.status-badge {
+  font-size: var(--font-size-xs);
+}
+
+/* Màu nhãn trạng thái sáng hơn để đọc rõ trên nền tối */
+.status-badge--present { color: #4ade80; }
+.status-badge--absent  { color: #f87171; }
+.status-badge--late,
+.status-badge--warning { color: #fbbf24; }
+.status-badge--ok      { color: #22d3ee; }
+
+/* Mô tả và footer dùng màu sáng hơn */
+.hero-description,
+.section-subtitle,
+.feature-item span,
+.footer-brand-description,
+.footer-links a,
+.footer-contact-item {
+  color: var(--text-secondary);
+}
+
+/* Lưới công trường: 2 cột ở tablet, 1 cột ở mobile */
+@media (max-width: 1024px) {
+  .sites-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sites-grid,
+  .feature-strip,
+  .worker-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-stats-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .hero,
+  .hero-copy,
+  .workers-header-left {
+    min-width: 0;
+  }
+
+  .hero h1 {
+    overflow-wrap: anywhere;
+  }
+}
+
+/* ---------- 13. Khối tiêu đề hero (eyebrow, h1, mô tả) ---------- */
+.eyebrow {
+  align-self: flex-start;
+  gap: 10px;
+  margin: 0 0 24px;
+  padding: 8px 18px 8px 14px;
+  color: var(--accent-light);
+  background: rgba(255, 139, 43, 0.1);
+  border: 1px solid rgba(255, 139, 43, 0.35);
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.eyebrow::before {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(255, 139, 43, 0.2);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.hero h1 {
+  max-width: 600px;
+  font-size: clamp(2.25rem, 4.2vw, 3.75rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.hero-description {
+  max-width: 540px;
+  margin-top: 24px;
+  padding-left: 18px;
+  border-left: 3px solid rgba(255, 139, 43, 0.6);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+@media (max-width: 480px) {
+  .eyebrow {
+    letter-spacing: 0.08em;
+  }
+
+  .hero h1 {
+    font-size: 2.1rem;
+  }
+}
+
+/* ---------- 14. Khung video nổi trên ảnh hero ---------- */
+/* Ảnh tòa nhà (background của .hero-image) luôn hiển thị; video nằm trong khung nổi ở góc dưới */
+.hero-image::after {
+  z-index: 1;
+}
+
+.hero-video-card {
+  position: absolute;
+  left: clamp(20px, 3vw, 40px);
+  bottom: clamp(20px, 3vw, 40px);
+  z-index: 2;
+  width: min(62%, 440px);
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55), 0 0 0 6px rgba(11, 14, 26, 0.35);
+}
+
+.hero-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.hero-video-label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  color: var(--white);
+  background: rgba(11, 14, 26, 0.7);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-video-label::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--danger);
+  border-radius: 50%;
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+@media (max-width: 1024px) {
+  .hero-video-card {
+    width: min(70%, 420px);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-video-card {
+    width: calc(100% - 32px);
+    left: 16px;
+    bottom: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-video-card {
+    display: none;
   }
 }
