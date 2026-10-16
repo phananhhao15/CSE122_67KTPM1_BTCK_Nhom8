@@ -1939,3 +1939,33 @@ ul, ol {
     font-size: 1.05rem;
   }
 }
+
+/* ---------- 19. Tối ưu độ mượt khi cuộn ---------- */
+/* Bỏ làm mờ nền (backdrop-filter) của thanh trên: nó phải vẽ lại liên tục khi video phía sau đang chạy */
+.site-header {
+  background: rgba(11, 14, 26, 0.94);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.hero-video-label {
+  background: rgba(11, 14, 26, 0.85);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Đưa khung video lên lớp đồ họa riêng, tránh vẽ lại cả hero mỗi khung hình */
+.hero-video-card {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Không vẽ các khối ở xa màn hình cho tới khi cuộn tới */
+.process-section,
+.roles-section,
+.faq-section,
+.rules-section,
+.site-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}

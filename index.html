@@ -767,7 +767,15 @@
         }
       });
     }
-    window.addEventListener('scroll', updateActiveNav, { passive: true });
+    let navTicking = false;
+    window.addEventListener('scroll', function () {
+      if (navTicking) return;
+      navTicking = true;
+      requestAnimationFrame(function () {
+        updateActiveNav();
+        navTicking = false;
+      });
+    }, { passive: true });
 
 
 
@@ -792,6 +800,20 @@
       heroVideo.currentTime = 0;
       heroVideo.play().catch(function () { });
     });
+
+    /* --- Chỉ phát video hero khi nó còn nằm trong màn hình, để cuộn mượt hơn --- */
+    const heroVideoEl = document.getElementById('heroVideo');
+    if (heroVideoEl && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            heroVideoEl.play().catch(function () {});
+          } else {
+            heroVideoEl.pause();
+          }
+        });
+      }, { threshold: 0.1 }).observe(heroVideoEl);
+    }
 
     /* --- Filter buttons toggle --- */
     const filterBtns = document.querySelectorAll('.filter-btn');
