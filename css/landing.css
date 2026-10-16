@@ -1915,3 +1915,27 @@ ul, ol {
 
 
 }
+
+/* ---------- 18. Câu giới thiệu nổi bật ở footer ---------- */
+.footer-brand-description {
+  max-width: 520px;
+  margin-top: 0;
+  padding-left: 20px;
+  color: var(--white);
+  border-left: 4px solid var(--accent-color);
+  font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.55;
+}
+
+.footer-highlight {
+  color: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+  .footer-brand-description {
+    max-width: none;
+    font-size: 1.05rem;
+  }
+}
