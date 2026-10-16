@@ -191,24 +191,165 @@
   <script src="../../js/main.js"></script>
   <script src="../../js/modules/auth.js"></script>
 
-  <!-- Script trợ giúp giao diện cơ bản (chưa viết logic đăng ký) -->
+  <!-- Script đăng ký đầy đủ: UI + Logic kết nối siteSafeAuth -->
   <script>
     (function () {
       "use strict";
 
-      // Nút ẩn/hiện mật khẩu (UI interaction)
+      // ── Phần tử DOM ──────────────────────────────────────────────
+      const registerForm        = document.getElementById("registerForm");
+      const fullNameInput       = document.getElementById("registerFullName");
+      const emailInput          = document.getElementById("registerEmail");
+      const phoneInput          = document.getElementById("registerPhone");
+      const roleSelect          = document.getElementById("registerRole");
+      const passwordInput       = document.getElementById("registerPassword");
+      const confirmPassInput    = document.getElementById("registerConfirmPassword");
+      const termsCheckbox       = document.getElementById("registerTerms");
+      const submitBtn           = document.getElementById("registerSubmitBtn");
+      const alertBox            = document.getElementById("registerAlert");
+      const alertIcon           = document.getElementById("registerAlertIcon");
+      const alertMessage        = document.getElementById("registerAlertMessage");
+      const successBox          = document.getElementById("registerSuccessBox");
+      const successMessage      = document.getElementById("registerSuccessMessage");
+
+      const fullNameError       = document.getElementById("registerFullNameError");
+      const emailError          = document.getElementById("registerEmailError");
+      const passwordError       = document.getElementById("registerPasswordError");
+      const confirmPassError    = document.getElementById("registerConfirmPasswordError");
+      const termsError          = document.getElementById("registerTermsError");
+
+      // ── Nút ẩn/hiện mật khẩu ────────────────────────────────────
       document.querySelectorAll("[data-auth-action='toggle-password']").forEach(function (btn) {
         btn.addEventListener("click", function () {
           const targetId = btn.dataset.targetInput;
           const input = document.getElementById(targetId);
           if (!input) return;
-
           const isPass = input.type === "password";
           input.type = isPass ? "text" : "password";
           btn.textContent = isPass ? "🙈" : "👁️";
           btn.setAttribute("aria-label", isPass ? "Ẩn mật khẩu" : "Hiện mật khẩu");
         });
       });
+
+      // ── Tiện ích hiển thị ────────────────────────────────────────
+      function setLoading(on) {
+        submitBtn.disabled = on;
+        submitBtn.classList.toggle("auth-btn--loading", on);
+      }
+
+      function showAlert(msg, type) {
+        alertBox.className = "auth-alert auth-alert--" + (type || "error");
+        alertIcon.textContent = (type === "success") ? "✓" : "✕";
+        alertMessage.textContent = msg;
+        alertBox.style.display = "flex";
+        alertBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function hideAlert() { alertBox.style.display = "none"; }
+
+      function showFieldError(inputEl, errorEl, msg) {
+        if (inputEl) inputEl.classList.add("is-invalid");
+        errorEl.textContent = msg;
+        errorEl.style.display = "block";
+      }
+
+      function clearErrors() {
+        hideAlert();
+        [fullNameInput, emailInput, phoneInput, passwordInput, confirmPassInput].forEach(function (el) {
+          if (el) el.classList.remove("is-invalid");
+        });
+        [fullNameError, emailError, passwordError, confirmPassError, termsError].forEach(function (el) {
+          el.style.display = "none";
+        });
+      }
+
+      // ── Validate đầy đủ trước khi gọi API ───────────────────────
+      function validateForm() {
+        clearErrors();
+        let ok = true;
+        let firstFocus = null;
+
+        const fullName = fullNameInput.value.trim();
+        const email    = emailInput.value.trim();
+        const password = passwordInput.value;
+        const confirmP = confirmPassInput.value;
+
+        // Họ tên
+        if (!fullName) {
+          showFieldError(fullNameInput, fullNameError, "Họ và tên không được để trống.");
+          firstFocus = firstFocus || fullNameInput;
+          ok = false;
+        }
+
+        // Email
+        if (!email || !email.includes("@")) {
+          showFieldError(emailInput, emailError, "Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại.");
+          firstFocus = firstFocus || emailInput;
+          ok = false;
+        }
+
+        // Mật khẩu (tối thiểu 6 ký tự)
+        if (!password || password.length < 6) {
+          showFieldError(passwordInput, passwordError, "Mật khẩu phải có ít nhất 6 ký tự.");
+          firstFocus = firstFocus || passwordInput;
+          ok = false;
+        }
+
+        // Xác nhận mật khẩu
+        if (!confirmP) {
+          showFieldError(confirmPassInput, confirmPassError, "Vui lòng nhập lại mật khẩu để xác nhận.");
+          firstFocus = firstFocus || confirmPassInput;
+          ok = false;
+        } else if (password && confirmP !== password) {
+          showFieldError(confirmPassInput, confirmPassError, "Mật khẩu xác nhận không khớp. Vui lòng kiểm tra lại.");
+          firstFocus = firstFocus || confirmPassInput;
+          ok = false;
+        }
+
+        // Điều khoản
+        if (!termsCheckbox.checked) {
+          termsError.textContent = "Bạn cần đồng ý điều khoản an toàn lao động để tiếp tục đăng ký.";
+          termsError.style.display = "block";
+          ok = false;
+        }
+
+        if (firstFocus) firstFocus.focus();
+        return ok;
+      }
+
+      // ── Xử lý submit đăng ký ────────────────────────────────────
+      registerForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        setLoading(true);
+        try {
+          const savedUser = await window.siteSafeAuth.register({
+            fullName: fullNameInput.value.trim(),
+            email:    emailInput.value.trim(),
+            password: passwordInput.value,
+            phone:    phoneInput.value.trim(),
+            role:     roleSelect.value || "WORKER",
+          });
+
+          // Ẩn form, hiển thị màn hình thành công
+          registerForm.style.display = "none";
+          successMessage.textContent =
+            "Tài khoản \"" + (savedUser && savedUser.fullName ? savedUser.fullName : emailInput.value.trim()) +
+            "\" đã được đăng ký thành công trong hệ thống SiteSafe. Bấm nút bên dưới để đăng nhập.";
+          successBox.style.display = "block";
+          successBox.scrollIntoView({ behavior: "smooth" });
+        } catch (err) {
+          setLoading(false);
+          showAlert(err.message || "Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.");
+          // Nếu lỗi email trùng → focus vào ô email
+          if (err.message && err.message.toLowerCase().includes("email")) {
+            emailInput.classList.add("is-invalid");
+            emailInput.focus();
+          }
+        }
+      });
+
     })();
   </script>
 </body>
