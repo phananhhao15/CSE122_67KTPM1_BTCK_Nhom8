@@ -1573,3 +1573,16 @@ ul, ol {
     display: none;
   }
 }
+
+/* ---------- 15. Icon SVG của dải tính năng ---------- */
+.feature-item .feature-icon {
+  color: var(--primary-light);
+}
+
+.feature-item:hover .feature-icon {
+  color: var(--accent-color);
+}
+
+.feature-item .feature-icon svg {
+  display: block;
+}
