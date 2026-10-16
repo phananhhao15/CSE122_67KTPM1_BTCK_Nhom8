@@ -1734,6 +1734,15 @@ ul, ol {
   stroke-linejoin: round;
 }
 
+.role-icon img {
+  width: 26px;
+  height: 26px;
+}
+
+.feature-item .feature-icon img {
+  display: block;
+}
+
 .role-card:hover .role-icon {
   color: var(--accent-color);
   background: rgba(255, 139, 43, 0.12);
