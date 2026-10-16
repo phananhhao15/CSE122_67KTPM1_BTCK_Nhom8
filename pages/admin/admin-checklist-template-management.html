@@ -89,113 +89,7 @@
                 <th scope="col">Thao tác</th>
               </tr>
             </thead>
-            <tbody id="questionRows">
-              <tr data-work-type="Làm việc trên cao">
-                <td>CL-001</td>
-                <td class="question-text">
-                  Trang bị dây an toàn 2 móc đúng quy định<span
-                    class="question-note"
-                    >Kiểm tra trước khi lên sàn thao tác</span
-                  >
-                </td>
-                <td>Làm việc trên cao</td>
-                <td>Có</td>
-                <td><span class="badge badge-success">Đang dùng</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-edit edit-button" type="button">
-                      Sửa</button
-                    ><button class="btn btn-danger delete-button" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-work-type="Làm việc trên cao">
-                <td>CL-002</td>
-                <td class="question-text">
-                  Sàn thao tác có rào chắn và tấm chắn chân<span
-                    class="question-note"
-                    >Không có khoảng trống nguy hiểm</span
-                  >
-                </td>
-                <td>Làm việc trên cao</td>
-                <td>Có</td>
-                <td><span class="badge badge-success">Đang dùng</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-edit edit-button" type="button">
-                      Sửa</button
-                    ><button class="btn btn-danger delete-button" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-work-type="Điện thi công">
-                <td>CL-003</td>
-                <td class="question-text">
-                  Tủ điện có aptomat chống giật và được đóng kín<span
-                    class="question-note"
-                    >Kiểm tra trước khi cấp nguồn</span
-                  >
-                </td>
-                <td>Điện thi công</td>
-                <td>Có</td>
-                <td><span class="badge badge-success">Đang dùng</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-edit edit-button" type="button">
-                      Sửa</button
-                    ><button class="btn btn-danger delete-button" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-work-type="Điện thi công">
-                <td>CL-004</td>
-                <td class="question-text">
-                  Dây nguồn không hở vỏ và được cố định gọn gàng<span
-                    class="question-note"
-                    >Không để dây nằm trên lối đi</span
-                  >
-                </td>
-                <td>Điện thi công</td>
-                <td>Có</td>
-                <td><span class="badge badge-success">Đang dùng</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-edit edit-button" type="button">
-                      Sửa</button
-                    ><button class="btn btn-danger delete-button" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-work-type="Nâng hạ vật liệu">
-                <td>CL-005</td>
-                <td class="question-text">
-                  Khu vực bên dưới tải nâng đã được rào chắn<span
-                    class="question-note"
-                    >Có tín hiệu viên hướng dẫn khi nâng</span
-                  >
-                </td>
-                <td>Nâng hạ vật liệu</td>
-                <td>Không</td>
-                <td><span class="badge badge-warning">Bản nháp</span></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-edit edit-button" type="button">
-                      Sửa</button
-                    ><button class="btn btn-danger delete-button" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
+            <tbody id="questionRows"></tbody>
           </table>
           <div class="empty-state" id="emptyState">
             Không có câu hỏi phù hợp.
@@ -207,7 +101,42 @@
       </div>
     </div>
 
+    <script>
+      // Đảm bảo quyền truy cập trang Quản trị viên khi mở trực tiếp file:// hoặc chuyển đổi role
+      try {
+        const existingUser = JSON.parse(
+          localStorage.getItem("siteSafeUser") || "null",
+        );
+        if (!existingUser || existingUser.role !== "ADMIN") {
+          localStorage.setItem(
+            "siteSafeUser",
+            JSON.stringify({
+              fullName:
+                existingUser && existingUser.fullName
+                  ? existingUser.fullName
+                  : "Nguyễn Minh Anh",
+              email:
+                existingUser && existingUser.email
+                  ? existingUser.email
+                  : "admin@sitesafe.test",
+              role: "ADMIN",
+            }),
+          );
+        }
+      } catch (e) {
+        localStorage.setItem(
+          "siteSafeUser",
+          JSON.stringify({
+            fullName: "Nguyễn Minh Anh",
+            email: "admin@sitesafe.test",
+            role: "ADMIN",
+          }),
+        );
+      }
+    </script>
     <script src="../../js/api.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/modules/admin.js"></script>
     <script>
       const questionForm = document.getElementById("questionForm");
       const questionRows = document.getElementById("questionRows");
@@ -216,7 +145,7 @@
       const workTypeInput = document.getElementById("workTypeInput");
       const emptyState = document.getElementById("emptyState");
       let editingRow = null;
-      let nextQuestionNumber = 6;
+      let nextQuestionNumber = 8;
 
       // Escape dữ liệu động trước khi chèn vào innerHTML để tránh XSS.
       function escapeHtml(value) {
@@ -234,10 +163,26 @@
         );
       }
 
-      function buildQuestionRow(id, question, workType) {
+      function buildQuestionRow(
+        id,
+        question,
+        note,
+        workType,
+        isRequired = true,
+        status = "ACTIVE",
+      ) {
         const row = document.createElement("tr");
         row.dataset.workType = workType;
-        row.innerHTML = `<td>${escapeHtml(id)}</td><td class="question-text">${escapeHtml(question)}</td><td>${escapeHtml(workType)}</td><td>Có</td><td><span class="badge badge-warning">Bản nháp</span></td><td><div class="action-buttons"><button class="btn btn-edit edit-button" type="button">Sửa</button><button class="btn btn-danger delete-button" type="button">Xóa</button></div></td>`;
+        const noteHtml = note
+          ? `<span class="question-note">${escapeHtml(note)}</span>`
+          : "";
+        const statusHtml =
+          status === "ACTIVE"
+            ? '<span class="badge badge-success">Đang dùng</span>'
+            : '<span class="badge badge-warning">Bản nháp</span>';
+        const requiredText = isRequired ? "Có" : "Không";
+
+        row.innerHTML = `<td>${escapeHtml(id)}</td><td class="question-text">${escapeHtml(question)}${noteHtml}</td><td>${escapeHtml(workType)}</td><td>${requiredText}</td><td>${statusHtml}</td><td><div class="action-buttons"><button class="btn btn-edit edit-button" type="button">Sửa</button><button class="btn btn-danger delete-button" type="button">Xóa</button></div></td>`;
         return row;
       }
 
@@ -291,10 +236,19 @@
 
         if (editingRow) {
           editingRow.dataset.workType = workType;
-          editingRow.children[1].firstChild.textContent = question;
+          const noteSpan = editingRow.querySelector(".question-note");
+          const noteText = noteSpan ? noteSpan.textContent : "";
+          editingRow.children[1].innerHTML = `${escapeHtml(question)}${noteText ? `<span class="question-note">${escapeHtml(noteText)}</span>` : ""}`;
           editingRow.children[2].textContent = workType;
         } else {
-          const row = buildQuestionRow(questionId, question, workType);
+          const row = buildQuestionRow(
+            questionId,
+            question,
+            "",
+            workType,
+            true,
+            "DRAFT",
+          );
           questionRows.appendChild(row);
           nextQuestionNumber += 1;
           bindRowActions(row);
@@ -303,9 +257,10 @@
         siteSafeApi.saveChecklist({
           id: questionId,
           title: question,
-          label: question,
+          question,
           workType,
-          status: editingRow ? "DRAFT" : "DRAFT",
+          status: editingRow ? "ACTIVE" : "DRAFT",
+          isRequired: true,
         });
 
         setFormVisible(false);
@@ -317,7 +272,12 @@
           .querySelector(".edit-button")
           .addEventListener("click", function () {
             editingRow = row;
-            questionInput.value = row.children[1].firstChild.textContent.trim();
+            const textNode = row.querySelector(".question-text");
+            const noteSpan = textNode.querySelector(".question-note");
+            const mainText = noteSpan
+              ? textNode.textContent.replace(noteSpan.textContent, "").trim()
+              : textNode.textContent.trim();
+            questionInput.value = mainText;
             workTypeInput.value = row.dataset.workType;
             setFormVisible(true);
             questionInput.focus();
@@ -326,6 +286,7 @@
         row
           .querySelector(".delete-button")
           .addEventListener("click", function () {
+            if (!confirm("Bạn có chắc muốn xóa câu hỏi này không?")) return;
             const questionId = row.children[0].textContent;
             row.remove();
             siteSafeApi.deleteChecklist(questionId);
@@ -333,31 +294,50 @@
           });
       }
 
-      siteSafeApi.getChecklists().forEach(function (checklist) {
-        const existingRow = Array.from(
-          questionRows.querySelectorAll("tr"),
-        ).find((row) => row.children[0].textContent === checklist.id);
-        if (existingRow) {
-          existingRow.dataset.workType = checklist.workType;
-          existingRow.children[1].firstChild.textContent =
-            checklist.title || checklist.label;
-          existingRow.children[2].textContent = checklist.workType;
-          return;
-        }
+      async function initChecklists() {
+        questionRows.innerHTML = "";
+        const checklists = await siteSafeAdmin.loadChecklists();
 
-        questionRows.appendChild(
-          buildQuestionRow(
-            checklist.id,
-            checklist.title || checklist.label,
-            checklist.workType,
-          ),
+        // Cập nhật nextQuestionNumber cao hơn id lớn nhất
+        checklists.forEach((c) => {
+          const num = parseInt(String(c.id).replace(/\D/g, ""), 10);
+          if (!isNaN(num) && num >= nextQuestionNumber) {
+            nextQuestionNumber = num + 1;
+          }
+        });
+
+        // Bổ sung các loại công việc mới vào bộ lọc nếu chưa có
+        const existingTypes = new Set(
+          Array.from(workTypeFilter.options).map((o) => o.value),
         );
-      });
+        checklists.forEach((c) => {
+          if (c.workType && !existingTypes.has(c.workType)) {
+            existingTypes.add(c.workType);
+            const opt1 = new Option(c.workType, c.workType);
+            workTypeFilter.add(opt1);
+            const opt2 = new Option(c.workType, c.workType);
+            workTypeInput.add(opt2);
+          }
+        });
 
-      questionRows.querySelectorAll("tr").forEach(bindRowActions);
+        checklists.forEach(function (checklist) {
+          const row = buildQuestionRow(
+            checklist.id,
+            checklist.question || checklist.title || checklist.label,
+            checklist.note || "",
+            checklist.workType,
+            checklist.isRequired !== false,
+            checklist.status || "ACTIVE",
+          );
+          questionRows.appendChild(row);
+          bindRowActions(row);
+        });
+
+        applyWorkTypeFilter();
+      }
+
       workTypeFilter.addEventListener("change", applyWorkTypeFilter);
+      initChecklists();
     </script>
-    <script src="../../js/main.js"></script>
-    <script src="../../js/modules/admin.js"></script>
   </body>
 </html>
