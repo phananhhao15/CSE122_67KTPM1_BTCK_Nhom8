@@ -1509,7 +1509,7 @@ ul, ol {
   left: clamp(20px, 3vw, 40px);
   bottom: clamp(20px, 3vw, 40px);
   z-index: 2;
-  width: min(62%, 440px);
+  width: min(48%, 340px);
   margin: 0;
   overflow: hidden;
   background: #000;
@@ -1556,13 +1556,13 @@ ul, ol {
 
 @media (max-width: 1024px) {
   .hero-video-card {
-    width: min(70%, 420px);
+    width: min(52%, 320px);
   }
 }
 
 @media (max-width: 480px) {
   .hero-video-card {
-    width: calc(100% - 32px);
+    width: min(60%, 260px);
     left: 16px;
     bottom: 16px;
   }
