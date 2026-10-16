@@ -1616,3 +1616,302 @@ ul, ol {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(24, 119, 242, 0.45);
 }
+
+/* ---------- 17. Quy trình, vai trò, hỏi đáp và quy tắc an toàn ---------- */
+.process-section,
+.roles-section,
+.faq-section,
+.rules-section {
+  padding: var(--section-py) 0;
+}
+
+.process-section { background: var(--bg-surface); }
+.roles-section   { background: var(--bg-color); }
+.faq-section     { background: var(--bg-surface); }
+.rules-section { background: var(--bg-color); }
+
+.process-header,
+.roles-header {
+  margin-bottom: 48px;
+}
+
+/* --- Quy trình 4 bước --- */
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  counter-reset: none;
+}
+
+.process-step {
+  position: relative;
+  padding: 28px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+}
+
+.process-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 46px;
+  right: -25px;
+  width: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-color), transparent);
+}
+
+.process-step:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+}
+
+.process-number {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--accent-color);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.process-step h3 {
+  margin-bottom: 8px;
+  color: var(--white);
+  font-size: var(--font-size-lg);
+}
+
+.process-step p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.7;
+}
+
+/* --- Vai trò --- */
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.role-card {
+  padding: 28px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+}
+
+.role-card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(255, 139, 43, 0.4);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-4px);
+}
+
+.role-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 18px;
+  color: var(--primary-light);
+  background: rgba(37, 99, 235, 0.12);
+  border-radius: var(--radius-md);
+}
+
+.role-icon svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.role-card:hover .role-icon {
+  color: var(--accent-color);
+  background: rgba(255, 139, 43, 0.12);
+}
+
+.role-card h3 {
+  margin-bottom: 14px;
+  color: var(--white);
+  font-size: var(--font-size-lg);
+}
+
+.role-card ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.role-card li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+}
+
+.role-card li::before {
+  content: '';
+  position: absolute;
+  top: 0.6em;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-color);
+  border-radius: 50%;
+}
+
+/* --- Hỏi đáp --- */
+.faq-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.faq-item[open] {
+  background: var(--bg-card-hover);
+  border-color: rgba(255, 139, 43, 0.4);
+}
+
+.faq-item summary {
+  position: relative;
+  padding: 18px 56px 18px 22px;
+  color: var(--white);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: '+';
+  position: absolute;
+  top: 50%;
+  right: 22px;
+  color: var(--accent-color);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1;
+  transform: translateY(-50%);
+  transition: transform var(--transition-fast);
+}
+
+.faq-item[open] summary::after {
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.faq-item p {
+  padding: 0 22px 20px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.75;
+}
+
+/* --- Quy tắc an toàn --- */
+.rules-header {
+  margin-bottom: 48px;
+}
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.rule-item {
+  position: relative;
+  padding: 26px 24px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+.rule-item:hover {
+  background: var(--bg-card-hover);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-4px);
+}
+
+.rule-tag {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 4px 12px;
+  color: var(--accent-light);
+  background: rgba(255, 139, 43, 0.12);
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.rule-item h3 {
+  margin-bottom: 10px;
+  color: var(--white);
+  font-size: var(--font-size-lg);
+  line-height: 1.35;
+}
+
+.rule-item p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.7;
+}
+
+@media (max-width: 1200px) {
+  .roles-grid,
+  .rules-grid,
+  .process-steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .process-step:not(:last-child)::after {
+    display: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .faq-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .roles-grid,
+  .rules-grid,
+  .process-steps {
+    grid-template-columns: 1fr;
+  }
+
+
+}
