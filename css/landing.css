@@ -1586,3 +1586,33 @@ ul, ol {
 .feature-item .feature-icon svg {
   display: block;
 }
+
+/* Dòng bản quyền đã bỏ: đặt cụm mạng xã hội ở giữa thanh cuối footer */
+.footer-bottom {
+  justify-content: center;
+}
+
+/* ---------- 16. Liên hệ: tên và biểu tượng Facebook ---------- */
+.footer-contact-item {
+  align-items: center;
+  justify-content: space-between;
+  max-width: 240px;
+}
+
+.contact-fb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  color: var(--white);
+  background: #1877f2;
+  border-radius: 50%;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.contact-fb:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(24, 119, 242, 0.45);
+}
