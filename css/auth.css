@@ -1232,6 +1232,40 @@ a.auth-signin-submit {
   box-sizing: border-box;
 }
 
+/* Dùng chung cho forgot-password.html */
+.auth-signin-actions {
+  display: grid;
+  gap: 12px;
+}
+
+.auth-signin-secondary {
+  height: 48px;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #0f172a;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.auth-signin-secondary:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.auth-signin-secondary:disabled {
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.auth-signin-secondary:focus-visible {
+  outline: 3px solid rgba(249, 115, 22, 0.45);
+  outline-offset: 2px;
+}
+
 .auth-signin-terms {
   align-items: flex-start;
   margin: 0;
