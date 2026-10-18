@@ -747,3 +747,585 @@
     font-size: 0.875rem;
   }
 }
+
+/* ==========================================================================
+   11. TRANG ĐĂNG NHẬP (login.html) – bố cục 2 cột
+   Tiền tố .auth-signin-; không ảnh hưởng register/forgot-password.
+   ========================================================================== */
+.auth-signin {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #0f172a;
+}
+
+.auth-signin [hidden] {
+  display: none !important;
+}
+
+/* ---- Cột trái: thương hiệu ---- */
+.auth-signin-brand {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 48px 56px 64px;
+  overflow: hidden;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 85% 0%, rgba(249, 115, 22, 0.28) 0%, rgba(249, 115, 22, 0) 45%),
+    linear-gradient(160deg, #13213d 0%, #0b1426 100%);
+}
+
+.auth-signin-brand::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(-35deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 22px);
+  pointer-events: none;
+}
+
+.auth-signin-brand > * {
+  position: relative;
+}
+
+.auth-signin-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.auth-signin-logo-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.auth-signin-logo-text span {
+  color: #f97316;
+}
+
+.auth-signin-hero-title {
+  margin: 0 0 18px;
+  font-size: 2.375rem;
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.auth-signin-hero-title span {
+  color: #f97316;
+}
+
+.auth-signin-hero-desc {
+  max-width: 440px;
+  margin: 0 0 28px;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #b6c2d6;
+}
+
+.auth-signin-features {
+  display: grid;
+  gap: 14px;
+  margin: 0 0 36px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+  color: #e2e8f0;
+}
+
+.auth-signin-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.auth-signin-tick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: #f97316;
+  background: rgba(249, 115, 22, 0.18);
+}
+
+.auth-signin-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 36px;
+  margin: 0;
+}
+
+.auth-signin-stats div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.auth-signin-stats div + div {
+  padding-left: 36px;
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.auth-signin-stats dd {
+  margin: 0;
+  font-size: 1.625rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.auth-signin-stats dt {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.auth-signin-copy {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #7c8aa3;
+}
+
+.auth-signin-stripe {
+  position: absolute !important;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14px;
+  background: repeating-linear-gradient(-45deg, #f97316 0 14px, #0b1426 14px 28px);
+}
+
+/* ---- Cột phải: form ---- */
+.auth-signin-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+  background: #f8fafc;
+}
+
+.auth-signin-logo--mobile {
+  display: none;
+}
+
+.auth-signin-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 40px 40px 32px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 16px 40px rgba(15, 23, 42, 0.08);
+  animation: authSigninRise 0.5s ease both;
+}
+
+.auth-signin-hero {
+  margin-block: auto;
+  animation: authSigninRise 0.6s ease 0.05s both;
+}
+
+@keyframes authSigninRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-signin-card,
+  .auth-signin-hero {
+    animation: none;
+  }
+
+  .auth-signin-submit {
+    transition: none;
+  }
+}
+
+.auth-signin-title {
+  margin: 0 0 8px;
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: #0f172a;
+}
+
+.auth-signin-sub {
+  margin: 0 0 28px;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  text-align: center;
+  color: #64748b;
+}
+
+.auth-signin-group {
+  margin-bottom: 18px;
+}
+
+.auth-signin-label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.auth-signin-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.auth-signin-group > .auth-signin-label {
+  margin-bottom: 8px;
+}
+
+.auth-signin-label-row .auth-signin-label {
+  margin: 0;
+}
+
+.auth-signin-hint {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.auth-signin-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #ea580c;
+  text-decoration: none;
+}
+
+.auth-signin-link:hover {
+  text-decoration: underline;
+}
+
+/* Segmented control chọn vai trò */
+.auth-signin-roles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 4px;
+  background: #eef2f7;
+  border-radius: 12px;
+}
+
+.auth-signin-role {
+  min-height: 38px;
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-signin-role:hover {
+  color: #0f172a;
+}
+
+.auth-signin-role.is-active {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #fb8a3c 0%, #ea580c 100%);
+  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.35);
+}
+
+.auth-signin-role.is-active::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 8.5 3.2 3.2L13 4.5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.auth-signin-role:focus-visible,
+.auth-signin-toggle:focus-visible,
+.auth-signin-link:focus-visible {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
+}
+
+/* Ô nhập có icon */
+.auth-signin-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-signin-field-icon {
+  position: absolute;
+  left: 14px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.auth-signin-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px 0 44px;
+  font: inherit;
+  font-size: 0.92rem;
+  color: #0f172a;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-signin-input::placeholder {
+  color: #94a3b8;
+}
+
+.auth-signin-input:hover:not(:focus):not(.is-invalid) {
+  border-color: #cbd5e1;
+}
+
+/* Giữ nền trắng khi trình duyệt tự điền */
+.auth-signin-input:-webkit-autofill {
+  -webkit-text-fill-color: #0f172a;
+  box-shadow: 0 0 0 1000px #ffffff inset;
+}
+
+.auth-signin-caps {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #b45309;
+}
+
+.auth-signin-input--password {
+  padding-right: 48px;
+}
+
+.auth-signin-input:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+}
+
+.auth-signin-input.is-invalid {
+  border-color: #ef4444;
+}
+
+.auth-signin-input.is-invalid:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+}
+
+.auth-signin-toggle {
+  position: absolute;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  color: #64748b;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.auth-signin-toggle:hover {
+  color: #0f172a;
+  background: #f1f5f9;
+}
+
+/* Checkbox ghi nhớ */
+.auth-signin-remember {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+}
+
+.auth-signin-remember input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: #f97316;
+  cursor: pointer;
+}
+
+.auth-signin .auth-alert {
+  margin-bottom: 16px;
+  border-radius: 12px;
+}
+
+.auth-signin .auth-alert-icon {
+  display: inline-flex;
+}
+
+/* Nút đăng nhập */
+.auth-signin-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 50px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #fb8a3c 0%, #ea580c 100%);
+  border: 0;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(234, 88, 12, 0.32);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.auth-signin-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(234, 88, 12, 0.4);
+}
+
+.auth-signin-submit:focus-visible {
+  outline: 3px solid rgba(249, 115, 22, 0.45);
+  outline-offset: 2px;
+}
+
+.auth-signin-submit:disabled {
+  cursor: wait;
+  opacity: 0.85;
+}
+
+.auth-signin .auth-footer-nav {
+  margin-top: 28px;
+}
+
+/* Dùng chung cho register.html */
+a.auth-signin-submit {
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.auth-signin-terms {
+  align-items: flex-start;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.auth-signin-terms input {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.auth-signin-success {
+  padding: 8px 0 4px;
+  text-align: center;
+}
+
+.auth-signin-success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  color: #16a34a;
+  background: #dcfce7;
+  border-radius: 50%;
+}
+
+.auth-signin-success-title {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.auth-signin-success-desc {
+  margin: 0 0 24px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #64748b;
+}
+
+/* ---- Responsive: < 900px ẩn cột trái, card trắng trên nền navy ---- */
+@media (max-width: 899px) {
+  .auth-signin {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-signin-brand {
+    display: none;
+  }
+
+  .auth-signin-panel {
+    justify-content: flex-start;
+    gap: 28px;
+    padding: 40px 16px;
+    background:
+      radial-gradient(circle at 85% 0%, rgba(249, 115, 22, 0.25) 0%, rgba(249, 115, 22, 0) 50%),
+      linear-gradient(160deg, #13213d 0%, #0b1426 100%);
+  }
+
+  .auth-signin-logo--mobile {
+    display: inline-flex;
+  }
+
+  .auth-signin-card {
+    padding: 32px 24px;
+    border: 0;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  }
+
+  .auth-signin-stats div + div {
+    padding-left: 24px;
+  }
+}
+
+@media (max-width: 400px) {
+  .auth-signin-panel {
+    padding: 28px 12px;
+  }
+
+  .auth-signin-card {
+    padding: 26px 18px;
+  }
+
+  .auth-signin-title {
+    font-size: 1.75rem;
+  }
+
+  .auth-signin-sub {
+    font-size: 1rem;
+  }
+
+  .auth-signin-label-row {
+    flex-wrap: wrap;
+  }
+}
