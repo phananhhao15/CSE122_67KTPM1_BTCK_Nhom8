@@ -5,511 +5,497 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Thực hiện bảng kiểm tra an toàn ca trực hằng ngày cho công nhân tại SiteSafe." />
-  <title>Checklist an toàn hằng ngày | SiteSafe</title>
-  <!-- Google Fonts: Inter (400, 500, 600, 700) -->
+  <title>Kiểm tra an toàn hằng ngày | SiteSafe</title>
+  <!-- Google Fonts: Be Vietnam Pro (hỗ trợ tiếng Việt tốt) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="../../css/style.css" />
   <link rel="stylesheet" href="../../css/worker.css" />
   <link rel="stylesheet" href="../../css/responsive.css" />
 </head>
 
 <body data-required-role="WORKER">
-  <div class="app-layout">
-    <!-- Sidebar tự động sinh bởi js/main.js -->
-    <aside class="sidebar" aria-label="Điều hướng chính"></aside>
+  <div class="wcl-app" id="wclApp">
+    <!-- Sidebar riêng của trang Checklist (không dùng .sidebar để main.js không ghi đè) -->
+    <aside class="wcl-sidebar" id="wclSidebar" aria-label="Điều hướng chính">
+      <a class="wcl-brand" href="../../index.html" aria-label="SiteSafe - Trang chủ">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="m9 12 2 2 4-4" />
+        </svg>
+        <span>site<em>safe</em></span>
+      </a>
 
-    <div class="main-content">
-      <!-- Topbar người dùng (không lặp logo SiteSafe - đã có ở Sidebar) -->
-      <header class="topbar">
-        <!-- Breadcrumb / Tiêu đề trang hiện tại -->
-        <span class="topbar-page-label">
-          <svg class="topbar-page-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 11l3 3L22 4" />
-            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+      <nav class="wcl-nav" aria-label="Menu công nhân">
+        <a class="wcl-nav__link" href="../../index.html">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7" rx="1.5" />
+            <rect x="14" y="3" width="7" height="7" rx="1.5" />
+            <rect x="3" y="14" width="7" height="7" rx="1.5" />
+            <rect x="14" y="14" width="7" height="7" rx="1.5" />
           </svg>
-          Checklist an toàn
-        </span>
-        <!-- Khu vực người dùng bên phải -->
-        <div class="topbar-user">
-          <!-- Icon thông báo -->
-          <button class="topbar-notif-btn" type="button" aria-label="Thông báo">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-          </button>
-          <!-- Thông tin người dùng -->
-          <div class="topbar-user-info">
-            <span class="topbar-user-avatar" aria-hidden="true"></span>
-            <div class="topbar-user-meta">
-              <span class="topbar-user-name" id="topbarUserName">Công nhân</span>
-              <span class="topbar-user-role" data-current-user-role></span>
-            </div>
+          Trang chủ
+        </a>
+
+        <p class="wcl-nav__label">Công việc hiện trường</p>
+
+        <a class="wcl-nav__link is-active" href="worker-safety-checklist.html" aria-current="page">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="5" y="3" width="14" height="18" rx="2" />
+            <path d="m9 12 2 2 4-4" />
+            <path d="M9 3v2h6V3" />
+          </svg>
+          Kiểm tra an toàn
+        </a>
+        <a class="wcl-nav__link" href="worker-hazard-create.html">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <path d="M12 9v4" />
+            <path d="M12 17h.01" />
+          </svg>
+          Báo cáo nguy cơ
+        </a>
+        <a class="wcl-nav__link" href="worker-my-hazards.html">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <path d="M14 2v6h6" />
+            <path d="M8 13h8" />
+            <path d="M8 17h5" />
+          </svg>
+          Sự cố của tôi
+          <span class="wcl-nav__badge is-hidden" id="myHazardBadge"></span>
+        </a>
+        <a class="wcl-nav__link" href="../training/safety-training.html">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 10 12 5 2 10l10 5 10-5z" />
+            <path d="M6 12v5c3 2 9 2 12 0v-5" />
+          </svg>
+          Huấn luyện an toàn
+        </a>
+      </nav>
+
+      <!-- Chuỗi ngày an toàn -->
+      <section class="wcl-streak" aria-label="Chuỗi ngày an toàn">
+        <p class="wcl-streak__label">Chuỗi ngày an toàn của bạn</p>
+        <p class="wcl-streak__value">128 <small>ngày</small></p>
+        <p class="wcl-streak__desc">Không ghi nhận sự cố cá nhân</p>
+        <div class="wcl-streak__bar" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </section>
+
+      <!-- Người dùng đang đăng nhập -->
+      <div class="wcl-sidebar-user">
+        <span class="wcl-avatar" data-user-initials aria-hidden="true">CN</span>
+        <div class="wcl-sidebar-user__meta">
+          <span class="wcl-sidebar-user__name" data-user-name>Công nhân</span>
+          <span class="wcl-sidebar-user__role" data-user-role>Công nhân hiện trường</span>
+        </div>
+        <button class="wcl-sidebar-user__logout" id="logoutBtn" type="button" aria-label="Đăng xuất"
+          title="Đăng xuất">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <path d="m16 17 5-5-5-5" />
+            <path d="M21 12H9" />
+          </svg>
+        </button>
+      </div>
+    </aside>
+    <button class="wcl-backdrop" id="wclBackdrop" type="button" aria-label="Đóng menu" tabindex="-1"></button>
+
+    <div class="wcl-main">
+      <!-- Topbar -->
+      <header class="wcl-topbar">
+        <button class="wcl-icon-btn wcl-menu-btn" id="menuToggleBtn" type="button" aria-label="Mở menu"
+          aria-controls="wclSidebar" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" aria-hidden="true">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
+        <nav aria-label="Breadcrumb">
+          <ol class="wcl-breadcrumb">
+            <li>Công việc
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </li>
+            <li aria-current="page">Kiểm tra an toàn</li>
+          </ol>
+        </nav>
+
+        <div class="wcl-search" role="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-3.5-3.5" />
+          </svg>
+          <input id="checklistSearch" type="search" placeholder="Tìm hạng mục, quy chuẩn..." autocomplete="off"
+            aria-label="Tìm hạng mục, quy chuẩn" />
+          <kbd>Ctrl K</kbd>
+        </div>
+
+        <button class="wcl-icon-btn" type="button" aria-label="Thông báo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <span class="wcl-icon-btn__dot"></span>
+        </button>
+
+        <div class="wcl-topbar-user">
+          <span class="wcl-avatar" data-user-initials aria-hidden="true">CN</span>
+          <div class="wcl-topbar-user__meta">
+            <span class="wcl-topbar-user__name" data-user-name>Công nhân</span>
+            <span class="wcl-topbar-user__role" data-user-role>Công nhân hiện trường</span>
           </div>
         </div>
       </header>
 
-      <div class="page-content">
-        <main class="worker-page-container">
-          <!-- Header trang -->
-          <header class="worker-header">
-            <div>
-              <h1 class="worker-header__title">Checklist an toàn hằng ngày</h1>
-              <p class="worker-header__desc">
-                Hoàn thành kiểm tra điều kiện an toàn hiện trường trước khi bắt đầu ca làm việc theo QCVN 18:2021/BXD.
-              </p>
-            </div>
-            <div class="worker-header__actions">
-              <a class="btn btn-warning" id="goToCreateHazardBtn" href="worker-hazard-create.html">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                  style="vertical-align:-2px;margin-right:5px">
-                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                  <line x1="12" y1="9" x2="12" y2="13" />
-                  <line x1="12" y1="17" x2="12.01" y2="17" />
+      <main class="wcl-content">
+        <!-- Header trang -->
+        <header class="wcl-page-head">
+          <div>
+            <p class="wcl-live">
+              <span class="wcl-live__dot" aria-hidden="true"></span>
+              <span id="liveShiftText">Ca sáng đang diễn ra · 07:00 – 15:00</span>
+            </p>
+            <h1 class="wcl-page-title">Kiểm tra an toàn hằng ngày</h1>
+            <p class="wcl-page-desc">
+              Hoàn thành kiểm tra điều kiện an toàn hiện trường trước khi bắt đầu ca làm việc theo
+              <strong>QCVN 18:2021/BXD</strong>.
+            </p>
+          </div>
+          <div class="wcl-page-actions">
+            <a class="wcl-btn wcl-btn--ghost" href="worker-my-hazards.html">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 2" />
+              </svg>
+              Lịch sử
+            </a>
+            <a class="wcl-btn wcl-btn--primary" id="goToCreateHazardBtn" href="worker-hazard-create.html">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <path d="M12 9v4" />
+                <path d="M12 17h.01" />
+              </svg>
+              Báo cáo sự cố
+            </a>
+          </div>
+        </header>
+
+        <!-- Hero an toàn -->
+        <section class="wcl-hero" aria-label="Thông điệp an toàn đầu ca">
+          <div class="wcl-hero__body">
+            <span class="wcl-hero__badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              Quy trình bắt buộc đầu ca
+            </span>
+            <h2 class="wcl-hero__title">An toàn bắt đầu từ <em>một lần kiểm tra</em> cẩn thận</h2>
+            <p class="wcl-hero__desc">
+              Kiểm tra trang bị BHLĐ cá nhân, mặt bằng làm việc và thiết bị điện trước khi thao tác để bảo vệ chính
+              bạn và đồng nghiệp.
+            </p>
+            <div class="wcl-hero__stats">
+              <div class="wcl-hero-stat">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />
                 </svg>
-                Báo cáo sự cố
-              </a>
-            </div>
-          </header>
-
-          <!-- Banner an toàn -->
-          <section class="worker-banner" aria-label="Thông điệp an toàn đầu ca">
-            <span class="worker-banner__badge">Quy trình bắt buộc đầu ca</span>
-            <h2 class="worker-banner__title">An toàn bắt đầu từ một lần kiểm tra cẩn thận</h2>
-            <p class="worker-banner__desc">
-              Kiểm tra trang bị BHLĐ cá nhân, mặt bằng làm việc và thiết bị điện trước khi thao tác để bảo vệ chính bạn
-              và đồng nghiệp.
-            </p>
-          </section>
-
-          <!-- Khối trạng thái Loading (Bật/tắt bằng class is-hidden) -->
-          <div class="worker-state worker-state--loading is-hidden" id="checklistLoadingState" data-state="loading"
-            role="status">
-            <div class="worker-spinner"></div>
-            <h2 class="worker-state__title">Đang nạp bảng câu hỏi checklist...</h2>
-            <p class="worker-state__desc">Hệ thống đang đồng bộ danh mục câu hỏi an toàn và khu vực công trường.</p>
-          </div>
-
-          <!-- Khối trạng thái Error (Bật/tắt bằng class is-hidden) -->
-          <div class="worker-state worker-state--error is-hidden" id="checklistErrorState" data-state="error"
-            role="alert">
-            <div class="worker-state__icon">⚠️</div>
-            <h2 class="worker-state__title">Không thể tải dữ liệu kiểm tra</h2>
-            <p class="worker-state__desc" id="checklistErrorMessage">Đã có lỗi xảy ra khi truy vấn danh sách câu hỏi
-              kiểm tra.</p>
-            <button class="worker-btn-retry" id="checklistRetryBtn" data-action="retry-checklist" type="button">🔄 Thử
-              lại</button>
-          </div>
-
-          <!-- Khối trạng thái Empty (Bật/tắt bằng class is-hidden) -->
-          <div class="worker-state worker-state--empty is-hidden" id="checklistEmptyState" data-state="empty">
-            <div class="worker-state__icon">📋</div>
-            <h2 class="worker-state__title">Chưa có hạng mục kiểm tra nào</h2>
-            <p class="worker-state__desc">Danh mục câu hỏi checklist đang được cán bộ an toàn cập nhật.</p>
-          </div>
-
-          <!-- Khối trạng thái Success sau khi gửi checklist (Bật/tắt bằng class is-hidden) -->
-          <div class="worker-state worker-state--success is-hidden" id="checklistSuccessState" data-state="success"
-            role="status">
-            <div class="worker-state__icon">🎉</div>
-            <h2 class="worker-state__title">Đã lưu kết quả checklist thành công!</h2>
-            <p class="worker-state__desc" id="checklistSuccessDesc">
-              Kết quả kiểm tra an toàn ca trực của bạn đã được ghi nhận vào cơ sở dữ liệu chung SiteSafe.
-            </p>
-            <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
-              <button class="btn btn-success" id="doAnotherChecklistBtn" data-action="new-checklist" type="button">Thực
-                hiện ca kiểm tra mới</button>
-              <a class="btn" id="viewMyHazardsBtn" href="worker-my-hazards.html">Xem sự cố của tôi</a>
+                <div><strong>34°C</strong><span>Nắng nóng – uống đủ nước</span></div>
+              </div>
+              <div class="wcl-hero-stat">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                <div><strong>42 người</strong><span>Trong ca tại Block A</span></div>
+              </div>
             </div>
           </div>
 
-          <!-- Form thực hiện checklist an toàn -->
-          <form id="checklistForm" data-component="checklist-form" novalidate>
-            <!-- 1. Vùng chọn zone / ca làm việc -->
-            <section class="worker-card worker-checklist-meta" aria-label="Thông tin ca kiểm tra">
-              <!-- Ngày kiểm tra + icon lịch -->
-              <div class="worker-form-group">
-                <label class="worker-label" for="checkDate">
-                  <span>Ngày kiểm tra <span class="worker-label-required">*</span></span>
-                </label>
-                <div class="worker-input-icon-wrap">
-                  <span class="worker-input-icon" aria-hidden="true">📅</span>
-                  <input class="worker-form-control worker-form-control--icon" id="checkDate" name="checkDate"
-                    data-field="date" type="date" required />
+          <!-- Ảnh công trường thật -->
+          <img class="wcl-hero__art" src="../../assets/images/%E1%BA%A3nh%20ph%E1%BA%A7n%20index.jpg" alt="Công trình đang thi công với cần trục tháp" loading="lazy" />
+        </section>
+
+        <!-- Khối trạng thái Loading -->
+        <div class="worker-state worker-state--loading is-hidden" id="checklistLoadingState" data-state="loading"
+          role="status">
+          <div class="worker-spinner"></div>
+          <h2 class="worker-state__title">Đang nạp bảng câu hỏi kiểm tra...</h2>
+          <p class="worker-state__desc">Hệ thống đang đồng bộ danh mục câu hỏi an toàn và khu vực công trường.</p>
+        </div>
+
+        <!-- Khối trạng thái Error -->
+        <div class="worker-state worker-state--error is-hidden" id="checklistErrorState" data-state="error"
+          role="alert">
+          <div class="worker-state__icon">⚠️</div>
+          <h2 class="worker-state__title">Không thể tải dữ liệu kiểm tra</h2>
+          <p class="worker-state__desc" id="checklistErrorMessage">Đã có lỗi xảy ra khi truy vấn danh sách câu hỏi
+            kiểm tra.</p>
+          <button class="worker-btn-retry" id="checklistRetryBtn" data-action="retry-checklist" type="button">🔄 Thử
+            lại</button>
+        </div>
+
+        <!-- Khối trạng thái Empty -->
+        <div class="worker-state worker-state--empty is-hidden" id="checklistEmptyState" data-state="empty">
+          <div class="worker-state__icon">📋</div>
+          <h2 class="worker-state__title">Chưa có hạng mục kiểm tra nào</h2>
+          <p class="worker-state__desc">Danh mục câu hỏi kiểm tra đang được cán bộ an toàn cập nhật.</p>
+        </div>
+
+        <!-- Khối trạng thái Success sau khi gửi checklist -->
+        <div class="worker-state worker-state--success is-hidden" id="checklistSuccessState" data-state="success"
+          role="status">
+          <div class="worker-state__icon">🎉</div>
+          <h2 class="worker-state__title">Đã lưu kết quả kiểm tra thành công!</h2>
+          <p class="worker-state__desc" id="checklistSuccessDesc">
+            Kết quả kiểm tra an toàn ca trực của bạn đã được ghi nhận vào cơ sở dữ liệu chung SiteSafe.
+          </p>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+            <button class="wcl-btn wcl-btn--primary" id="doAnotherChecklistBtn" data-action="new-checklist"
+              type="button">Thực hiện ca kiểm tra mới</button>
+            <a class="wcl-btn wcl-btn--ghost" id="viewMyHazardsBtn" href="worker-my-hazards.html">Xem sự cố của
+              tôi</a>
+          </div>
+        </div>
+
+        <!-- Form thực hiện checklist an toàn -->
+        <form class="wcl-grid" id="checklistForm" data-component="checklist-form" novalidate>
+          <div class="wcl-col">
+            <!-- 1. Thông tin ca kiểm tra -->
+            <section class="wcl-card wcl-meta" aria-label="Thông tin ca kiểm tra">
+              <div class="wcl-field">
+                <label class="wcl-field__label" for="checkDate">Ngày kiểm tra <b>*</b></label>
+                <div class="wcl-field__control">
+                  <span class="wcl-field__icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" />
+                      <path d="M16 2v4M8 2v4M3 10h18" />
+                    </svg>
+                  </span>
+                  <input class="wcl-field__input" id="checkDate" name="checkDate" data-field="date" type="date"
+                    required />
                 </div>
-                <div class="worker-field-error is-hidden" id="dateError" data-error-for="checkDate">Vui lòng chọn ngày
+                <div class="wcl-field__error is-hidden" id="dateError" data-error-for="checkDate">Vui lòng chọn ngày
                   kiểm tra</div>
               </div>
 
-              <!-- Ca làm việc + icon đồng hồ -->
-              <div class="worker-form-group">
-                <label class="worker-label" for="workShift">
-                  <span>Ca làm việc <span class="worker-label-required">*</span></span>
-                </label>
-                <div class="worker-input-icon-wrap">
-                  <span class="worker-input-icon" aria-hidden="true">⏰</span>
-                  <select class="worker-form-control worker-form-control--icon" id="workShift" name="workShift"
-                    data-field="shift" required>
-                    <option value="Ca sáng (07:00 - 15:00)" selected>Ca sáng (07:00 - 15:00)</option>
-                    <option value="Ca chiều (15:00 - 23:00)">Ca chiều (15:00 - 23:00)</option>
-                    <option value="Ca đêm (23:00 - 07:00)">Ca đêm (23:00 - 07:00)</option>
+              <div class="wcl-field">
+                <label class="wcl-field__label" for="workShift">Ca làm việc <b>*</b></label>
+                <div class="wcl-field__control">
+                  <span class="wcl-field__icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 7v5l3 2" />
+                    </svg>
+                  </span>
+                  <select class="wcl-field__input" id="workShift" name="workShift" data-field="shift" required>
+                    <option value="Ca sáng (07:00 - 15:00)">Ca sáng · 7h–15h</option>
+                    <option value="Ca chiều (15:00 - 23:00)">Ca chiều · 15h–23h</option>
+                    <option value="Ca đêm (23:00 - 07:00)">Ca đêm · 23h–7h</option>
                   </select>
+                  <svg class="wcl-field__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
                 </div>
-                <div class="worker-field-error is-hidden" id="shiftError" data-error-for="workShift">Vui lòng chọn ca
-                  làm việc</div>
               </div>
 
-              <!-- Khu vực làm việc + icon định vị -->
-              <div class="worker-form-group">
-                <label class="worker-label" for="workZone">
-                  <span>Khu vực làm việc <span class="worker-label-required">*</span></span>
-                </label>
-                <div class="worker-input-icon-wrap">
-                  <span class="worker-input-icon" aria-hidden="true">📍</span>
-                  <select class="worker-form-control worker-form-control--icon" id="workZone" name="workZone"
-                    data-field="zone" required>
+              <div class="wcl-field">
+                <label class="wcl-field__label" for="workZone">Khu vực làm việc <b>*</b></label>
+                <div class="wcl-field__control">
+                  <span class="wcl-field__icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </span>
+                  <select class="wcl-field__input" id="workZone" name="workZone" data-field="zone" required>
                     <option value="">-- Chọn khu vực thi công --</option>
-                    <option value="ZONE-001" selected>Tòa A - Khối tháp 25 tầng (Kết cấu & giàn giáo)</option>
-                    <option value="ZONE-002">Kho vật tư và nhiên liệu</option>
-                    <option value="ZONE-003">Khu điều hành và hạ tầng</option>
-                    <option value="ZONE-004">Mố cầu phía Đông (Thi công cọc & hố móng)</option>
-                    <option value="ZONE-005">Khu tập kết phế liệu và xà bần</option>
-                    <option value="ZONE-006">Khu cơ điện và trạm biến áp tạm</option>
                   </select>
+                  <svg class="wcl-field__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
                 </div>
-                <div class="worker-field-error is-hidden" id="zoneCheckError" data-error-for="workZone">Vui lòng chọn
+                <div class="wcl-field__error is-hidden" id="zoneCheckError" data-error-for="workZone">Vui lòng chọn
                   khu vực làm việc</div>
               </div>
             </section>
 
-            <!-- 2. Thanh tiến độ đánh giá checklist -->
-            <section class="worker-progress-wrap" id="checklistProgressWrapper"
-              aria-label="Tiến độ hoàn thành checklist">
-              <div class="worker-progress-header">
-                <span class="worker-progress-title">
-                  <span>📊 Tiến độ đánh giá an toàn:</span>
-                  <span id="checklistProgressCount" data-progress="count">0/5 mục</span>
+            <!-- 2. Danh mục hạng mục an toàn -->
+            <section class="wcl-card" aria-labelledby="checklistSectionTitle">
+              <div class="wcl-list-head">
+                <div>
+                  <h2 id="checklistSectionTitle">Danh mục hạng mục an toàn</h2>
+                  <p>Đánh dấu Đạt, Không đạt hoặc N/A cho từng hạng mục trước khi thi công.</p>
+                </div>
+                <div class="wcl-tabs" role="tablist" aria-label="Lọc hạng mục">
+                  <button class="wcl-tab is-active" type="button" role="tab" aria-selected="true"
+                    data-filter="all">Tất cả <span class="wcl-tab__count" data-tab-count="all">0</span></button>
+                  <button class="wcl-tab" type="button" role="tab" aria-selected="false" data-filter="pending">Chưa
+                    đánh giá <span class="wcl-tab__count" data-tab-count="pending">0</span></button>
+                  <button class="wcl-tab" type="button" role="tab" aria-selected="false" data-filter="fail">Không
+                    đạt <span class="wcl-tab__count" data-tab-count="fail">0</span></button>
+                </div>
+              </div>
+
+              <!-- Danh sách hạng mục (render từ worker.getChecklists) -->
+              <div class="wcl-items" id="checklistItems" data-container="checklist-items"></div>
+              <div class="wcl-items is-hidden" id="checklistNoMatch">
+                <p class="wcl-items__empty">Không có hạng mục nào phù hợp với bộ lọc hiện tại.</p>
+              </div>
+
+              <div class="wcl-list-foot">
+                <span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="4" y="11" width="16" height="10" rx="2" />
+                    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                  </svg>
+                  Kết quả được lưu trữ phục vụ công tác thanh tra an toàn định kỳ.
                 </span>
-                <span class="worker-progress-text" id="checklistProgressText" data-progress="percent">0%</span>
+                <span id="draftStatus">Tự động lưu nháp</span>
               </div>
-              <div class="worker-progress-bar" id="checklistProgressBar" role="progressbar" aria-valuenow="0"
-                aria-valuemin="0" aria-valuemax="100">
-                <div class="worker-progress-fill" id="checklistProgressFill" style="width: 0%;"></div>
+            </section>
+          </div>
+
+          <!-- Cột phải: tiến độ, lưu ý, hotline, nộp -->
+          <aside class="wcl-aside" aria-label="Tổng quan đánh giá">
+            <section class="wcl-card wcl-progress" aria-label="Tiến độ đánh giá">
+              <div class="wcl-progress__top">
+                <div class="wcl-ring" id="checklistProgressBar" role="progressbar" aria-valuenow="0"
+                  aria-valuemin="0" aria-valuemax="100" aria-label="Tiến độ đánh giá">
+                  <svg viewBox="0 0 140 140" aria-hidden="true">
+                    <defs>
+                      <linearGradient id="wclRing" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#fb923c" />
+                        <stop offset="1" stop-color="#ea580c" />
+                      </linearGradient>
+                    </defs>
+                    <circle cx="70" cy="70" r="60" fill="none" stroke="#f1f5f9" stroke-width="12" />
+                    <circle class="wcl-ring__value" id="checklistProgressRing" cx="70" cy="70" r="60" fill="none"
+                      stroke="url(#wclRing)" stroke-width="12" stroke-linecap="round" stroke-dasharray="376.99"
+                      stroke-dashoffset="376.99" />
+                  </svg>
+                  <div class="wcl-ring__label">
+                    <strong id="checklistProgressText">0%</strong>
+                    <span id="checklistProgressCount">0/0 mục</span>
+                  </div>
+                </div>
+                <div>
+                  <h3>Tiến độ đánh giá</h3>
+                  <p>Hoàn thành tất cả hạng mục để nộp kết quả.</p>
+                </div>
+              </div>
+              <div class="wcl-stats">
+                <div class="wcl-stat wcl-stat--pass"><strong id="passCountText">0</strong><span>Đạt</span></div>
+                <div class="wcl-stat wcl-stat--fail"><strong id="failCountText">0</strong><span>Không đạt</span></div>
+                <div class="wcl-stat"><strong id="naCountText">0</strong><span>N/A</span></div>
               </div>
             </section>
 
-            <!-- 3. Danh mục câu hỏi kiểm tra an toàn -->
-            <section class="worker-card" aria-labelledby="checklistSectionTitle">
-              <div class="worker-checklist-summary-bar">
-                <div>
-                  <h2 id="checklistSectionTitle" style="margin: 0; font-size: 1.15rem; color: var(--color-primary);">
-                    Danh mục hạng mục an toàn
-                  </h2>
-                  <span style="font-size: 0.82rem; color: #64748b;">
-                    Đánh dấu Đạt, Không đạt hoặc N/A cho từng hạng mục trước khi thi công.
+            <section class="wcl-card wcl-notes" aria-labelledby="notesTitle">
+              <div class="wcl-notes__head">
+                <h3 id="notesTitle">Lưu ý hôm nay</h3>
+                <a href="../training/safety-training.html">Xem tất cả</a>
+              </div>
+              <ul>
+                <li class="wcl-note wcl-tone--orange">
+                  <span class="wcl-note__icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                      <path d="M12 9v4M12 17h.01" />
+                    </svg>
                   </span>
-                </div>
-                <div class="worker-checklist-summary-counts">
-                  <span class="worker-count-pill worker-count-pill--pass" id="passCountText" data-count="pass">Đạt:
-                    0</span>
-                  <span class="worker-count-pill worker-count-pill--fail" id="failCountText" data-count="fail">Không
-                    đạt: 0</span>
-                  <span class="worker-count-pill worker-count-pill--na" id="naCountText" data-count="na">N/A: 0</span>
-                </div>
-              </div>
-
-              <!-- Cảnh báo khi có mục không đạt (Bật/tắt bằng class is-hidden) -->
-              <div class="worker-fail-alert is-hidden" id="failAlertBox" data-alert="fail" role="alert">
-                <div>
-                  <strong>⚠️ Lưu ý an toàn:</strong> Bạn đã đánh dấu một hoặc nhiều hạng mục “Không đạt”. Hãy dừng thao
-                  tác tại khu vực nguy hiểm và báo ngay cho cán bộ an toàn!
-                </div>
-                <a class="btn btn-danger" id="reportAlertHazardBtn" href="worker-hazard-create.html"
-                  style="font-size: 0.85rem; padding: 6px 12px; white-space: nowrap;">
-                  Báo cáo nguy cơ này ngay
-                </a>
-              </div>
-
-              <!-- Bảng / Danh sách câu hỏi kiểm tra -->
-              <div class="worker-checklist-table-wrap">
-                <table class="worker-checklist-table" id="checklistTable">
-                  <thead>
-                    <tr>
-                      <th scope="col" style="text-align: left; width: 55%;">Hạng mục kiểm tra an toàn</th>
-                      <th scope="col" style="text-align: center; width: 45%;">Đánh giá & Chi tiết</th>
-                    </tr>
-                  </thead>
-                  <tbody id="checklistTableBody" data-container="checklist-items">
-                    <!-- Mục 1: BHLĐ -->
-                    <tr class="worker-checklist-row" id="row_CL-001" data-item-id="CL-001">
-                      <td>
-                        <div class="worker-checklist-item-title">
-                          Trang bị bảo hộ cá nhân (PPE) đầy đủ (Mũ, áo phản quang, giày mũi thép)
-                        </div>
-                        <span class="worker-checklist-item-type">Bảo hộ cá nhân</span>
-                      </td>
-                      <td style="text-align: right;">
-                        <div class="worker-choice-group" data-choice-group="CL-001">
-                          <label class="worker-choice-btn worker-choice-btn--pass" data-choice="PASS">
-                            <input type="radio" name="status_CL-001" value="PASS" data-action="choose-status"
-                              data-item="CL-001" />
-                            <span>✓ Đạt</span>
-                          </label>
-                          <label class="worker-choice-btn worker-choice-btn--fail" data-choice="FAIL">
-                            <input type="radio" name="status_CL-001" value="FAIL" data-action="choose-status"
-                              data-item="CL-001" />
-                            <span>✕ Không đạt</span>
-                          </label>
-                          <label class="worker-choice-btn worker-choice-btn--na" data-choice="NA">
-                            <input type="radio" name="status_CL-001" value="NA" data-action="choose-status"
-                              data-item="CL-001" />
-                            <span>— N/A</span>
-                          </label>
-                        </div>
-
-                        <!-- Khối mở rộng: Ghi chú, Ảnh & Nút Tạo hazard -->
-                        <div class="worker-item-expand is-hidden" id="expand_CL-001" data-expand-for="CL-001">
-                          <textarea class="worker-item-notes-textarea" id="note_CL-001" data-item-note="CL-001"
-                            placeholder="Nhập ghi chú hiện trường cho mục này..."></textarea>
-                          <div class="worker-item-photo-bar">
-                            <label class="worker-item-photo-btn" for="photo_CL-001">
-                              📷 Đính kèm ảnh minh chứng
-                              <input type="file" id="photo_CL-001" data-item-photo="CL-001" accept="image/*"
-                                class="is-hidden" />
-                            </label>
-                            <span class="worker-item-photo-preview is-hidden" id="photoPreview_CL-001">✓ Đã chọn
-                              ảnh</span>
-                            <a class="worker-btn-create-hazard is-hidden" id="createHazardBtn_CL-001"
-                              href="worker-hazard-create.html?ref=CL-001" data-action="create-hazard-from-item"
-                              data-item-id="CL-001">
-                              ⚡ Tạo hazard từ mục này
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-
-                    <!-- Mục 2: Mặt bằng thi công -->
-                    <tr class="worker-checklist-row" id="row_CL-002" data-item-id="CL-002">
-                      <td>
-                        <div class="worker-checklist-item-title">
-                          Lối đi bộ, sàn thao tác thông thoáng, không có vật cản hay dầu mỡ trơn trượt
-                        </div>
-                        <span class="worker-checklist-item-type">Mặt bằng thi công</span>
-                      </td>
-                      <td style="text-align: right;">
-                        <div class="worker-choice-group" data-choice-group="CL-002">
-                          <label class="worker-choice-btn worker-choice-btn--pass" data-choice="PASS">
-                            <input type="radio" name="status_CL-002" value="PASS" data-action="choose-status"
-                              data-item="CL-002" />
-                            <span>✓ Đạt</span>
-                          </label>
-                          <label class="worker-choice-btn worker-choice-btn--fail" data-choice="FAIL">
-                            <input type="radio" name="status_CL-002" value="FAIL" data-action="choose-status"
-                              data-item="CL-002" />
-                            <span>✕ Không đạt</span>
-                          </label>
-                          <label class="worker-choice-btn worker-choice-btn--na" data-choice="NA">
-                            <input type="radio" name="status_CL-002" value="NA" data-action="choose-status"
-                              data-item="CL-002" />
-                            <span>— N/A</span>
-                          </label>
-                        </div>
-
-                        <div class="worker-item-expand is-hidden" id="expand_CL-002" data-expand-for="CL-002">
-                          <textarea class="worker-item-notes-textarea" id="note_CL-002" data-item-note="CL-002"
-                            placeholder="Nhập ghi chú hiện trường cho mục này..."></textarea>
-                          <div class="worker-item-photo-bar">
-                            <label class="worker-item-photo-btn" for="photo_CL-002">
-                              📷 Đính kèm ảnh minh chứng
-                              <input type="file" id="photo_CL-002" data-item-photo="CL-002" accept="image/*"
-                                class="is-hidden" />
-                            </label>
-                            <span class="worker-item-photo-preview is-hidden" id="photoPreview_CL-002">✓ Đã chọn
-                              ảnh</span>
-                            <a class="worker-btn-create-hazard is-hidden" id="createHazardBtn_CL-002"
-                              href="worker-hazard-create.html?ref=CL-002" data-action="create-hazard-from-item"
-                              data-item-id="CL-002">
-                              ⚡ Tạo hazard từ mục này
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-
-                    <!-- Mục 3: Điện thi công -->
-                    <tr class="worker-checklist-row" id="row_CL-003" data-item-id="CL-003">
-                      <td>
-                        <div class="worker-checklist-item-title">
-                          Dây cáp điện thi công được treo cao >2.5m, tủ điện có nắp đậy và rơ-le chống giật (ELCB)
-                        </div>
-                        <span class="worker-checklist-item-type">Điện thi công</span>
-                      </td>
-                      <td style="text-align: right;">
-                        <div class="worker-choice-group" data-choice-group="CL-003">
-                          <label class="worker-choice-btn worker-choice-btn--pass" data-choice="PASS">
-                            <input type="radio" name="status_CL-003" value="PASS" data-action="choose-status"
-                              data-item="CL-003" />
-                            <span>✓ Đạt</span>
-                          </label>
-                          <label class="worker-choice-btn worker-choice-btn--fail" data-choice="FAIL">
-                            <input type="radio" name="status_CL-003" value="FAIL" data-action="choose-status"
-                              data-item="CL-003" />
-                            <span>✕ Không đạt</span>
-                          </label>
-                          <label class="worker-choice-btn worker-choice-btn--na" data-choice="NA">
-                            <input type="radio" name="status_CL-003" value="NA" data-action="choose-status"
-                              data-item="CL-003" />
-                            <span>— N/A</span>
-                          </label>
-                        </div>
-
-                        <div class="worker-item-expand is-hidden" id="expand_CL-003" data-expand-for="CL-003">
-                          <textarea class="worker-item-notes-textarea" id="note_CL-003" data-item-note="CL-003"
-                            placeholder="Nhập ghi chú hiện trường cho mục này..."></textarea>
-                          <div class="worker-item-photo-bar">
-                            <label class="worker-item-photo-btn" for="photo_CL-003">
-                              📷 Đính kèm ảnh minh chứng
-                              <input type="file" id="photo_CL-003" data-item-photo="CL-003" accept="image/*"
-                                class="is-hidden" />
-                            </label>
-                            <span class="worker-item-photo-preview is-hidden" id="photoPreview_CL-003">✓ Đã chọn
-                              ảnh</span>
-                            <a class="worker-btn-create-hazard is-hidden" id="createHazardBtn_CL-003"
-                              href="worker-hazard-create.html?ref=CL-003" data-action="create-hazard-from-item"
-                              data-item-id="CL-003">
-                              ⚡ Tạo hazard từ mục này
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-
-                    <!-- Mục 4: Làm việc trên cao -->
-                    <tr class="worker-checklist-row" id="row_CL-004" data-item-id="CL-004">
-                      <td>
-                        <div class="worker-checklist-item-title">
-                          Khu vực mép sàn, hố mở trên cao có lan can bảo vệ 2 tầng và tấm chắn chân
-                        </div>
-                        <span class="worker-checklist-item-type">Làm việc trên cao</span>
-                      </td>
-                      <td style="text-align: right;">
-                        <div class="worker-choice-group" data-choice-group="CL-004">
-                          <label class="worker-choice-btn worker-choice-btn--pass" data-choice="PASS">
-                            <input type="radio" name="status_CL-004" value="PASS" data-action="choose-status"
-                              data-item="CL-004" />
-                            <span>✓ Đạt</span>
-                          </label>
-                          <label class="worker-choice-btn worker-choice-btn--fail" data-choice="FAIL">
-                            <input type="radio" name="status_CL-004" value="FAIL" data-action="choose-status"
-                              data-item="CL-004" />
-                            <span>✕ Không đạt</span>
-                          </label>
-                          <label class="worker-choice-btn worker-choice-btn--na" data-choice="NA">
-                            <input type="radio" name="status_CL-004" value="NA" data-action="choose-status"
-                              data-item="CL-004" />
-                            <span>— N/A</span>
-                          </label>
-                        </div>
-
-                        <div class="worker-item-expand is-hidden" id="expand_CL-004" data-expand-for="CL-004">
-                          <textarea class="worker-item-notes-textarea" id="note_CL-004" data-item-note="CL-004"
-                            placeholder="Nhập ghi chú hiện trường cho mục này..."></textarea>
-                          <div class="worker-item-photo-bar">
-                            <label class="worker-item-photo-btn" for="photo_CL-004">
-                              📷 Đính kèm ảnh minh chứng
-                              <input type="file" id="photo_CL-004" data-item-photo="CL-004" accept="image/*"
-                                class="is-hidden" />
-                            </label>
-                            <span class="worker-item-photo-preview is-hidden" id="photoPreview_CL-004">✓ Đã chọn
-                              ảnh</span>
-                            <a class="worker-btn-create-hazard is-hidden" id="createHazardBtn_CL-004"
-                              href="worker-hazard-create.html?ref=CL-004" data-action="create-hazard-from-item"
-                              data-item-id="CL-004">
-                              ⚡ Tạo hazard từ mục này
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-
-                    <!-- Mục 5: PCCC -->
-                    <tr class="worker-checklist-row" id="row_CL-005" data-item-id="CL-005">
-                      <td>
-                        <div class="worker-checklist-item-title">
-                          Nắm rõ quy trình thoát hiểm khẩn cấp và vị trí bình chữa cháy khu vực
-                        </div>
-                        <span class="worker-checklist-item-type">PCCC & Ứng phó</span>
-                      </td>
-                      <td style="text-align: right;">
-                        <div class="worker-choice-group" data-choice-group="CL-005">
-                          <label class="worker-choice-btn worker-choice-btn--pass" data-choice="PASS">
-                            <input type="radio" name="status_CL-005" value="PASS" data-action="choose-status"
-                              data-item="CL-005" />
-                            <span>✓ Đạt</span>
-                          </label>
-                          <label class="worker-choice-btn worker-choice-btn--fail" data-choice="FAIL">
-                            <input type="radio" name="status_CL-005" value="FAIL" data-action="choose-status"
-                              data-item="CL-005" />
-                            <span>✕ Không đạt</span>
-                          </label>
-                          <label class="worker-choice-btn worker-choice-btn--na" data-choice="NA">
-                            <input type="radio" name="status_CL-005" value="NA" data-action="choose-status"
-                              data-item="CL-005" />
-                            <span>— N/A</span>
-                          </label>
-                        </div>
-
-                        <div class="worker-item-expand is-hidden" id="expand_CL-005" data-expand-for="CL-005">
-                          <textarea class="worker-item-notes-textarea" id="note_CL-005" data-item-note="CL-005"
-                            placeholder="Nhập ghi chú hiện trường cho mục này..."></textarea>
-                          <div class="worker-item-photo-bar">
-                            <label class="worker-item-photo-btn" for="photo_CL-005">
-                              📷 Đính kèm ảnh minh chứng
-                              <input type="file" id="photo_CL-005" data-item-photo="CL-005" accept="image/*"
-                                class="is-hidden" />
-                            </label>
-                            <span class="worker-item-photo-preview is-hidden" id="photoPreview_CL-005">✓ Đã chọn
-                              ảnh</span>
-                            <a class="worker-btn-create-hazard is-hidden" id="createHazardBtn_CL-005"
-                              href="worker-hazard-create.html?ref=CL-005" data-action="create-hazard-from-item"
-                              data-item-id="CL-005">
-                              ⚡ Tạo hazard từ mục này
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <!-- Lỗi chung nếu chưa hoàn thành các mục -->
-              <div class="worker-field-error is-hidden" id="itemsError" data-error-for="checklistItems"
-                style="margin-bottom: 14px; font-weight: 600;"></div>
-
-              <!-- Nút nộp checklist -->
-              <div
-                style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding-top: 20px; border-top: 1px solid var(--color-border);">
-                <p style="margin: 0; font-size: 0.88rem; color: #64748b;">
-                  * Kết quả kiểm tra được lưu trữ phục vụ công tác thanh tra an toàn định kỳ.
-                </p>
-                <button class="btn btn-success" id="submitChecklistBtn" data-action="submit-checklist" type="submit"
-                  style="min-width: 170px;">
-                  <span id="checklistSpinner" class="worker-spinner is-hidden"
-                    style="width: 16px; height: 16px; margin: 0 6px 0 0; border-width: 2px;"></span>
-                  <span id="checklistBtnText">Nộp kết quả checklist</span>
-                </button>
-              </div>
+                  <div>
+                    <strong>Cẩu tháp hoạt động 09:00–11:00</strong>
+                    <p>Không đứng dưới tầm quay cần trục khu Block A.</p>
+                  </div>
+                </li>
+                <li class="wcl-note wcl-tone--blue">
+                  <span class="wcl-note__icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2.7s-6 6.6-6 11.3a6 6 0 0 0 12 0c0-4.7-6-11.3-6-11.3z" />
+                    </svg>
+                  </span>
+                  <div>
+                    <strong>Nghỉ uống nước mỗi 60 phút</strong>
+                    <p>Nhiệt độ cao, chú ý dấu hiệu say nắng.</p>
+                  </div>
+                </li>
+                <li class="wcl-note wcl-tone--purple">
+                  <span class="wcl-note__icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M22 10 12 5 2 10l10 5 10-5z" />
+                      <path d="M6 12v5c3 2 9 2 12 0v-5" />
+                    </svg>
+                  </span>
+                  <div>
+                    <strong>Huấn luyện làm việc trên cao</strong>
+                    <p>Hạn hoàn thành: 25/10/2026</p>
+                  </div>
+                </li>
+              </ul>
             </section>
-          </form>
-        </main>
-      </div>
+
+            <a class="wcl-hotline" href="tel:0389545324" aria-label="Gọi hotline khẩn cấp 0389 545 324">
+              <div>
+                <small>HOTLINE KHẨN CẤP</small>
+                <strong>0389 545 324</strong>
+                <span>Ban chỉ huy an toàn công trường · 24/7</span>
+              </div>
+              <span class="wcl-hotline__call" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </span>
+            </a>
+
+            <button class="wcl-btn wcl-btn--primary wcl-submit" id="submitChecklistBtn"
+              data-action="submit-checklist" type="submit" disabled>
+              <span id="checklistSpinner" class="worker-spinner is-hidden"></span>
+              <svg id="checklistBtnIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              <span id="checklistBtnText">Nộp kết quả kiểm tra</span>
+            </button>
+            <p class="wcl-submit-hint" id="itemsError" data-error-for="checklistItems" aria-live="polite">Đang tải
+              hạng mục...</p>
+          </aside>
+        </form>
+      </main>
     </div>
   </div>
 
@@ -531,28 +517,112 @@
       if (!currentUser) return; // Đã bị redirect bởi requireAuth
 
       const worker = window.siteSafeWorker;
-      const api = window.siteSafeApi;
+      const app = document.getElementById("wclApp");
+      const form = document.getElementById("checklistForm");
+      const itemsContainer = document.getElementById("checklistItems");
+      const RING_LENGTH = 376.99; // 2 * PI * r (r = 60)
+      const DRAFT_KEY = "siteSafeChecklistDraft_" + (currentUser.id || currentUser.email || "worker");
+
+      // Nhóm hạng mục → tông màu, icon và điều khoản QCVN 18:2021/BXD tương ứng
+      const CATEGORY_META = {
+        "Bảo hộ cá nhân": { tone: "orange", icon: "helmet", ref: "QCVN 18 · Điều 2.1" },
+        "Mặt bằng thi công": { tone: "blue", icon: "site", ref: "QCVN 18 · Điều 2.4" },
+        "Điện thi công": { tone: "amber", icon: "zap", ref: "QCVN 18 · Điều 2.9" },
+        "Làm việc trên cao": { tone: "purple", icon: "height", ref: "QCVN 18 · Điều 2.13" },
+        "PCCC & Ứng phó": { tone: "red", icon: "flame", ref: "QCVN 18 · Điều 2.20" },
+      };
+      const DEFAULT_META = { tone: "slate", icon: "clipboard", ref: "QCVN 18:2021/BXD" };
+
+      const ICONS = {
+        helmet: '<path d="M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z"/><path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/><path d="M4 15v-3a6 6 0 0 1 6-6"/><path d="M14 6a6 6 0 0 1 6 6v3"/>',
+        site: '<path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/>',
+        zap: '<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
+        height: '<path d="M7 3v18M17 3v18M7 7h10M7 12h10M7 17h10M3 21h18"/>',
+        flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+        clipboard: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3M9 12h6M9 16h4"/>',
+        check: '<path d="M20 6 9 17l-5-5"/>',
+        x: '<path d="M18 6 6 18M6 6l12 12"/>',
+        minus: '<path d="M5 12h14"/>',
+        plus: '<path d="M12 5v14M5 12h14"/>',
+        pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+        book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/>',
+        alert: '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/>',
+      };
+
+      function icon(name, size, extraClass) {
+        return '<svg' + (extraClass ? ' class="' + extraClass + '"' : "") + ' width="' + size + '" height="' + size +
+          '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+          ICONS[name] + "</svg>";
+      }
+
+      // Ảnh minh chứng theo từng hạng mục: { itemId: [{ name, url }] }
+      const photoStore = {};
+      let currentFilter = "all";
 
       // =====================================================================
-      // 1. TRẠNG THÁI TRANG – Helper bật/tắt các khối UI
+      // 1. THÔNG TIN NGƯỜI DÙNG, SIDEBAR & TOPBAR
+      // =====================================================================
+      function getInitials(name) {
+        const words = String(name || "").trim().split(/\s+/).filter(Boolean);
+        if (words.length === 0) return "CN";
+        const first = words[0].charAt(0);
+        const last = words.length > 1 ? words[words.length - 1].charAt(0) : "";
+        return (first + last).toUpperCase();
+      }
+
+      const displayName = currentUser.fullName || currentUser.email || "Công nhân";
+      document.querySelectorAll("[data-user-name]").forEach(function (el) { el.textContent = displayName; });
+      document.querySelectorAll("[data-user-initials]").forEach(function (el) { el.textContent = getInitials(displayName); });
+      document.querySelectorAll("[data-user-role]").forEach(function (el) { el.textContent = "Công nhân hiện trường"; });
+
+      // Badge số sự cố chưa xử lý xong
+      try {
+        const openHazards = (worker.getMyHazards(currentUser) || []).filter(function (h) {
+          return h && h.status !== "RESOLVED" && h.status !== "CLOSED";
+        }).length;
+        const badge = document.getElementById("myHazardBadge");
+        if (badge && openHazards > 0) {
+          badge.textContent = openHazards;
+          badge.classList.remove("is-hidden");
+        }
+      } catch (err) { /* Không chặn trang nếu lỗi đếm */ }
+
+      document.getElementById("logoutBtn").addEventListener("click", function () {
+        if (window.siteSafeMain && window.siteSafeMain.logoutUser) window.siteSafeMain.logoutUser();
+      });
+
+      // Mở/đóng sidebar trên tablet & mobile
+      const menuBtn = document.getElementById("menuToggleBtn");
+      function setNavOpen(isOpen) {
+        app.classList.toggle("is-nav-open", isOpen);
+        menuBtn.setAttribute("aria-expanded", String(isOpen));
+      }
+      menuBtn.addEventListener("click", function () { setNavOpen(!app.classList.contains("is-nav-open")); });
+      document.getElementById("wclBackdrop").addEventListener("click", function () { setNavOpen(false); });
+
+      // Ctrl/Cmd + K → tìm hạng mục, Esc → đóng menu
+      const searchInput = document.getElementById("checklistSearch");
+      document.addEventListener("keydown", function (e) {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+          e.preventDefault();
+          searchInput.focus();
+        }
+        if (e.key === "Escape") setNavOpen(false);
+      });
+      searchInput.addEventListener("input", applyFilters);
+
+      // =====================================================================
+      // 2. TRẠNG THÁI TRANG – Helper bật/tắt các khối UI
       // =====================================================================
       function showState(stateId) {
         ["checklistLoadingState", "checklistErrorState", "checklistEmptyState", "checklistSuccessState"].forEach(function (id) {
           const el = document.getElementById(id);
           if (el) el.classList.add("is-hidden");
         });
-        const form = document.getElementById("checklistForm");
-        const progress = document.getElementById("checklistProgressWrapper");
-        if (form) form.classList.add("is-hidden");
-        if (progress) progress.classList.add("is-hidden");
-
+        form.classList.toggle("is-hidden", Boolean(stateId));
         if (stateId) {
           const target = document.getElementById(stateId);
           if (target) target.classList.remove("is-hidden");
-        } else {
-          // stateId = null → Hiển thị form
-          if (form) form.classList.remove("is-hidden");
-          if (progress) progress.classList.remove("is-hidden");
         }
       }
 
@@ -563,391 +633,504 @@
       }
 
       // =====================================================================
-      // 2. KHỞI TẠO NGÀY MẶC ĐỊNH
+      // 3. NGÀY & CA MẶC ĐỊNH (theo giờ địa phương)
       // =====================================================================
-      const checkDateEl = document.getElementById("checkDate");
-      if (checkDateEl && !checkDateEl.value) {
-        checkDateEl.value = new Date().toISOString().split("T")[0];
+      function todayLocal() {
+        const d = new Date();
+        const pad = function (n) { return String(n).padStart(2, "0"); };
+        return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
       }
 
+      function currentShiftIndex() {
+        const h = new Date().getHours();
+        if (h >= 7 && h < 15) return 0;
+        if (h >= 15 && h < 23) return 1;
+        return 2;
+      }
+
+      const SHIFT_LIVE_TEXT = [
+        "Ca sáng đang diễn ra · 07:00 – 15:00",
+        "Ca chiều đang diễn ra · 15:00 – 23:00",
+        "Ca đêm đang diễn ra · 23:00 – 07:00",
+      ];
+
+      const checkDateEl = document.getElementById("checkDate");
+      const shiftEl = document.getElementById("workShift");
+      const zoneEl = document.getElementById("workZone");
+
+      function resetMetaDefaults() {
+        checkDateEl.value = todayLocal();
+        shiftEl.selectedIndex = currentShiftIndex();
+      }
+      resetMetaDefaults();
+      document.getElementById("liveShiftText").textContent = SHIFT_LIVE_TEXT[currentShiftIndex()];
+
       // =====================================================================
-      // 3. LOAD ZONES TỪ API → Populate select#workZone
+      // 4. LOAD ZONES → select#workZone
       // =====================================================================
       function populateZoneSelect(zones) {
-        const sel = document.getElementById("workZone");
-        if (!sel) return;
-        sel.innerHTML = '<option value="">-- Chọn khu vực thi công --</option>';
+        zoneEl.innerHTML = '<option value="">-- Chọn khu vực thi công --</option>';
         zones.forEach(function (z) {
           const opt = document.createElement("option");
           opt.value = z.id;
           opt.textContent = z.name || z.id;
-          sel.appendChild(opt);
+          zoneEl.appendChild(opt);
         });
-        // Chọn mặc định option đầu tiên nếu chỉ có 1
-        if (zones.length === 1) sel.value = zones[0].id;
+        if (zones.length > 0) zoneEl.value = zones[0].id;
       }
 
       // =====================================================================
-      // 4. RENDER CHECKLIST ITEMS TỪ API → tbody#checklistTableBody
+      // 5. RENDER HẠNG MỤC CHECKLIST
       // =====================================================================
+      function renderItem(item) {
+        const id = worker.escapeHtml(item.id);
+        const title = worker.escapeHtml(item.title || item.name || "(Chưa có tiêu đề)");
+        const rawType = item.workType || item.category || "";
+        const workType = worker.escapeHtml(rawType);
+        const meta = CATEGORY_META[rawType] || DEFAULT_META;
+        const ref = worker.escapeHtml(item.standardRef || meta.ref);
+
+        const article = document.createElement("article");
+        article.className = "wcl-item worker-checklist-row wcl-tone--" + meta.tone;
+        article.id = "row_" + id;
+        article.dataset.itemId = item.id;
+        article.dataset.status = "";
+        article.dataset.search = (String(item.title || "") + " " + rawType + " " + (item.standardRef || meta.ref)).toLowerCase();
+
+        const choice = function (value, cls, iconName, label) {
+          return '<label class="wcl-seg__opt wcl-seg__opt--' + cls + '">' +
+            '<input type="radio" name="status_' + id + '" value="' + value + '" data-action="choose-status" data-item="' + id + '" />' +
+            icon(iconName, 16) + label + "</label>";
+        };
+        const level = function (value, label, checked) {
+          return '<label data-level="' + value + '"' + (checked ? ' class="is-selected"' : "") + ">" +
+            '<input type="radio" name="severity_' + id + '" value="' + value + '"' + (checked ? " checked" : "") + " />" +
+            label + "</label>";
+        };
+
+        article.innerHTML =
+          '<div class="wcl-item__icon">' + icon(meta.icon, 26) +
+          '<span class="wcl-item__state">' + icon("check", 12, "wcl-item__state-pass") + icon("x", 12, "wcl-item__state-fail") + icon("minus", 12, "wcl-item__state-na") + "</span></div>" +
+          '<div class="wcl-item__body">' +
+          '<h3 class="wcl-item__title" id="title_' + id + '">' + title + "</h3>" +
+          '<div class="wcl-item__tags">' + (workType ? '<span class="wcl-tag">' + workType + "</span>" : "") +
+          '<span class="wcl-ref">' + icon("book", 14) + ref + "</span></div></div>" +
+          '<div class="wcl-seg" role="radiogroup" aria-labelledby="title_' + id + '">' +
+          choice("PASS", "pass", "check", "Đạt") + choice("FAIL", "fail", "x", "Không đạt") + choice("NA", "na", "minus", "N/A") +
+          "</div>" +
+          '<div class="wcl-item__detail is-hidden" id="expand_' + id + '" data-expand-for="' + id + '">' +
+          '<div><label class="wcl-detail__label" for="note_' + id + '">' + icon("pen", 15) + "Mô tả điểm không đạt</label>" +
+          '<textarea class="wcl-detail__note" id="note_' + id + '" data-item-note="' + id + '" placeholder="Mô tả vị trí, tình trạng cụ thể..."></textarea></div>' +
+          '<div><span class="wcl-detail__label">Mức độ</span><div class="wcl-severity" role="radiogroup" aria-label="Mức độ nguy hiểm">' +
+          level("LOW", "Thấp") + level("MEDIUM", "Trung bình", true) + level("HIGH", "Cao") + "</div></div>" +
+          '<div class="wcl-photos" id="photos_' + id + '">' +
+          '<label class="wcl-photo-add" title="Thêm ảnh minh chứng">' +
+          '<input type="file" id="photo_' + id + '" data-item-photo="' + id + '" accept="image/*" multiple aria-label="Thêm ảnh minh chứng" />' +
+          icon("plus", 22) + "</label>" +
+          '<a class="wcl-hazard-link" id="createHazardBtn_' + id + '" href="worker-hazard-create.html" data-action="create-hazard-from-item" data-item-id="' + id + '" data-item-title="' + title + '">' +
+          icon("alert", 16) + "Tạo hazard từ mục này</a>" +
+          "</div></div>";
+
+        return article;
+      }
+
       function renderChecklistItems(items) {
-        const tbody = document.getElementById("checklistTableBody");
-        if (!tbody) return;
-        if (!items || items.length === 0) {
-          showState("checklistEmptyState");
-          return;
-        }
-
-        tbody.innerHTML = "";
-        items.forEach(function (item) {
-          const id = worker.escapeHtml(item.id);
-          const title = worker.escapeHtml(item.title || item.name || "(Chưa có tiêu đề)");
-          const workType = worker.escapeHtml(item.workType || item.category || "");
-          const tr = document.createElement("tr");
-          tr.className = "worker-checklist-row";
-          tr.id = "row_" + id;
-          tr.setAttribute("data-item-id", id);
-          tr.innerHTML = `
-            <td>
-              <div class="worker-checklist-item-title">${title}</div>
-              ${workType ? `<span class="worker-checklist-item-type">${workType}</span>` : ""}
-            </td>
-            <td style="text-align: right;">
-              <div class="worker-choice-group" data-choice-group="${id}">
-                <label class="worker-choice-btn worker-choice-btn--pass" data-choice="PASS">
-                  <input type="radio" name="status_${id}" value="PASS" data-action="choose-status" data-item="${id}" />
-                  <span>✓ Đạt</span>
-                </label>
-                <label class="worker-choice-btn worker-choice-btn--fail" data-choice="FAIL">
-                  <input type="radio" name="status_${id}" value="FAIL" data-action="choose-status" data-item="${id}" />
-                  <span>✕ Không đạt</span>
-                </label>
-                <label class="worker-choice-btn worker-choice-btn--na" data-choice="NA">
-                  <input type="radio" name="status_${id}" value="NA" data-action="choose-status" data-item="${id}" />
-                  <span>— N/A</span>
-                </label>
-              </div>
-              <div class="worker-item-expand is-hidden" id="expand_${id}" data-expand-for="${id}">
-                <textarea class="worker-item-notes-textarea" id="note_${id}" data-item-note="${id}" placeholder="Nhập ghi chú hiện trường cho mục này..."></textarea>
-                <div class="worker-item-photo-bar">
-                  <label class="worker-item-photo-btn" for="photo_${id}">
-                    📷 Đính kèm ảnh minh chứng
-                    <input type="file" id="photo_${id}" data-item-photo="${id}" accept="image/*" class="is-hidden" />
-                  </label>
-                  <span class="worker-item-photo-preview is-hidden" id="photoPreview_${id}">✓ Đã chọn ảnh</span>
-                  <a class="worker-btn-create-hazard is-hidden" id="createHazardBtn_${id}"
-                     href="#" data-action="create-hazard-from-item" data-item-id="${id}"
-                     data-item-title="${title}">
-                    ⚡ Tạo hazard từ mục này
-                  </a>
-                </div>
-              </div>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-
-        // Cập nhật href cho các nút "Tạo hazard" sau khi render (cần biết zone hiện tại)
+        itemsContainer.innerHTML = "";
+        items.forEach(function (item) { itemsContainer.appendChild(renderItem(item)); });
         updateHazardLinks();
         updateProgressUI();
       }
 
-      // Cập nhật href của các nút "Tạo hazard" với query string zone + ref
+      // Cập nhật href "Tạo hazard" với zone + hạng mục tham chiếu
       function updateHazardLinks() {
-        const zoneEl = document.getElementById("workZone");
-        const zoneId = zoneEl ? zoneEl.value : "";
-        const zoneText = zoneEl && zoneEl.options[zoneEl.selectedIndex] ? zoneEl.options[zoneEl.selectedIndex].text : "";
+        const zoneId = zoneEl.value;
+        const zoneText = zoneEl.options[zoneEl.selectedIndex] ? zoneEl.options[zoneEl.selectedIndex].text : "";
 
         document.querySelectorAll("[data-action='create-hazard-from-item']").forEach(function (btn) {
-          const itemId = btn.getAttribute("data-item-id");
-          const itemTitle = btn.getAttribute("data-item-title") || "";
           const params = new URLSearchParams();
           if (zoneId) { params.set("zone", zoneId); params.set("zoneName", zoneText); }
-          params.set("ref", itemId);
-          params.set("refTitle", itemTitle);
+          params.set("ref", btn.getAttribute("data-item-id"));
+          params.set("refTitle", btn.getAttribute("data-item-title") || "");
           btn.href = "worker-hazard-create.html?" + params.toString();
         });
 
-        // Cập nhật link "Báo cáo nguy cơ này ngay" trong failAlertBox
-        const alertBtn = document.getElementById("reportAlertHazardBtn");
-        if (alertBtn && zoneId) {
-          const p = new URLSearchParams({ zone: zoneId, zoneName: zoneText });
-          alertBtn.href = "worker-hazard-create.html?" + p.toString();
+        const headerBtn = document.getElementById("goToCreateHazardBtn");
+        if (headerBtn && zoneId) {
+          headerBtn.href = "worker-hazard-create.html?" + new URLSearchParams({ zone: zoneId, zoneName: zoneText }).toString();
         }
       }
 
       // =====================================================================
-      // 5. PROGRESS BAR
+      // 6. TRẠNG THÁI HẠNG MỤC, TIẾN ĐỘ & BỘ LỌC
       // =====================================================================
+      function setItemStatus(row, status) {
+        const itemId = row.dataset.itemId;
+        row.dataset.status = status || "";
+        row.querySelectorAll(".wcl-seg__opt").forEach(function (lbl) {
+          const input = lbl.querySelector("input");
+          input.checked = input.value === status;
+          lbl.classList.toggle("is-selected", input.checked);
+        });
+        const expandBox = document.getElementById("expand_" + itemId);
+        if (expandBox) expandBox.classList.toggle("is-hidden", status !== "FAIL");
+      }
+
+      function setSeverity(row, level) {
+        row.querySelectorAll(".wcl-severity label").forEach(function (lbl) {
+          const input = lbl.querySelector("input");
+          input.checked = input.value === level;
+          lbl.classList.toggle("is-selected", input.checked);
+        });
+      }
+
+      function getRows() {
+        return Array.prototype.slice.call(itemsContainer.querySelectorAll(".wcl-item"));
+      }
+
       function updateProgressUI() {
-        const rows = document.querySelectorAll(".worker-checklist-row");
+        const rows = getRows();
         const total = rows.length;
-        let answered = 0, pass = 0, fail = 0, na = 0;
+        let pass = 0, fail = 0, na = 0, missingNotes = 0;
 
         rows.forEach(function (row) {
-          const checked = row.querySelector('input[type="radio"]:checked');
-          if (checked) {
-            answered++;
-            if (checked.value === "PASS") pass++;
-            else if (checked.value === "FAIL") fail++;
-            else if (checked.value === "NA") na++;
+          const status = row.dataset.status;
+          if (status === "PASS") pass++;
+          else if (status === "NA") na++;
+          else if (status === "FAIL") {
+            fail++;
+            const note = document.getElementById("note_" + row.dataset.itemId);
+            if (!note || !note.value.trim()) missingNotes++;
           }
         });
 
+        const answered = pass + fail + na;
         const percent = total > 0 ? Math.round((answered / total) * 100) : 0;
-        const fill = document.getElementById("checklistProgressFill");
-        const text = document.getElementById("checklistProgressText");
-        const count = document.getElementById("checklistProgressCount");
-        const passEl = document.getElementById("passCountText");
-        const failEl = document.getElementById("failCountText");
-        const naEl = document.getElementById("naCountText");
-        const failAlert = document.getElementById("failAlertBox");
 
-        if (fill) { fill.style.width = percent + "%"; }
-        if (text) text.textContent = percent + "%";
-        if (count) count.textContent = answered + "/" + total + " mục";
-        if (passEl) passEl.textContent = "Đạt: " + pass;
-        if (failEl) failEl.textContent = "Không đạt: " + fail;
-        if (naEl) naEl.textContent = "N/A: " + na;
+        document.getElementById("checklistProgressRing").setAttribute("stroke-dashoffset", String(RING_LENGTH * (1 - percent / 100)));
+        document.getElementById("checklistProgressBar").setAttribute("aria-valuenow", percent);
+        document.getElementById("checklistProgressText").textContent = percent + "%";
+        document.getElementById("checklistProgressCount").textContent = answered + "/" + total + " mục";
+        document.getElementById("passCountText").textContent = pass;
+        document.getElementById("failCountText").textContent = fail;
+        document.getElementById("naCountText").textContent = na;
 
-        const bar = document.getElementById("checklistProgressBar");
-        if (bar) { bar.setAttribute("aria-valuenow", percent); }
+        document.querySelector('[data-tab-count="all"]').textContent = total;
+        document.querySelector('[data-tab-count="pending"]').textContent = total - answered;
+        document.querySelector('[data-tab-count="fail"]').textContent = fail;
 
-        if (failAlert) {
-          failAlert.classList.toggle("is-hidden", fail === 0);
+        // Gợi ý & khóa nút nộp cho đến khi đủ điều kiện
+        const hint = document.getElementById("itemsError");
+        const submitBtn = document.getElementById("submitChecklistBtn");
+        let message = "";
+        if (total === 0) message = "Chưa có hạng mục để đánh giá";
+        else if (answered < total) message = "Còn " + (total - answered) + " hạng mục chưa đánh giá";
+        else if (missingNotes > 0) message = "Cần mô tả cho " + missingNotes + " mục không đạt";
+        else if (!zoneEl.value) message = "Vui lòng chọn khu vực làm việc";
+        const ready = message === "";
+        hint.textContent = ready ? "Sẵn sàng nộp kết quả" : message;
+        hint.classList.toggle("is-ready", ready);
+        if (!isSubmitting) submitBtn.disabled = !ready;
+
+        applyFilters();
+        return { total: total, answered: answered, pass: pass, fail: fail, na: na, missingNotes: missingNotes };
+      }
+
+      function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visible = 0;
+        getRows().forEach(function (row) {
+          const status = row.dataset.status;
+          const matchFilter = currentFilter === "all" ||
+            (currentFilter === "pending" && !status) ||
+            (currentFilter === "fail" && status === "FAIL");
+          const matchQuery = !query || row.dataset.search.indexOf(query) !== -1;
+          const show = matchFilter && matchQuery;
+          row.classList.toggle("is-filtered-out", !show);
+          if (show) visible++;
+        });
+        document.getElementById("checklistNoMatch").classList.toggle("is-hidden", visible > 0 || getRows().length === 0);
+      }
+
+      document.querySelectorAll(".wcl-tab").forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          currentFilter = tab.dataset.filter;
+          document.querySelectorAll(".wcl-tab").forEach(function (t) {
+            const active = t === tab;
+            t.classList.toggle("is-active", active);
+            t.setAttribute("aria-selected", String(active));
+          });
+          applyFilters();
+        });
+      });
+
+      // =====================================================================
+      // 7. ẢNH MINH CHỨNG
+      // =====================================================================
+      function renderPhotos(itemId) {
+        const wrap = document.getElementById("photos_" + itemId);
+        if (!wrap) return;
+        wrap.querySelectorAll(".wcl-photo").forEach(function (el) { el.remove(); });
+        const addBtn = wrap.querySelector(".wcl-photo-add");
+        (photoStore[itemId] || []).forEach(function (photo, index) {
+          const fig = document.createElement("div");
+          fig.className = "wcl-photo";
+          fig.innerHTML = '<img alt="" /><span></span><button type="button" aria-label="Xóa ảnh">' + icon("x", 12) + "</button>";
+          fig.querySelector("img").src = photo.url;
+          fig.querySelector("span").textContent = photo.name;
+          fig.querySelector("button").addEventListener("click", function () {
+            URL.revokeObjectURL(photo.url);
+            photoStore[itemId].splice(index, 1);
+            renderPhotos(itemId);
+          });
+          wrap.insertBefore(fig, addBtn);
+        });
+      }
+
+      function clearPhotos() {
+        Object.keys(photoStore).forEach(function (itemId) {
+          photoStore[itemId].forEach(function (p) { URL.revokeObjectURL(p.url); });
+          delete photoStore[itemId];
+        });
+      }
+
+      // =====================================================================
+      // 8. LƯU NHÁP TỰ ĐỘNG (localStorage của trình duyệt)
+      // =====================================================================
+      let draftTimer = null;
+
+      function formatTime(date) {
+        return String(date.getHours()).padStart(2, "0") + ":" + String(date.getMinutes()).padStart(2, "0");
+      }
+
+      function setDraftStatus(date) {
+        document.getElementById("draftStatus").textContent = date ? "Tự động lưu nháp · " + formatTime(date) : "Tự động lưu nháp";
+      }
+
+      function saveDraft() {
+        const items = {};
+        getRows().forEach(function (row) {
+          const id = row.dataset.itemId;
+          const note = document.getElementById("note_" + id);
+          const sev = row.querySelector('.wcl-severity input:checked');
+          items[id] = { status: row.dataset.status, note: note ? note.value : "", severity: sev ? sev.value : "MEDIUM" };
+        });
+        const now = new Date();
+        try {
+          localStorage.setItem(DRAFT_KEY, JSON.stringify({
+            date: checkDateEl.value, shift: shiftEl.value, zone: zoneEl.value, items: items, savedAt: now.toISOString(),
+          }));
+          setDraftStatus(now);
+        } catch (err) { /* Bộ nhớ trình duyệt không khả dụng – bỏ qua nháp */ }
+      }
+
+      function scheduleDraftSave() {
+        clearTimeout(draftTimer);
+        draftTimer = setTimeout(saveDraft, 400);
+      }
+
+      function restoreDraft() {
+        let draft = null;
+        try { draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); } catch (err) { draft = null; }
+        if (!draft || draft.date !== todayLocal()) return;
+
+        if (draft.shift) shiftEl.value = draft.shift;
+        if (draft.zone && zoneEl.querySelector('option[value="' + CSS.escape(draft.zone) + '"]')) zoneEl.value = draft.zone;
+        getRows().forEach(function (row) {
+          const saved = draft.items && draft.items[row.dataset.itemId];
+          if (!saved) return;
+          setItemStatus(row, saved.status);
+          setSeverity(row, saved.severity || "MEDIUM");
+          const note = document.getElementById("note_" + row.dataset.itemId);
+          if (note) note.value = saved.note || "";
+        });
+        if (draft.savedAt) setDraftStatus(new Date(draft.savedAt));
+      }
+
+      function clearDraft() {
+        try { localStorage.removeItem(DRAFT_KEY); } catch (err) { /* bỏ qua */ }
+        setDraftStatus(null);
+      }
+
+      // =====================================================================
+      // 9. SỰ KIỆN FORM (chọn trạng thái, mức độ, ảnh, ghi chú, đổi zone)
+      // =====================================================================
+      form.addEventListener("change", function (e) {
+        const target = e.target;
+        const row = target.closest(".wcl-item");
+
+        if (target.dataset.action === "choose-status" && row) {
+          setItemStatus(row, target.value);
+          if (target.value === "FAIL") {
+            const note = document.getElementById("note_" + row.dataset.itemId);
+            if (note) note.focus();
+          }
         }
 
-        return { total, answered, pass, fail, na };
-      }
+        if (target.name && target.name.indexOf("severity_") === 0 && row) {
+          setSeverity(row, target.value);
+        }
+
+        if (target.type === "file" && target.dataset.itemPhoto) {
+          const itemId = target.dataset.itemPhoto;
+          photoStore[itemId] = photoStore[itemId] || [];
+          Array.prototype.forEach.call(target.files || [], function (file) {
+            photoStore[itemId].push({ name: file.name, url: URL.createObjectURL(file) });
+          });
+          target.value = "";
+          renderPhotos(itemId);
+        }
+
+        if (target === zoneEl) {
+          zoneEl.classList.remove("is-invalid");
+          document.getElementById("zoneCheckError").classList.add("is-hidden");
+          updateHazardLinks();
+        }
+        if (target === checkDateEl) {
+          checkDateEl.classList.remove("is-invalid");
+          document.getElementById("dateError").classList.add("is-hidden");
+        }
+
+        updateProgressUI();
+        scheduleDraftSave();
+      });
+
+      form.addEventListener("input", function (e) {
+        if (e.target.classList.contains("wcl-detail__note")) {
+          e.target.classList.remove("is-invalid");
+          updateProgressUI();
+          scheduleDraftSave();
+        }
+      });
 
       // =====================================================================
-      // 6. XỬ LÝ FORM CHANGE (chọn trạng thái, upload ảnh, đổi zone)
-      // =====================================================================
-      const form = document.getElementById("checklistForm");
-      if (form) {
-        form.addEventListener("change", function (e) {
-          // Chọn trạng thái Đạt/Không đạt/N/A
-          if (e.target && e.target.type === "radio" && e.target.dataset.action === "choose-status") {
-            const row = e.target.closest(".worker-checklist-row");
-            if (!row) return;
-
-            // Visual selection
-            row.querySelectorAll(".worker-choice-btn").forEach(function (lbl) {
-              lbl.classList.remove("is-selected");
-            });
-            const parentLabel = e.target.closest(".worker-choice-btn");
-            if (parentLabel) parentLabel.classList.add("is-selected");
-
-            // Expand box ghi chú (mở khi bất kỳ lựa chọn nào)
-            const itemId = row.getAttribute("data-item-id");
-            const expandBox = document.getElementById("expand_" + itemId);
-            const hazardBtn = document.getElementById("createHazardBtn_" + itemId);
-
-            if (expandBox) expandBox.classList.remove("is-hidden");
-
-            if (e.target.value === "FAIL") {
-              row.classList.add("worker-checklist-row--fail");
-              if (hazardBtn) hazardBtn.classList.remove("is-hidden");
-            } else {
-              row.classList.remove("worker-checklist-row--fail");
-              if (hazardBtn) hazardBtn.classList.add("is-hidden");
-            }
-
-            updateProgressUI();
-            // Ẩn lỗi items nếu còn hiện
-            const itemsErr = document.getElementById("itemsError");
-            if (itemsErr) itemsErr.classList.add("is-hidden");
-          }
-
-          // Preview ảnh khi chọn file
-          if (e.target && e.target.type === "file" && e.target.dataset.itemPhoto) {
-            const itemId = e.target.getAttribute("data-item-photo");
-            const preview = document.getElementById("photoPreview_" + itemId);
-            if (preview && e.target.files && e.target.files[0]) {
-              preview.textContent = "✓ Đã chọn: " + e.target.files[0].name;
-              preview.classList.remove("is-hidden");
-            }
-          }
-
-          // Đổi zone → cập nhật lại href hazard links
-          if (e.target && e.target.id === "workZone") {
-            updateHazardLinks();
-          }
-        });
-      }
-
-      // =====================================================================
-      // 7. SUBMIT FORM
+      // 10. SUBMIT FORM
       // =====================================================================
       let isSubmitting = false;
 
       function setSubmitLoading(isLoading) {
         const btn = document.getElementById("submitChecklistBtn");
-        const spinner = document.getElementById("checklistSpinner");
-        const btnText = document.getElementById("checklistBtnText");
-        if (!btn) return;
         isSubmitting = isLoading;
         btn.disabled = isLoading;
-        if (spinner) spinner.classList.toggle("is-hidden", !isLoading);
-        if (btnText) btnText.textContent = isLoading ? "Đang lưu..." : "Nộp kết quả checklist";
+        document.getElementById("checklistSpinner").classList.toggle("is-hidden", !isLoading);
+        document.getElementById("checklistBtnIcon").classList.toggle("is-hidden", isLoading);
+        document.getElementById("checklistBtnText").textContent = isLoading ? "Đang lưu..." : "Nộp kết quả kiểm tra";
       }
 
       function validateForm() {
         let valid = true;
 
-        // Kiểm tra ngày
-        const dateVal = (document.getElementById("checkDate") || {}).value;
         const dateErr = document.getElementById("dateError");
-        if (!dateVal) {
-          if (dateErr) dateErr.classList.remove("is-hidden");
-          valid = false;
-        } else {
-          if (dateErr) dateErr.classList.add("is-hidden");
-        }
+        const dateOk = Boolean(checkDateEl.value);
+        dateErr.classList.toggle("is-hidden", dateOk);
+        checkDateEl.classList.toggle("is-invalid", !dateOk);
+        if (!dateOk) valid = false;
 
-        // Kiểm tra zone
-        const zoneVal = (document.getElementById("workZone") || {}).value;
         const zoneErr = document.getElementById("zoneCheckError");
-        if (!zoneVal) {
-          if (zoneErr) zoneErr.classList.remove("is-hidden");
-          valid = false;
-        } else {
-          if (zoneErr) zoneErr.classList.add("is-hidden");
-        }
+        const zoneOk = Boolean(zoneEl.value);
+        zoneErr.classList.toggle("is-hidden", zoneOk);
+        zoneEl.classList.toggle("is-invalid", !zoneOk);
+        if (!zoneOk) valid = false;
 
-        // Kiểm tra tất cả mục đã được đánh giá
-        const rows = document.querySelectorAll(".worker-checklist-row");
-        let allAnswered = true;
-        rows.forEach(function (row) {
-          if (!row.querySelector('input[type="radio"]:checked')) {
-            allAnswered = false;
+        // Mục "Không đạt" bắt buộc có mô tả
+        getRows().forEach(function (row) {
+          if (row.dataset.status !== "FAIL") return;
+          const note = document.getElementById("note_" + row.dataset.itemId);
+          if (note && !note.value.trim()) {
+            note.classList.add("is-invalid");
+            valid = false;
           }
         });
 
-        const itemsErr = document.getElementById("itemsError");
-        if (!allAnswered) {
-          if (itemsErr) {
-            itemsErr.textContent = "⚠️ Vui lòng đánh giá tất cả " + rows.length + " hạng mục trước khi nộp.";
-            itemsErr.classList.remove("is-hidden");
-          }
-          valid = false;
-        } else {
-          if (itemsErr) itemsErr.classList.add("is-hidden");
-        }
-
+        const summary = updateProgressUI();
+        if (summary.answered < summary.total) valid = false;
         return valid;
       }
 
-      if (form) {
-        form.addEventListener("submit", function (e) {
-          e.preventDefault();
-          if (isSubmitting) return; // Chặn double-submit
-          if (!validateForm()) return;
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (isSubmitting) return; // Chặn double-submit
+        if (!validateForm()) return;
 
-          setSubmitLoading(true);
+        setSubmitLoading(true);
 
-          try {
-            // Thu thập kết quả từng mục
-            const rows = document.querySelectorAll(".worker-checklist-row");
-            const items = [];
-            rows.forEach(function (row) {
-              const itemId = row.getAttribute("data-item-id");
-              const checked = row.querySelector('input[type="radio"]:checked');
-              const noteEl = document.getElementById("note_" + itemId);
-              const photoEl = document.getElementById("photo_" + itemId);
-              items.push({
-                itemId: itemId,
-                status: checked ? checked.value : "NA",
-                note: noteEl ? noteEl.value.trim() : "",
-                hasPhoto: photoEl && photoEl.files && photoEl.files.length > 0,
-              });
-            });
-
-            const zoneEl = document.getElementById("workZone");
-            const zoneId = zoneEl ? zoneEl.value : "";
-            const zoneName = zoneEl && zoneEl.options[zoneEl.selectedIndex] ? zoneEl.options[zoneEl.selectedIndex].text : "";
-            const dateVal = (document.getElementById("checkDate") || {}).value;
-            const shiftEl = document.getElementById("workShift");
-            const shiftVal = shiftEl ? shiftEl.value : "";
-
-            const { total, pass, fail, na } = updateProgressUI();
-            const progress = total > 0 ? Math.round(((pass + fail + na) / total) * 100) : 0;
-
-            const resultRecord = {
-              workerId: currentUser.id,
-              workerEmail: currentUser.email,
-              workerName: currentUser.fullName || currentUser.email,
-              zoneId: zoneId,
-              zoneName: zoneName,
-              date: dateVal,
-              shift: shiftVal,
-              items: items,
-              summary: { total, pass, fail, na, progress },
-              submittedAt: new Date().toISOString(),
+        try {
+          const items = getRows().map(function (row) {
+            const itemId = row.dataset.itemId;
+            const note = document.getElementById("note_" + itemId);
+            const sev = row.querySelector(".wcl-severity input:checked");
+            const isFail = row.dataset.status === "FAIL";
+            return {
+              itemId: itemId,
+              status: row.dataset.status || "NA",
+              note: isFail && note ? note.value.trim() : "",
+              severity: isFail && sev ? sev.value : null,
+              hasPhoto: isFail && (photoStore[itemId] || []).length > 0,
+              photoCount: isFail ? (photoStore[itemId] || []).length : 0,
             };
+          });
 
-            // Gọi API lưu kết quả
-            const saved = worker.submitChecklist(resultRecord);
+          const zoneName = zoneEl.options[zoneEl.selectedIndex] ? zoneEl.options[zoneEl.selectedIndex].text : "";
+          const dateVal = checkDateEl.value;
+          const shiftVal = shiftEl.value;
+          const s = updateProgressUI();
 
-            // Hiển thị trạng thái thành công
-            const successDesc = document.getElementById("checklistSuccessDesc");
-            if (successDesc) {
-              const failCount = items.filter(function (i) { return i.status === "FAIL"; }).length;
-              const failNote = failCount > 0 ? ` Có ${failCount} mục không đạt – vui lòng báo ngay cán bộ an toàn.` : "";
-              successDesc.textContent =
-                `Kết quả kiểm tra ca ${shiftVal} ngày ${dateVal} tại "${zoneName}" đã được ghi nhận (${pass}/${total} mục Đạt).${failNote}`;
-            }
-            showState("checklistSuccessState");
-          } catch (err) {
-            showError("Không thể lưu kết quả: " + (err && err.message ? err.message : String(err)));
-          } finally {
-            setSubmitLoading(false);
-          }
-        });
-      }
+          worker.submitChecklist({
+            workerId: currentUser.id,
+            workerEmail: currentUser.email,
+            workerName: currentUser.fullName || currentUser.email,
+            zoneId: zoneEl.value,
+            zoneName: zoneName,
+            date: dateVal,
+            shift: shiftVal,
+            items: items,
+            summary: { total: s.total, pass: s.pass, fail: s.fail, na: s.na, progress: 100 },
+            submittedAt: new Date().toISOString(),
+          });
 
-      // =====================================================================
-      // 8. NÚT "Thực hiện ca kiểm tra mới"
-      // =====================================================================
-      const doAnotherBtn = document.getElementById("doAnotherChecklistBtn");
-      if (doAnotherBtn) {
-        doAnotherBtn.addEventListener("click", function () {
-          // Reset form
-          if (form) form.reset();
-          if (checkDateEl) checkDateEl.value = new Date().toISOString().split("T")[0];
-          // Ẩn tất cả expand boxes
-          document.querySelectorAll(".worker-item-expand").forEach(function (el) { el.classList.add("is-hidden"); });
-          document.querySelectorAll(".worker-btn-create-hazard").forEach(function (el) { el.classList.add("is-hidden"); });
-          document.querySelectorAll(".worker-choice-btn").forEach(function (el) { el.classList.remove("is-selected"); });
-          document.querySelectorAll(".worker-checklist-row--fail").forEach(function (el) { el.classList.remove("worker-checklist-row--fail"); });
-          document.querySelectorAll(".worker-item-photo-preview").forEach(function (el) { el.classList.add("is-hidden"); });
+          const failNote = s.fail > 0 ? " Có " + s.fail + " mục không đạt – vui lòng báo ngay cán bộ an toàn." : "";
+          document.getElementById("checklistSuccessDesc").textContent =
+            "Kết quả kiểm tra " + shiftVal + " ngày " + dateVal + ' tại "' + zoneName + '" đã được ghi nhận (' +
+            s.pass + "/" + s.total + " mục Đạt)." + failNote;
+          clearDraft();
+          showState("checklistSuccessState");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (err) {
+          showError("Không thể lưu kết quả: " + (err && err.message ? err.message : String(err)));
+        } finally {
+          setSubmitLoading(false);
           updateProgressUI();
-          showState(null); // Hiển thị lại form
-        });
-      }
+        }
+      });
 
       // =====================================================================
-      // 9. NÚT RETRY
+      // 11. NÚT "Thực hiện ca kiểm tra mới" & "Thử lại"
       // =====================================================================
-      const retryBtn = document.getElementById("checklistRetryBtn");
-      if (retryBtn) {
-        retryBtn.addEventListener("click", function () {
-          loadPage();
+      document.getElementById("doAnotherChecklistBtn").addEventListener("click", function () {
+        form.reset();
+        resetMetaDefaults();
+        clearPhotos();
+        getRows().forEach(function (row) {
+          setItemStatus(row, "");
+          setSeverity(row, "MEDIUM");
+          renderPhotos(row.dataset.itemId);
         });
-      }
+        updateHazardLinks();
+        updateProgressUI();
+        showState(null);
+      });
+
+      document.getElementById("checklistRetryBtn").addEventListener("click", loadPage);
 
       // =====================================================================
-      // 10. TẢI DỮ LIỆU TRANG (Zones + Checklist Items)
+      // 12. TẢI DỮ LIỆU TRANG (Zones + Checklist Items)
       // =====================================================================
       function loadPage() {
         showState("checklistLoadingState");
 
         try {
-          // Load zones
           const zones = worker.getZones();
           populateZoneSelect(Array.isArray(zones) ? zones : []);
 
-          // Load checklist items
           const items = worker.getChecklists();
           if (!items || items.length === 0) {
             showState("checklistEmptyState");
@@ -955,15 +1138,16 @@
           }
 
           renderChecklistItems(items);
-          showState(null); // Hiển thị form
+          restoreDraft();
+          updateHazardLinks();
+          updateProgressUI();
+          showState(null);
         } catch (err) {
           showError("Lỗi tải dữ liệu: " + (err && err.message ? err.message : String(err)));
         }
       }
 
-      // Khởi chạy
       loadPage();
-
     })();
   </script>
 </body>
