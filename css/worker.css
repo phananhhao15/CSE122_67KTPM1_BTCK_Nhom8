@@ -144,10 +144,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   width: 44px;
   height: 44px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 1.25rem;
+  color: #475569;
   background: #f1f5f9;
 }
 
@@ -218,9 +220,26 @@
 }
 
 .worker-state__icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 14px;
+  border-radius: 18px;
   font-size: 2.8rem;
-  margin-bottom: 12px;
   line-height: 1;
+  color: #475569;
+  background: #f1f5f9;
+}
+
+.worker-state__icon--error {
+  color: #dc2626;
+  background: #fee2e2;
+}
+
+.worker-state__icon--empty {
+  color: #ea580c;
+  background: #fff7ed;
 }
 
 .worker-state__title {
@@ -367,6 +386,28 @@ textarea.worker-form-control {
   gap: 10px;
   flex-wrap: wrap;
   flex: 1;
+}
+
+.worker-search-field {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+}
+
+.worker-search-field__icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  display: grid;
+  place-items: center;
+  color: #94a3b8;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.worker-search-field .worker-search-input {
+  padding-left: 38px;
 }
 
 .worker-search-input {
@@ -560,6 +601,12 @@ textarea.worker-form-control {
   border-top: 1px solid #f1f5f9;
 }
 
+.worker-card-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .worker-card-actions {
   display: flex;
   align-items: center;
@@ -579,6 +626,57 @@ textarea.worker-form-control {
   text-align: center;
   border: 1px solid transparent;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.worker-icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-left: 4px;
+  padding: 0;
+  color: #475569;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.worker-icon-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.worker-icon-btn--edit {
+  color: #c2410c;
+  background: #fff7ed;
+  border-color: #fdba74;
+}
+
+.worker-icon-btn--edit:hover {
+  background: #ffedd5;
+  border-color: #fb923c;
+}
+
+.worker-icon-btn--trash {
+  color: #dc2626;
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.worker-icon-btn--trash:hover {
+  background: #fee2e2;
+  border-color: #f87171;
+}
+
+.worker-icon-btn:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
 }
 
 .worker-card-btn--detail {
@@ -1491,11 +1589,12 @@ textarea.worker-form-control {
 .worker-modal__close {
   background: transparent;
   border: none;
-  font-size: 1.25rem;
+  display: grid;
+  place-items: center;
   line-height: 1;
   color: #94a3b8;
   cursor: pointer;
-  padding: 4px;
+  padding: 6px;
   border-radius: 6px;
   transition: all 0.2s;
 }
@@ -1649,6 +1748,24 @@ textarea.worker-form-control {
   font-size: 0.82rem;
   color: #64748b;
   margin-top: 2px;
+}
+
+.worker-toast__icon {
+  display: inline-grid;
+  place-items: center;
+}
+
+/* Nút có icon SVG: căn icon và chữ cùng hàng */
+.worker-header__actions .btn,
+.worker-state .btn,
+.worker-btn-retry,
+.worker-view-btn,
+.worker-modal__footer .btn,
+.worker-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 /* 16. TOAST THÔNG BÁO NHANH */
