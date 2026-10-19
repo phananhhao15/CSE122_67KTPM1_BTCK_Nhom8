@@ -135,6 +135,91 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.worker-stat-card {
+  cursor: pointer;
+}
+
+.worker-stat-card.is-active {
+  border-color: #f59e0b;
+  background: #fffbeb;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+}
+
+.worker-stat-card.is-active .worker-stat-num {
+  color: #c2410c;
+}
+
+/* Thanh báo danh sách đang lọc theo trạng thái */
+.worker-active-filter {
+  --wf-color: #ea580c;
+  --wf-bg: #fff7ed;
+  --wf-border: #fdba74;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  font-size: 0.92rem;
+  color: #334155;
+  background: var(--wf-bg);
+  border: 1px solid var(--wf-border);
+  border-left: 4px solid var(--wf-color);
+  border-radius: 10px;
+}
+
+.worker-active-filter[data-status="IN_PROGRESS"] {
+  --wf-color: #2563eb;
+  --wf-bg: #eff6ff;
+  --wf-border: #bfdbfe;
+}
+
+.worker-active-filter[data-status="RESOLVED"] {
+  --wf-color: #16a34a;
+  --wf-bg: #f0fdf4;
+  --wf-border: #bbf7d0;
+}
+
+.worker-active-filter__dot {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--wf-color);
+}
+
+.worker-active-filter__text {
+  flex: 1;
+}
+
+.worker-active-filter__text strong {
+  color: var(--wf-color);
+}
+
+.worker-active-filter__count {
+  color: #64748b;
+}
+
+.worker-active-filter__clear {
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--wf-color);
+  background: #ffffff;
+  border: 1px solid var(--wf-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.worker-active-filter__clear:hover {
+  background: var(--wf-bg);
+}
+
+.worker-stat-card:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+}
+
 .worker-stat-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
@@ -520,20 +605,17 @@ textarea.worker-form-control {
 .worker-card-thumb-wrap {
   position: relative;
   width: 100%;
-  height: 160px;
-  background: #f1f5f9;
+  aspect-ratio: 4 / 3;
+  background: #0f172a;
   overflow: hidden;
 }
 
+/* Hiển thị trọn vẹn bức ảnh (không cắt), phần thừa là nền tối */
 .worker-card-thumb {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.worker-hazard-card:hover .worker-card-thumb {
-  transform: scale(1.04);
+  object-fit: contain;
 }
 
 .worker-card-badges {
