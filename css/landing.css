@@ -2137,15 +2137,6 @@ body.login-modal-open {
   display: none;
 }
 
-.login-modal__remember {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-}
-
 .login-modal__alert {
   margin-bottom: 16px;
   padding: 10px 14px;

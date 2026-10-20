@@ -51,7 +51,7 @@
         <div class="login-modal__group">
           <span class="login-modal__label">Vai trò công tác <small>Tùy chọn</small></span>
           <div class="login-modal__roles" id="loginModalRoles" role="group" aria-label="Vai trò công tác">
-            <button type="button" class="login-modal__role is-active" data-role="WORKER" aria-pressed="true">Công nhân</button>
+            <button type="button" class="login-modal__role" data-role="WORKER" aria-pressed="false">Công nhân</button>
             <button type="button" class="login-modal__role" data-role="SAFETY_OFFICER" aria-pressed="false">An toàn viên</button>
             <button type="button" class="login-modal__role" data-role="SITE_MANAGER" aria-pressed="false">Quản lý</button>
           </div>
@@ -91,11 +91,6 @@
           </div>
           <span class="login-modal__error" id="loginModalPasswordError" hidden></span>
         </div>
-
-        <label class="login-modal__remember">
-          <input type="checkbox" id="loginModalRemember" />
-          <span>Ghi nhớ đăng nhập trên máy này <small>(lần sau không cần nhập mật khẩu)</small></span>
-        </label>
 
         <div class="login-modal__alert" id="loginModalAlert" role="alert" aria-live="polite" hidden></div>
 
@@ -785,27 +780,15 @@
       const form = document.getElementById("loginModalForm");
       const emailInput = document.getElementById("loginModalEmail");
       const passInput = document.getElementById("loginModalPassword");
-      const rememberInput = document.getElementById("loginModalRemember");
       const submitBtn = document.getElementById("loginModalSubmit");
       const alertBox = document.getElementById("loginModalAlert");
       const emailError = document.getElementById("loginModalEmailError");
       const passError = document.getElementById("loginModalPasswordError");
       const roleButtons = document.querySelectorAll(".login-modal__role");
       const loginLinks = document.querySelectorAll(".nav-button--login");
-      let selectedRole = "WORKER";
+      // Không chọn sẵn vai trò: trang đích lấy theo vai trò của tài khoản
+      let selectedRole = "";
       let lastFocus = null;
-
-      // Cờ "ghi nhớ đăng nhập" (không lưu mật khẩu, chỉ giữ phiên trên thiết bị này)
-      const REMEMBER_KEY = "siteSafeRemember";
-      function isRemembered() {
-        try { return localStorage.getItem(REMEMBER_KEY) === "1"; } catch (err) { return false; }
-      }
-      function setRemembered(on) {
-        try {
-          if (on) localStorage.setItem(REMEMBER_KEY, "1");
-          else localStorage.removeItem(REMEMBER_KEY);
-        } catch (err) { /* bỏ qua */ }
-      }
 
       function redirectUrl(role) {
         switch ((role || "").toUpperCase()) {
@@ -817,13 +800,7 @@
       }
 
       function openModal() {
-        // Đã chọn "Ghi nhớ" ở lần trước và phiên còn hợp lệ → vào thẳng, không hỏi mật khẩu
-        const saved = window.siteSafeAuth && window.siteSafeAuth.getCurrentUser();
-        if (isRemembered() && saved && saved.role) {
-          window.location.href = redirectUrl(saved.role);
-          return;
-        }
-        // Không ghi nhớ → bắt nhập tài khoản + mật khẩu: bỏ phiên cũ còn lưu trong trình duyệt
+        // Luôn bắt nhập tài khoản + mật khẩu: bỏ phiên cũ còn lưu trong trình duyệt
         try { localStorage.removeItem("siteSafeUser"); } catch (err) { /* bỏ qua */ }
         form.reset();
         setPasswordVisible(false);
@@ -924,9 +901,7 @@
             emailOrUsername: emailInput.value.trim(),
             password: passInput.value,
             role: selectedRole,
-            remember: rememberInput.checked,
           });
-          setRemembered(rememberInput.checked);
           showAlert("Đăng nhập thành công! Đang chuyển hướng...", "success");
           setTimeout(function () { window.location.href = redirectUrl(sessionUser.role); }, 600);
         } catch (err) {

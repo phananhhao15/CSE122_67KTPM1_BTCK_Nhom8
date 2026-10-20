@@ -102,7 +102,7 @@
               <span class="auth-signin-hint">Tùy chọn · kiểm tra phân quyền</span>
             </div>
             <div class="auth-signin-roles" id="loginRole" role="group" aria-labelledby="loginRoleLabel">
-              <button type="button" class="auth-signin-role is-active" data-role="WORKER" aria-pressed="true">Công nhân</button>
+              <button type="button" class="auth-signin-role" data-role="WORKER" aria-pressed="false">Công nhân</button>
               <button type="button" class="auth-signin-role" data-role="SAFETY_OFFICER" aria-pressed="false">An toàn viên</button>
               <button type="button" class="auth-signin-role" data-role="SITE_MANAGER" aria-pressed="false">Quản lý</button>
             </div>
@@ -155,12 +155,6 @@
             <span class="auth-field-error" id="loginPasswordError" data-auth-error="password" hidden></span>
           </div>
 
-          <!-- Ghi nhớ đăng nhập -->
-          <label class="auth-signin-remember">
-            <input type="checkbox" id="loginRemember" name="remember" />
-            <span>Ghi nhớ đăng nhập trên thiết bị này</span>
-          </label>
-
           <!-- Thông báo lỗi chung (ví dụ 401) nằm phía trên nút -->
           <div class="auth-alert auth-alert--error" id="loginAlert" data-auth-alert="general" role="alert"
             aria-live="polite" hidden>
@@ -199,7 +193,6 @@
       const loginForm     = document.getElementById("loginForm");
       const emailInput    = document.getElementById("loginEmail");
       const passInput     = document.getElementById("loginPassword");
-      const rememberInput = document.getElementById("loginRemember");
       const roleButtons   = document.querySelectorAll(".auth-signin-role");
       const submitBtn     = document.getElementById("loginSubmitBtn");
       const toggleBtn     = document.getElementById("togglePasswordBtn");
@@ -213,7 +206,8 @@
       const ICON_OK = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></svg>';
 
       // ── Chọn vai trò (bấm lần nữa để bỏ chọn, vì trường này là tùy chọn) ──
-      let selectedRole = "WORKER";
+      // Không chọn sẵn vai trò: trang đích lấy theo vai trò của tài khoản
+      let selectedRole = "";
       roleButtons.forEach(function (btn) {
         btn.addEventListener("click", function () {
           const role = btn.getAttribute("data-role");
@@ -321,12 +315,11 @@
 
         setLoading(true);
         try {
-          // TODO nối API thật: POST /auth/login { identifier, password, role, remember }
+          // TODO nối API thật: POST /auth/login { identifier, password, role }
           const sessionUser = await window.siteSafeAuth.login({
             emailOrUsername: emailInput.value.trim(),
             password:        passInput.value,
             role:            selectedRole,
-            remember:        rememberInput.checked,
           });
 
           showAlert("Đăng nhập thành công! Đang chuyển hướng...", "success");
@@ -342,14 +335,8 @@
         }
       });
 
-      // ── Kiểm tra nếu đã đăng nhập → redirect ngay ───────────────
-      (function checkAlreadyLoggedIn() {
-        if (!window.siteSafeAuth) return;
-        const user = window.siteSafeAuth.getCurrentUser();
-        if (user && user.role) {
-          window.location.replace(getRedirectUrl(user.role));
-        }
-      })();
+      // ── Luôn bắt nhập tài khoản + mật khẩu: bỏ phiên cũ còn lưu ──
+      try { localStorage.removeItem("siteSafeUser"); } catch (err) { /* bỏ qua */ }
 
     })();
   </script>

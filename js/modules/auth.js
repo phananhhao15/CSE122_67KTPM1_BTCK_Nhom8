@@ -230,7 +230,7 @@
     }
 
     // Kiểm tra mật khẩu
-    if (matchedUser.password && matchedUser.password !== cleanPass) {
+    if (!matchedUser.password || matchedUser.password !== cleanPass) {
       throw new Error("Tài khoản hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại.");
     }
 
