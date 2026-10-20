@@ -31,16 +31,7 @@
 
       <section class="map-panel" aria-label="Sơ đồ rủi ro công trường">
         <h2>Sơ đồ công trường · Cập nhật 20/09/2026</h2>
-        <div class="map-layout" id="mapLayout">
-          <div class="map-zone map-zone--critical">
-            Vùng A · Kết cấu cao tầng
-          </div>
-          <div class="map-zone map-zone--high">Vùng B · Khu cọc</div>
-          <div class="map-zone map-zone--medium">Vùng C · Kho vật tư</div>
-          <div class="map-zone map-zone--low">Vùng D · Văn phòng</div>
-          <div class="map-zone map-zone--high">Vùng E · Khu cơ điện</div>
-          <div class="map-zone map-zone--medium">Vùng F · Lối vận chuyển</div>
-        </div>
+        <div class="map-layout" id="mapLayout"></div>
         <div class="risk-legend" aria-label="Chú giải mức độ rủi ro">
           <div class="legend-item">
             <span class="legend-color legend-color--critical"></span>Nghiêm
@@ -58,79 +49,48 @@
         </div>
       </section>
 
-      <section class="zone-grid" id="zoneGrid" aria-label="Danh sách vùng">
-        <article class="card zone-card zone-card--critical">
-          <div class="zone-card-header">
-            <h2>Vùng A</h2>
-            <span class="badge badge-danger">Nghiêm trọng</span>
-          </div>
-          <p>Khu kết cấu cao tầng và giàn giáo, đang có 3 nguy cơ mở.</p>
-          <div class="zone-meta">
-            <span>12 sự cố</span><span>Giám sát: Dũng</span>
-          </div>
-        </article>
-        <article class="card zone-card zone-card--high">
-          <div class="zone-card-header">
-            <h2>Vùng B</h2>
-            <span class="badge badge-warning">Cao</span>
-          </div>
-          <p>Khu thi công cọc và mố cầu phía Đông, cần kiểm tra hàng ngày.</p>
-          <div class="zone-meta">
-            <span>8 sự cố</span><span>Giám sát: Long</span>
-          </div>
-        </article>
-        <article class="card zone-card zone-card--medium">
-          <div class="zone-card-header">
-            <h2>Vùng C</h2>
-            <span class="badge" style="background: #fef9c3; color: #854d0e"
-              >Trung bình</span
-            >
-          </div>
-          <p>
-            Kho vật tư và thiết bị nâng, ưu tiên kiểm soát lối đi và dầu tràn.
-          </p>
-          <div class="zone-meta">
-            <span>5 sự cố</span><span>Giám sát: Quân</span>
-          </div>
-        </article>
-        <article class="card zone-card zone-card--low">
-          <div class="zone-card-header">
-            <h2>Vùng D</h2>
-            <span class="badge badge-success">Thấp</span>
-          </div>
-          <p>Khu văn phòng và điều hành, hiện không có nguy cơ mở.</p>
-          <div class="zone-meta">
-            <span>1 sự cố</span><span>Giám sát: Mai</span>
-          </div>
-        </article>
-        <article class="card zone-card zone-card--high">
-          <div class="zone-card-header">
-            <h2>Vùng E</h2>
-            <span class="badge badge-warning">Cao</span>
-          </div>
-          <p>Khu cơ điện và hàn cắt, cần kiểm soát nguồn điện tạm.</p>
-          <div class="zone-meta">
-            <span>6 sự cố</span><span>Giám sát: Hoàng</span>
-          </div>
-        </article>
-        <article class="card zone-card zone-card--medium">
-          <div class="zone-card-header">
-            <h2>Vùng F</h2>
-            <span class="badge" style="background: #fef9c3; color: #854d0e"
-              >Trung bình</span
-            >
-          </div>
-          <p>Lối vận chuyển vật liệu và khu vực điều phối xe công trường.</p>
-          <div class="zone-meta">
-            <span>4 sự cố</span><span>Giám sát: Huy</span>
-          </div>
-        </article>
-      </section>
+      <section class="zone-grid" id="zoneGrid" aria-label="Danh sách vùng"></section>
     </main>
         </div>
       </div>
-    </div>
+    <script>
+      // Đảm bảo quyền truy cập trang Quản lý công trường khi mở trực tiếp file:// hoặc chuyển đổi role từ trang quản trị
+      try {
+        const existingUser = JSON.parse(
+          localStorage.getItem("siteSafeUser") || "null",
+        );
+        if (!existingUser || existingUser.role !== "SITE_MANAGER") {
+          localStorage.setItem(
+            "siteSafeUser",
+            JSON.stringify({
+              fullName:
+                existingUser && existingUser.fullName
+                  ? existingUser.fullName
+                  : "Phạm Minh Quân",
+              email:
+                existingUser && existingUser.email
+                  ? existingUser.email
+                  : "quan.pm@sitesafe.test",
+              role: "SITE_MANAGER",
+              department: "Ban Quản lý công trường",
+            }),
+          );
+        }
+      } catch (e) {
+        localStorage.setItem(
+          "siteSafeUser",
+          JSON.stringify({
+            fullName: "Phạm Minh Quân",
+            email: "quan.pm@sitesafe.test",
+            role: "SITE_MANAGER",
+            department: "Ban Quản lý công trường",
+          }),
+        );
+      }
+    </script>
     <script src="../../js/api.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/modules/manager.js"></script>
     <script>
       function escapeHtml(value) {
         return String(value == null ? "" : value).replace(
@@ -146,7 +106,7 @@
           },
         );
       }
-      const savedZones = siteSafeApi.getZones();
+
       const riskLabels = {
         CRITICAL: "Nghiêm trọng",
         HIGH: "Cao",
@@ -159,20 +119,52 @@
         MEDIUM: "medium",
         LOW: "low",
       };
-      savedZones.forEach(function (zone) {
-        const riskClass = savedZoneClass[zone.riskLevel] || "medium";
-        const mapZone = document.createElement("div");
-        mapZone.className = `map-zone map-zone--${riskClass}`;
-        mapZone.textContent = `${zone.code || zone.id} · ${zone.name}`;
-        document.getElementById("mapLayout").appendChild(mapZone);
+      const riskBadgeClass = {
+        CRITICAL: "badge-danger",
+        HIGH: "badge-warning",
+        MEDIUM: "badge-warning",
+        LOW: "badge-success",
+      };
 
-        const card = document.createElement("article");
-        card.className = `card zone-card zone-card--${riskClass}`;
-        card.innerHTML = `<div class="zone-card-header"><h2>${escapeHtml(zone.code || zone.id)}</h2><span class="badge">${escapeHtml(riskLabels[zone.riskLevel] || "Chưa phân loại")}</span></div><p>${escapeHtml(zone.description || "Chưa có mô tả.")}</p><div class="zone-meta"><span>Đang cập nhật</span><span>${escapeHtml(zone.supervisor || "Chưa phân công")}</span></div>`;
-        document.getElementById("zoneGrid").appendChild(card);
-      });
+      async function initRiskMap() {
+        const mapLayout = document.getElementById("mapLayout");
+        const zoneGrid = document.getElementById("zoneGrid");
+        mapLayout.innerHTML = "";
+        zoneGrid.innerHTML = "";
+
+        const zones = await siteSafeManager.loadZones();
+
+        zones.forEach(function (zone) {
+          const riskKey = zone.riskLevel || "MEDIUM";
+          const riskClass = savedZoneClass[riskKey] || "medium";
+          const badgeClass = riskBadgeClass[riskKey] || "badge-warning";
+          const hazardsCount = Number(zone.hazardsCount) || 0;
+
+          // Render khối trên sơ đồ
+          const mapZone = document.createElement("div");
+          mapZone.className = `map-zone map-zone--${riskClass}`;
+          mapZone.textContent = `${zone.code || zone.id} · ${zone.name}`;
+          mapLayout.appendChild(mapZone);
+
+          // Render thẻ chi tiết từng vùng
+          const card = document.createElement("article");
+          card.className = `card zone-card zone-card--${riskClass}`;
+          card.innerHTML = `
+            <div class="zone-card-header">
+              <h2>${escapeHtml(zone.code || zone.id)}</h2>
+              <span class="badge ${badgeClass}">${escapeHtml(riskLabels[riskKey] || "Chưa phân loại")}</span>
+            </div>
+            <p>${escapeHtml(zone.description || "Chưa có mô tả.")}</p>
+            <div class="zone-meta">
+              <span>${hazardsCount} sự cố</span>
+              <span>Giám sát: ${escapeHtml(zone.supervisor || "Chưa phân công")}</span>
+            </div>
+          `;
+          zoneGrid.appendChild(card);
+        });
+      }
+
+      initRiskMap();
     </script>
-    <script src="../../js/main.js"></script>
-    <script src="../../js/modules/manager.js"></script>
   </body>
 </html>

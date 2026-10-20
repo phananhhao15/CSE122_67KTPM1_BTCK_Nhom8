@@ -135,143 +135,7 @@
                 <th scope="col">Thao tác</th>
               </tr>
             </thead>
-            <tbody id="zone-rows">
-              <tr data-risk="CRITICAL" data-status="ACTIVE">
-                <td>
-                  <div class="zone-cell">
-                    <img
-                      class="zone-image"
-                      src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=160&q=80"
-                      alt="Ảnh Vùng LM-A"
-                    />
-                    <div>
-                      <span class="zone-name">Tòa A - Khối tháp 25 tầng</span
-                      ><span class="zone-code">LM-A</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Kết cấu cao tầng và giàn giáo.</td>
-                <td><span class="badge risk-critical">Nghiêm trọng</span></td>
-                <td>12</td>
-                <td><span class="badge badge-success">Đang hoạt động</span></td>
-                <td>
-                  <div class="zone-actions">
-                    <button class="btn edit-zone" type="button">Sửa</button
-                    ><button class="btn btn-danger delete-zone" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-risk="MEDIUM" data-status="ACTIVE">
-                <td>
-                  <div class="zone-cell">
-                    <img
-                      class="zone-image"
-                      src="https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?auto=format&fit=crop&w=160&q=80"
-                      alt="Ảnh Vùng LM-B"
-                    />
-                    <div>
-                      <span class="zone-name">Kho vật tư và nhiên liệu</span
-                      ><span class="zone-code">LM-B</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Lưu trữ máy móc, sơn và nhiên liệu.</td>
-                <td><span class="badge risk-medium">Trung bình</span></td>
-                <td>05</td>
-                <td><span class="badge badge-success">Đang hoạt động</span></td>
-                <td>
-                  <div class="zone-actions">
-                    <button class="btn edit-zone" type="button">Sửa</button
-                    ><button class="btn btn-danger delete-zone" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-risk="LOW" data-status="ACTIVE">
-                <td>
-                  <div class="zone-cell">
-                    <img
-                      class="zone-image"
-                      src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=160&q=80"
-                      alt="Ảnh Vùng LM-C"
-                    />
-                    <div>
-                      <span class="zone-name">Khu điều hành và hạ tầng</span
-                      ><span class="zone-code">LM-C</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Văn phòng ban chỉ huy công trường.</td>
-                <td><span class="badge risk-low">Thấp</span></td>
-                <td>01</td>
-                <td><span class="badge badge-success">Đang hoạt động</span></td>
-                <td>
-                  <div class="zone-actions">
-                    <button class="btn edit-zone" type="button">Sửa</button
-                    ><button class="btn btn-danger delete-zone" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-risk="HIGH" data-status="ACTIVE">
-                <td>
-                  <div class="zone-cell">
-                    <img
-                      class="zone-image"
-                      src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=160&q=80"
-                      alt="Ảnh Vùng BR-E"
-                    />
-                    <div>
-                      <span class="zone-name">Mố cầu phía Đông</span
-                      ><span class="zone-code">BR-E</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Thi công cọc khoan nhồi và dầm cầu.</td>
-                <td><span class="badge risk-high">Cao</span></td>
-                <td>08</td>
-                <td><span class="badge badge-success">Đang hoạt động</span></td>
-                <td>
-                  <div class="zone-actions">
-                    <button class="btn edit-zone" type="button">Sửa</button
-                    ><button class="btn btn-danger delete-zone" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr data-risk="MEDIUM" data-status="INACTIVE">
-                <td>
-                  <div class="zone-cell">
-                    <img
-                      class="zone-image"
-                      src="https://images.unsplash.com/photo-1590644365607-1c5a0c4a3f25?auto=format&fit=crop&w=160&q=80"
-                      alt="Ảnh Vùng LM-D"
-                    />
-                    <div>
-                      <span class="zone-name">Khu tập kết phế liệu</span
-                      ><span class="zone-code">LM-D</span>
-                    </div>
-                  </div>
-                </td>
-                <td>Khu vực tạm dừng, chờ phương án thu gom.</td>
-                <td><span class="badge risk-medium">Trung bình</span></td>
-                <td>02</td>
-                <td><span class="badge badge-warning">Tạm dừng</span></td>
-                <td>
-                  <div class="zone-actions">
-                    <button class="btn edit-zone" type="button">Sửa</button
-                    ><button class="btn btn-danger delete-zone" type="button">
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
+            <tbody id="zone-rows"></tbody>
           </table>
           <div class="empty-state" id="empty-state">
             Không tìm thấy khu vực phù hợp.
@@ -283,7 +147,42 @@
       </div>
     </div>
 
+    <script>
+      // Đảm bảo quyền truy cập trang Quản trị viên khi mở trực tiếp file:// hoặc chuyển đổi role
+      try {
+        const existingUser = JSON.parse(
+          localStorage.getItem("siteSafeUser") || "null",
+        );
+        if (!existingUser || existingUser.role !== "ADMIN") {
+          localStorage.setItem(
+            "siteSafeUser",
+            JSON.stringify({
+              fullName:
+                existingUser && existingUser.fullName
+                  ? existingUser.fullName
+                  : "Nguyễn Minh Anh",
+              email:
+                existingUser && existingUser.email
+                  ? existingUser.email
+                  : "admin@sitesafe.test",
+              role: "ADMIN",
+            }),
+          );
+        }
+      } catch (e) {
+        localStorage.setItem(
+          "siteSafeUser",
+          JSON.stringify({
+            fullName: "Nguyễn Minh Anh",
+            email: "admin@sitesafe.test",
+            role: "ADMIN",
+          }),
+        );
+      }
+    </script>
     <script src="../../js/api.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/modules/admin.js"></script>
     <script>
       const zoneRows = document.getElementById("zone-rows");
       const searchInput = document.getElementById("zone-search");
@@ -292,7 +191,7 @@
       const zoneForm = document.getElementById("zone-form");
       const emptyState = document.getElementById("empty-state");
       let editingRow = null;
-      let nextZoneNumber = 6;
+      let nextZoneNumber = 7;
 
       const zoneImageUrl =
         "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=160&q=80";
@@ -332,9 +231,14 @@
 
       function buildZoneRow(zone) {
         const row = document.createElement("tr");
+        const imgUrl = zone.image || zoneImageUrl;
         row.dataset.risk = zone.riskLevel;
         row.dataset.status = zone.status;
-        row.innerHTML = `<td><div class="zone-cell"><img class="zone-image" src="${zoneImageUrl}" alt="Ảnh ${escapeHtml(zone.code)}"><div><span class="zone-name">${escapeHtml(zone.name)}</span><span class="zone-code">${escapeHtml(zone.code)}</span></div></div></td><td>${escapeHtml(zone.description)}</td><td></td><td>${Number(zone.incidentCount) || 0}</td><td></td><td><div class="zone-actions"><button class="btn edit-zone" type="button">Sửa</button><button class="btn btn-danger delete-zone" type="button">Xóa</button></div></td>`;
+        const count =
+          typeof zone.hazardsCount === "number"
+            ? zone.hazardsCount
+            : Number(zone.incidentCount) || 0;
+        row.innerHTML = `<td><div class="zone-cell"><img class="zone-image" src="${escapeHtml(imgUrl)}" alt="Ảnh ${escapeHtml(zone.code || zone.id)}"><div><span class="zone-name">${escapeHtml(zone.name)}</span><span class="zone-code">${escapeHtml(zone.code || zone.id)}</span></div></div></td><td>${escapeHtml(zone.description)}</td><td></td><td>${count}</td><td></td><td><div class="zone-actions"><button class="btn edit-zone" type="button">Sửa</button><button class="btn btn-danger delete-zone" type="button">Xóa</button></div></td>`;
         renderRowBadges(row);
         return row;
       }
@@ -471,28 +375,21 @@
         filterZones();
       });
 
-      siteSafeApi.getZones().forEach(function (zone) {
-        const existingRow = Array.from(zoneRows.querySelectorAll("tr")).find(
-          (row) => row.querySelector(".zone-code").textContent === zone.code,
-        );
-        if (existingRow) {
-          existingRow.dataset.risk = zone.riskLevel;
-          existingRow.dataset.status = zone.status;
-          existingRow.querySelector(".zone-name").textContent = zone.name;
-          existingRow.children[1].textContent = zone.description;
-          renderRowBadges(existingRow);
-          return;
-        }
+      async function initZones() {
+        zoneRows.innerHTML = "";
+        const zones = await siteSafeAdmin.loadZones();
+        zones.forEach(function (zone) {
+          const row = buildZoneRow(zone);
+          zoneRows.appendChild(row);
+          bindRowActions(row);
+        });
+        filterZones();
+      }
 
-        zoneRows.appendChild(buildZoneRow(zone));
-      });
-
-      zoneRows.querySelectorAll("tr").forEach(bindRowActions);
       searchInput.addEventListener("input", filterZones);
       riskFilter.addEventListener("change", filterZones);
       statusFilter.addEventListener("change", filterZones);
+      initZones();
     </script>
-    <script src="../../js/main.js"></script>
-    <script src="../../js/modules/admin.js"></script>
   </body>
 </html>

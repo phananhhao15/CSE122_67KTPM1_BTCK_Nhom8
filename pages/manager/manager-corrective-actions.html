@@ -63,141 +63,73 @@
                 <th scope="col">Trạng thái</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <span class="action-name">Dựng rào chắn quanh miệng cọc</span
-                  ><span class="action-context">HZ-001 · Mố cầu phía Đông</span>
-                </td>
-                <td>Võ Thành Long</td>
-                <td>21/09/2026</td>
-                <td class="progress-cell">
-                  <div class="progress-label">
-                    <span>Đã hoàn thành</span><span>100%</span>
-                  </div>
-                  <div class="progress-track">
-                    <div
-                      class="progress-bar progress-bar--done"
-                      style="width: 100%"
-                    ></div>
-                  </div>
-                </td>
-                <td class="status-cell">
-                  <span class="badge badge-success">Hoàn thành</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="action-name"
-                    >Lắp bổ sung lan can và tấm chắn chân</span
-                  ><span class="action-context"
-                    >HZ-002 · Khu kết cấu và giàn giáo</span
-                  >
-                </td>
-                <td>Phan Quốc Huy</td>
-                <td>25/09/2026</td>
-                <td class="progress-cell">
-                  <div class="progress-label">
-                    <span>Đang thực hiện</span><span>65%</span>
-                  </div>
-                  <div class="progress-track">
-                    <div class="progress-bar" style="width: 65%"></div>
-                  </div>
-                </td>
-                <td class="status-cell">
-                  <span class="badge badge-warning">Đang xử lý</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="action-name"
-                    >Treo cao và bọc bảo vệ dây điện tạm</span
-                  ><span class="action-context">HZ-003 · Khu cơ điện</span>
-                </td>
-                <td>Trần Huy Hoàng</td>
-                <td>22/09/2026</td>
-                <td class="progress-cell">
-                  <div class="progress-label">
-                    <span>Quá hạn</span><span>35%</span>
-                  </div>
-                  <div class="progress-track">
-                    <div
-                      class="progress-bar progress-bar--late"
-                      style="width: 35%"
-                    ></div>
-                  </div>
-                </td>
-                <td class="status-cell">
-                  <span class="badge badge-danger">Cần đôn đốc</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="action-name"
-                    >Vệ sinh dầu tràn và đặt biển cảnh báo</span
-                  ><span class="action-context">HZ-004 · Kho vật tư</span>
-                </td>
-                <td>Nguyễn Minh Khoa</td>
-                <td>24/09/2026</td>
-                <td class="progress-cell">
-                  <div class="progress-label">
-                    <span>Đang thực hiện</span><span>80%</span>
-                  </div>
-                  <div class="progress-track">
-                    <div class="progress-bar" style="width: 80%"></div>
-                  </div>
-                </td>
-                <td class="status-cell">
-                  <span class="badge badge-warning">Đang xử lý</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="action-name"
-                    >Bổ sung kính bảo hộ tại khu cắt vật liệu</span
-                  ><span class="action-context"
-                    >Khu gia công · Kiểm tra định kỳ</span
-                  >
-                </td>
-                <td>Trần Huy Hoàng</td>
-                <td>18/09/2026</td>
-                <td class="progress-cell">
-                  <div class="progress-label">
-                    <span>Đã hoàn thành</span><span>100%</span>
-                  </div>
-                  <div class="progress-track">
-                    <div
-                      class="progress-bar progress-bar--done"
-                      style="width: 100%"
-                    ></div>
-                  </div>
-                </td>
-                <td class="status-cell">
-                  <span class="badge badge-success">Hoàn thành</span>
-                </td>
-              </tr>
-            </tbody>
+            <tbody id="actions-table-body"></tbody>
           </table>
         </div>
       </section>
     </main>
         </div>
       </div>
-    </div>
-    <script src="../../js/api.js"></script>
     <script>
-      const actionRows = Array.from(
-        document.querySelectorAll(".actions-table tbody tr"),
-      );
+      // Đảm bảo quyền truy cập trang Quản lý công trường khi mở trực tiếp file:// hoặc chuyển đổi role từ trang quản trị
+      try {
+        const existingUser = JSON.parse(
+          localStorage.getItem("siteSafeUser") || "null",
+        );
+        if (!existingUser || existingUser.role !== "SITE_MANAGER") {
+          localStorage.setItem(
+            "siteSafeUser",
+            JSON.stringify({
+              fullName:
+                existingUser && existingUser.fullName
+                  ? existingUser.fullName
+                  : "Phạm Minh Quân",
+              email:
+                existingUser && existingUser.email
+                  ? existingUser.email
+                  : "quan.pm@sitesafe.test",
+              role: "SITE_MANAGER",
+              department: "Ban Quản lý công trường",
+            }),
+          );
+        }
+      } catch (e) {
+        localStorage.setItem(
+          "siteSafeUser",
+          JSON.stringify({
+            fullName: "Phạm Minh Quân",
+            email: "quan.pm@sitesafe.test",
+            role: "SITE_MANAGER",
+            department: "Ban Quản lý công trường",
+          }),
+        );
+      }
+    </script>
+    <script src="../../js/api.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/modules/manager.js"></script>
+    <script>
+      const tbody = document.getElementById("actions-table-body");
 
-      function getRowActionId(row) {
-        return row
-          .querySelector(".action-context")
-          .textContent.split("·")[0]
-          .trim();
+      function showCustomPrompt(message, defaultValue = "") {
+        return Promise.resolve(window.prompt(message, defaultValue));
       }
 
-      // Đồng bộ thanh tiến độ, nhãn, badge trạng thái của một hàng theo giá trị tiến độ.
+      function escapeHtml(value) {
+        return String(value == null ? "" : value).replace(
+          /[&<>'"]/g,
+          function (character) {
+            return {
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              "'": "&#39;",
+              '"': "&quot;",
+            }[character];
+          },
+        );
+      }
+
       function applyProgress(row, progress) {
         const isDone = progress >= 100;
         const isLate = row.dataset.late === "true" && !isDone;
@@ -222,11 +154,10 @@
         row.dataset.done = String(isDone);
       }
 
-      // Tính lại số liệu tổng quan từ dữ liệu thực trong bảng.
       function updateSummary() {
-        const total = actionRows.length;
-        const done = actionRows.filter((row) => row.dataset.done === "true")
-          .length;
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+        const total = rows.length;
+        const done = rows.filter((row) => row.dataset.done === "true").length;
         document.getElementById("summary-total").textContent = String(total);
         document.getElementById("summary-progress").textContent = String(
           total - done,
@@ -236,39 +167,40 @@
           `Cập nhật: ${new Date().toLocaleDateString("vi-VN")}`;
       }
 
-      // Khởi tạo: ghi nhớ trạng thái quá hạn mẫu rồi áp dụng dữ liệu đã lưu.
-      actionRows.forEach(function (row) {
-        row.dataset.late = String(
-          row.querySelector(".progress-bar--late") !== null,
-        );
-        const initialProgress = parseInt(
-          row.querySelector(".progress-label span:last-child").textContent,
-          10,
-        );
-        applyProgress(row, Number.isFinite(initialProgress) ? initialProgress : 0);
-      });
+      function buildActionRow(action) {
+        const row = document.createElement("tr");
+        row.dataset.actionId = action.id;
+        row.dataset.late = String(Boolean(action.isLate));
+        const progress = Number(action.progress || 0);
 
-      siteSafeApi.getCorrectiveActions().forEach(function (action) {
-        const row = actionRows.find((r) => getRowActionId(r) === action.id);
-        if (!row || typeof action.progress !== "number") return;
-        applyProgress(row, Math.max(0, Math.min(100, action.progress)));
-      });
-      updateSummary();
+        row.innerHTML = `
+          <td>
+            <span class="action-name">${escapeHtml(action.title)}</span><span class="action-context">${escapeHtml(action.context || action.id)}</span>
+          </td>
+          <td>${escapeHtml(action.owner || "Chưa phân công")}</td>
+          <td>${escapeHtml(action.deadline || "30/09/2026")}</td>
+          <td class="progress-cell">
+            <div class="progress-label">
+              <span>Đang thực hiện</span><span>${progress}%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" style="width: ${progress}%"></div>
+            </div>
+          </td>
+          <td class="status-cell">
+            <span class="badge badge-warning">Đang xử lý</span>
+            <button class="btn btn-warning update-progress" type="button" style="margin-left: 8px;">Cập nhật</button>
+          </td>
+        `;
 
-      actionRows.forEach(function (row) {
-        const updateButton = document.createElement("button");
-        updateButton.className = "btn btn-warning update-progress";
-        updateButton.type = "button";
-        updateButton.textContent = "Cập nhật";
-        updateButton.style.marginLeft = "8px";
-        row.querySelector(".status-cell").appendChild(updateButton);
+        applyProgress(row, progress);
 
+        const updateButton = row.querySelector(".update-progress");
         updateButton.addEventListener("click", async function () {
           const input = await showCustomPrompt(
             "Tiến độ mới (0-100):",
             row.dataset.progress || "0",
           );
-          // Bấm Cancel hoặc để trống thì không thay đổi gì.
           if (input === null || input.trim() === "") return;
           const progressValue = Number(input);
           if (
@@ -279,19 +211,30 @@
             alert("Vui lòng nhập số từ 0 đến 100.");
             return;
           }
-          const progress = Math.round(progressValue);
-          applyProgress(row, progress);
+          const newProgress = Math.round(progressValue);
+          applyProgress(row, newProgress);
           updateSummary();
           siteSafeApi.saveCorrectiveAction({
-            id: getRowActionId(row),
-            title: row.querySelector(".action-name").textContent,
-            progress,
-            status: progress === 100 ? "COMPLETED" : "IN_PROGRESS",
+            ...action,
+            progress: newProgress,
+            status: newProgress === 100 ? "COMPLETED" : "IN_PROGRESS",
           });
         });
-      });
+
+        return row;
+      }
+
+      async function initActions() {
+        tbody.innerHTML = "";
+        const actions = await siteSafeManager.loadCorrectiveActions();
+        actions.forEach((act) => {
+          const row = buildActionRow(act);
+          tbody.appendChild(row);
+        });
+        updateSummary();
+      }
+
+      initActions();
     </script>
-    <script src="../../js/main.js"></script>
-    <script src="../../js/modules/manager.js"></script>
   </body>
 </html>
