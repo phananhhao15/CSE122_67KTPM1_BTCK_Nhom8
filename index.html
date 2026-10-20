@@ -39,6 +39,55 @@
     <button class="menu-toggle" id="menuToggle" type="button" aria-label="Mở menu" aria-expanded="false">☰</button>
   </header>
 
+  <!-- ============ MODAL ĐĂNG NHẬP ============ -->
+  <div class="login-modal" id="loginModal" hidden>
+    <div class="login-modal__backdrop" data-login-close></div>
+    <div class="login-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+      <button class="login-modal__close" type="button" aria-label="Đóng" data-login-close>×</button>
+      <h2 class="login-modal__title" id="loginModalTitle">Đăng nhập hệ thống</h2>
+      <p class="login-modal__sub">Đăng nhập để thực hiện kiểm tra an toàn và giám sát công trường.</p>
+
+      <form id="loginModalForm" novalidate>
+        <div class="login-modal__group">
+          <span class="login-modal__label">Vai trò công tác <small>Tùy chọn</small></span>
+          <div class="login-modal__roles" id="loginModalRoles" role="group" aria-label="Vai trò công tác">
+            <button type="button" class="login-modal__role is-active" data-role="WORKER" aria-pressed="true">Công nhân</button>
+            <button type="button" class="login-modal__role" data-role="SAFETY_OFFICER" aria-pressed="false">An toàn viên</button>
+            <button type="button" class="login-modal__role" data-role="SITE_MANAGER" aria-pressed="false">Quản lý</button>
+          </div>
+        </div>
+
+        <div class="login-modal__group">
+          <label class="login-modal__label" for="loginModalEmail">Tên đăng nhập</label>
+          <input class="login-modal__input" id="loginModalEmail" type="text" autocomplete="username"
+            autocapitalize="off" spellcheck="false" placeholder="ten@sitesafe.test hoặc Mã USR" />
+          <span class="login-modal__error" id="loginModalEmailError" hidden></span>
+        </div>
+
+        <div class="login-modal__group">
+          <div class="login-modal__label-row">
+            <label class="login-modal__label" for="loginModalPassword">Mật khẩu</label>
+            <a href="pages/auth/forgot-password.html">Quên mật khẩu?</a>
+          </div>
+          <input class="login-modal__input" id="loginModalPassword" type="password"
+            autocomplete="current-password" placeholder="Nhập mật khẩu của bạn" />
+          <span class="login-modal__error" id="loginModalPasswordError" hidden></span>
+        </div>
+
+        <label class="login-modal__remember">
+          <input type="checkbox" id="loginModalRemember" />
+          <span>Ghi nhớ đăng nhập trên thiết bị này</span>
+        </label>
+
+        <div class="login-modal__alert" id="loginModalAlert" role="alert" aria-live="polite" hidden></div>
+
+        <button class="login-modal__submit" id="loginModalSubmit" type="submit">Đăng nhập</button>
+      </form>
+
+      <p class="login-modal__foot">Chưa có tài khoản? <a href="pages/auth/register.html">Đăng ký tài khoản mới</a></p>
+    </div>
+  </div>
+
   <main>
 
     <!-- ============ HERO SECTION ============ -->
@@ -706,6 +755,138 @@
   </footer>
 
   <!-- ============ SCRIPTS ============ -->
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/modules/auth.js"></script>
+  <script>
+    /* --- Modal đăng nhập --- */
+    (function () {
+      "use strict";
+
+      const modal = document.getElementById("loginModal");
+      const form = document.getElementById("loginModalForm");
+      const emailInput = document.getElementById("loginModalEmail");
+      const passInput = document.getElementById("loginModalPassword");
+      const rememberInput = document.getElementById("loginModalRemember");
+      const submitBtn = document.getElementById("loginModalSubmit");
+      const alertBox = document.getElementById("loginModalAlert");
+      const emailError = document.getElementById("loginModalEmailError");
+      const passError = document.getElementById("loginModalPasswordError");
+      const roleButtons = document.querySelectorAll(".login-modal__role");
+      const loginLinks = document.querySelectorAll(".nav-button--login");
+      let selectedRole = "WORKER";
+      let lastFocus = null;
+
+      function redirectUrl(role) {
+        switch ((role || "").toUpperCase()) {
+          case "SAFETY_OFFICER": return "pages/safety-officer/safety-dashboard.html";
+          case "SITE_MANAGER": return "pages/manager/manager-corrective-actions.html";
+          case "ADMIN": return "pages/admin/admin-user-management.html";
+          default: return "pages/worker/worker-safety-checklist.html";
+        }
+      }
+
+      function openModal() {
+        // Luôn bắt nhập tài khoản + mật khẩu: bỏ phiên cũ còn lưu trong trình duyệt
+        try { localStorage.removeItem("siteSafeUser"); } catch (err) { /* bỏ qua */ }
+        form.reset();
+        clearErrors();
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        document.body.classList.add("login-modal-open");
+        emailInput.focus();
+      }
+
+      function closeModal() {
+        modal.hidden = true;
+        document.body.classList.remove("login-modal-open");
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+
+      function clearErrors() {
+        [emailInput, passInput].forEach(function (el) { el.classList.remove("is-invalid"); });
+        emailError.hidden = true;
+        passError.hidden = true;
+        alertBox.hidden = true;
+      }
+
+      function showAlert(msg, type) {
+        alertBox.className = "login-modal__alert login-modal__alert--" + (type || "error");
+        alertBox.textContent = msg;
+        alertBox.hidden = false;
+      }
+
+      loginLinks.forEach(function (link) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault(); // Không có JS thì href vẫn dẫn tới trang login.html
+          openModal();
+        });
+      });
+
+      modal.querySelectorAll("[data-login-close]").forEach(function (el) {
+        el.addEventListener("click", closeModal);
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !modal.hidden) closeModal();
+      });
+
+      roleButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const role = btn.getAttribute("data-role");
+          selectedRole = selectedRole === role ? "" : role;
+          roleButtons.forEach(function (b) {
+            const on = b.getAttribute("data-role") === selectedRole;
+            b.classList.toggle("is-active", on);
+            b.setAttribute("aria-pressed", String(on));
+          });
+        });
+      });
+
+      emailInput.addEventListener("input", clearErrors);
+      passInput.addEventListener("input", clearErrors);
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        clearErrors();
+        let ok = true;
+        if (!emailInput.value.trim()) {
+          emailInput.classList.add("is-invalid");
+          emailError.textContent = "Vui lòng nhập tên đăng nhập.";
+          emailError.hidden = false;
+          ok = false;
+        }
+        if (!passInput.value) {
+          passInput.classList.add("is-invalid");
+          passError.textContent = "Vui lòng nhập mật khẩu.";
+          passError.hidden = false;
+          ok = false;
+        }
+        if (!ok) {
+          (emailInput.value.trim() ? passInput : emailInput).focus();
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Đang đăng nhập…";
+        try {
+          const sessionUser = await window.siteSafeAuth.login({
+            emailOrUsername: emailInput.value.trim(),
+            password: passInput.value,
+            role: selectedRole,
+            remember: rememberInput.checked,
+          });
+          showAlert("Đăng nhập thành công! Đang chuyển hướng...", "success");
+          setTimeout(function () { window.location.href = redirectUrl(sessionUser.role); }, 600);
+        } catch (err) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Đăng nhập";
+          showAlert(err.message || "Sai thông tin đăng nhập");
+          passInput.value = "";
+          passInput.focus();
+        }
+      });
+    })();
+  </script>
   <script>
     /* --- Mobile menu toggle --- */
     const siteHeader = document.getElementById('siteHeader');
