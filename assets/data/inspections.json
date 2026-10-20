@@ -1,0 +1,78 @@
+[
+  {
+    "id": "IN-001",
+    "title": "Kiểm tra an toàn giàn giáo",
+    "zoneId": "ZONE-001",
+    "zoneCode": "LM-A",
+    "zone": "Khu kết cấu và giàn giáo",
+    "owner": "Bùi Văn Dũng",
+    "date": "2026-09-24",
+    "status": "scheduled",
+    "statusLabel": "Đã lên lịch",
+    "searchTags": "kiểm tra an toàn giàn giáo khu kết cấu",
+    "checklistCount": 12,
+    "issuesFound": 0,
+    "createdAt": "2026-09-20T08:00:00.000Z"
+  },
+  {
+    "id": "IN-002",
+    "title": "Kiểm tra thiết bị nâng",
+    "zoneId": "ZONE-002",
+    "zoneCode": "LM-B",
+    "zone": "Kho vật tư và thiết bị nâng",
+    "owner": "Trần Huy Hoàng",
+    "date": "2026-09-22",
+    "status": "in-progress",
+    "statusLabel": "Đang thực hiện",
+    "searchTags": "kiểm tra thiết bị nâng kho vật tư",
+    "checklistCount": 8,
+    "issuesFound": 1,
+    "createdAt": "2026-09-21T08:00:00.000Z"
+  },
+  {
+    "id": "IN-003",
+    "title": "Kiểm tra an toàn điện",
+    "zoneId": "ZONE-006",
+    "zoneCode": "MEP-01",
+    "zone": "Khu cơ điện",
+    "owner": "Trần Huy Hoàng",
+    "date": "2026-09-20",
+    "status": "completed",
+    "statusLabel": "Đã hoàn thành",
+    "searchTags": "kiểm tra an toàn điện khu cơ điện",
+    "checklistCount": 15,
+    "issuesFound": 1,
+    "createdAt": "2026-09-19T08:00:00.000Z"
+  },
+  {
+    "id": "IN-004",
+    "title": "Kiểm tra phòng cháy chữa cháy",
+    "zoneId": "ZONE-002",
+    "zoneCode": "LM-B",
+    "zone": "Kho vật tư",
+    "owner": "Võ Thành Long",
+    "date": "2026-09-26",
+    "status": "scheduled",
+    "statusLabel": "Đã lên lịch",
+    "searchTags": "kiểm tra phòng cháy chữa cháy kho vật tư",
+    "checklistCount": 10,
+    "issuesFound": 0,
+    "createdAt": "2026-09-22T08:00:00.000Z"
+  },
+  {
+    "id": "IN-005",
+    "title": "Kiểm tra khu vực cọc",
+    "zoneId": "ZONE-004",
+    "zoneCode": "BR-E",
+    "zone": "Mố cầu phía Đông",
+    "owner": "Trần Huy Hoàng",
+    "date": "2026-09-18",
+    "status": "completed",
+    "statusLabel": "Đã hoàn thành",
+    "searchTags": "kiểm tra khu vực cọc mố cầu phía đông",
+    "checklistCount": 14,
+    "issuesFound": 2,
+    "createdAt": "2026-09-17T08:00:00.000Z"
+  }
+]
+

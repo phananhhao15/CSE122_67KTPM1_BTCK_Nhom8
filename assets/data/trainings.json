@@ -1,0 +1,55 @@
+[
+  {
+    "id": "TR-001",
+    "title": "An toàn lao động trên cao",
+    "description": "Quy chuẩn đeo dây an toàn 2 móc, kiểm tra sàn công tác giàn giáo và lắp đặt lưới chống rơi ngã.",
+    "duration": "45 phút",
+    "level": "Bắt buộc",
+    "image": "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=600&q=80",
+    "status": "COMPLETED",
+    "progress": 100,
+    "category": "Trên cao",
+    "instructor": "Trần Huy Hoàng",
+    "validUntil": "2027-09-20"
+  },
+  {
+    "id": "TR-002",
+    "title": "PCCC & Ứng phó sự cố khẩn cấp",
+    "description": "Hướng dẫn sử dụng bình bột/CO2, vận hành lăng vòi chữa cháy và quy trình sơ tán hiện trường khi có báo động.",
+    "duration": "60 phút",
+    "level": "Bắt buộc",
+    "image": "https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?auto=format&fit=crop&w=600&q=80",
+    "status": "IN_PROGRESS",
+    "progress": 60,
+    "category": "PCCC",
+    "instructor": "Võ Thành Long",
+    "validUntil": "2027-10-01"
+  },
+  {
+    "id": "TR-003",
+    "title": "An toàn điện công trường",
+    "description": "Quy định nối đất vỏ thiết bị, sử dụng tủ điện tạm chuẩn IP54 và kiểm tra định kỳ dụng cụ điện cầm tay.",
+    "duration": "30 phút",
+    "level": "Khuyến nghị",
+    "image": "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=600&q=80",
+    "status": "NOT_STARTED",
+    "progress": 0,
+    "category": "Điện",
+    "instructor": "Trần Huy Hoàng",
+    "validUntil": "2027-11-15"
+  },
+  {
+    "id": "TR-004",
+    "title": "Quy trình làm việc trong hố sâu & không gian kín",
+    "description": "Đo nồng độ khí độc/oxy, cấp khí tươi nhân tạo và phương án cứu hộ khẩn cấp bằng tời cứu sinh.",
+    "duration": "50 phút",
+    "level": "Bắt buộc",
+    "image": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80",
+    "status": "NOT_STARTED",
+    "progress": 0,
+    "category": "Hố móng",
+    "instructor": "Võ Thành Long",
+    "validUntil": "2027-12-01"
+  }
+]
+
