@@ -69,14 +69,32 @@
             <label class="login-modal__label" for="loginModalPassword">Mật khẩu</label>
             <a href="pages/auth/forgot-password.html">Quên mật khẩu?</a>
           </div>
-          <input class="login-modal__input" id="loginModalPassword" type="password"
-            autocomplete="current-password" placeholder="Nhập mật khẩu của bạn" />
+          <div class="login-modal__pass">
+            <input class="login-modal__input login-modal__input--pass" id="loginModalPassword" type="password"
+              autocomplete="current-password" placeholder="Nhập mật khẩu của bạn" />
+            <button class="login-modal__toggle" id="loginModalToggle" type="button" aria-label="Hiện mật khẩu"
+              aria-pressed="false">
+              <svg class="login-modal__eye" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <svg class="login-modal__eye-off" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true" hidden>
+                <path d="M3 3l18 18" />
+                <path d="M10.6 5.1A10.5 10.5 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.5 6.6C3.7 8.4 2 12 2 12s3.6 7 10 7c1.7 0 3.2-.4 4.5-1.1" />
+                <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+              </svg>
+            </button>
+          </div>
           <span class="login-modal__error" id="loginModalPasswordError" hidden></span>
         </div>
 
         <label class="login-modal__remember">
           <input type="checkbox" id="loginModalRemember" />
-          <span>Ghi nhớ đăng nhập trên thiết bị này</span>
+          <span>Ghi nhớ đăng nhập trên máy này <small>(lần sau không cần nhập mật khẩu)</small></span>
         </label>
 
         <div class="login-modal__alert" id="loginModalAlert" role="alert" aria-live="polite" hidden></div>
@@ -777,6 +795,18 @@
       let selectedRole = "WORKER";
       let lastFocus = null;
 
+      // Cờ "ghi nhớ đăng nhập" (không lưu mật khẩu, chỉ giữ phiên trên thiết bị này)
+      const REMEMBER_KEY = "siteSafeRemember";
+      function isRemembered() {
+        try { return localStorage.getItem(REMEMBER_KEY) === "1"; } catch (err) { return false; }
+      }
+      function setRemembered(on) {
+        try {
+          if (on) localStorage.setItem(REMEMBER_KEY, "1");
+          else localStorage.removeItem(REMEMBER_KEY);
+        } catch (err) { /* bỏ qua */ }
+      }
+
       function redirectUrl(role) {
         switch ((role || "").toUpperCase()) {
           case "SAFETY_OFFICER": return "pages/safety-officer/safety-dashboard.html";
@@ -787,9 +817,16 @@
       }
 
       function openModal() {
-        // Luôn bắt nhập tài khoản + mật khẩu: bỏ phiên cũ còn lưu trong trình duyệt
+        // Đã chọn "Ghi nhớ" ở lần trước và phiên còn hợp lệ → vào thẳng, không hỏi mật khẩu
+        const saved = window.siteSafeAuth && window.siteSafeAuth.getCurrentUser();
+        if (isRemembered() && saved && saved.role) {
+          window.location.href = redirectUrl(saved.role);
+          return;
+        }
+        // Không ghi nhớ → bắt nhập tài khoản + mật khẩu: bỏ phiên cũ còn lưu trong trình duyệt
         try { localStorage.removeItem("siteSafeUser"); } catch (err) { /* bỏ qua */ }
         form.reset();
+        setPasswordVisible(false);
         clearErrors();
         lastFocus = document.activeElement;
         modal.hidden = false;
@@ -842,6 +879,20 @@
         });
       });
 
+      // Nút ẩn/hiện mật khẩu
+      const toggleBtn = document.getElementById("loginModalToggle");
+      function setPasswordVisible(show) {
+        passInput.type = show ? "text" : "password";
+        toggleBtn.setAttribute("aria-label", show ? "Ẩn mật khẩu" : "Hiện mật khẩu");
+        toggleBtn.setAttribute("aria-pressed", String(show));
+        toggleBtn.querySelector(".login-modal__eye").hidden = show;
+        toggleBtn.querySelector(".login-modal__eye-off").hidden = !show;
+      }
+      toggleBtn.addEventListener("click", function () {
+        setPasswordVisible(passInput.type === "password");
+        passInput.focus();
+      });
+
       emailInput.addEventListener("input", clearErrors);
       passInput.addEventListener("input", clearErrors);
 
@@ -875,6 +926,7 @@
             role: selectedRole,
             remember: rememberInput.checked,
           });
+          setRemembered(rememberInput.checked);
           showAlert("Đăng nhập thành công! Đang chuyển hướng...", "success");
           setTimeout(function () { window.location.href = redirectUrl(sessionUser.role); }, 600);
         } catch (err) {

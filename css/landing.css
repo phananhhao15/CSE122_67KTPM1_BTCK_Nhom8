@@ -2183,3 +2183,37 @@ body.login-modal-open {
   font-size: var(--font-size-sm);
   color: var(--text-muted);
 }
+
+/* Nút ẩn/hiện mật khẩu trong modal đăng nhập */
+.login-modal__pass {
+  position: relative;
+}
+
+.login-modal__input--pass {
+  padding-right: 48px;
+}
+
+.login-modal__toggle {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.login-modal__toggle:hover,
+.login-modal__toggle[aria-pressed="true"] {
+  color: var(--accent-color);
+}
+
+.login-modal__toggle svg[hidden] {
+  display: none;
+}
