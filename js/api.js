@@ -35,6 +35,9 @@
     USE_BACKEND: false, // Chuyển thành true khi có RESTful Backend API thật
     API_BASE_URL: "https://api.sitesafe.vn/v1",
     SIMULATE_LATENCY: 120, // Độ trễ giả lập (ms) mô phỏng mạng thật
+    // Địa chỉ MockAPI của dự án, dạng https://<project-id>.mockapi.io (không có dấu / ở cuối).
+    // Để trống thì chạy hoàn toàn bằng LocalStorage. Có thể thử nhanh bằng siteSafeApi.mock.setUrl(...)
+    MOCKAPI_URL: "https://6ad86fff95e98f36aef364ba.mockapi.io",
   };
 
   // ============================================================================
@@ -790,6 +793,7 @@
     } catch (e) {
       console.error("[SiteSafeApi] Không thể lưu LocalStorage:", e);
     }
+    mockSchedulePush(); // gửi phần thay đổi lên MockAPI ở nền (nếu đã cấu hình)
   }
 
   /**
@@ -829,6 +833,410 @@
       timestamp: new Date().toISOString()
     };
   }
+
+  // ============================================================================
+  // 3b. ĐỒNG BỘ MOCKAPI (https://mockapi.io)
+  // ----------------------------------------------------------------------------
+  // - Chỉ bật khi có địa chỉ MockAPI (CONFIG.MOCKAPI_URL hoặc siteSafeApi.mock.setUrl()).
+  //   Chưa cấu hình thì mọi thứ chạy như cũ, chỉ với LocalStorage.
+  // - LocalStorage vẫn là bộ nhớ đệm: toàn bộ code đồng bộ (getHazards, saveUser,...) của
+  //   cả nhóm giữ nguyên. Mỗi lần lưu, phần thay đổi được gửi lên MockAPI ở nền
+  //   (POST / PUT / DELETE); mỗi lần mở trang, dữ liệu MockAPI được kéo về (GET).
+  // - Id nghiệp vụ (USR-001, HZ-101,...) được lưu ở trường refId trên MockAPI, vì MockAPI
+  //   tự sinh id riêng cho mỗi bản ghi (lưu cục bộ ở trường _mid).
+  // - Mọi request đi qua một hàm duy nhất mockRequest(), theo mẫu request() trong tài liệu
+  //   "MockAPI & CRUD với fetch": kiểm tra response.ok, đọc text() khi lỗi, xử lý 204.
+  // ============================================================================
+  const MOCK_URL_KEY = "siteSafeMockApiUrl";
+  const MOCK_SNAPSHOT_KEY = "siteSafeMockSnapshot";
+  const MOCK_RELOAD_KEY = "siteSafeMockReloadAt";
+
+  // Tên nhóm dữ liệu cục bộ -> tên resource trên MockAPI (chữ thường, không dấu).
+  // Gói miễn phí của MockAPI chỉ cho 2 resource, nên nhiều nhóm dùng chung resource "data":
+  // mỗi bản ghi mang thêm trường col (tên nhóm) để phân biệt. Có gói trả phí thì có thể tách
+  // mỗi nhóm một resource riêng bằng cách đổi tên ở đây (không cần sửa chỗ nào khác).
+  // Muốn bỏ một nhóm khỏi MockAPI thì xóa dòng đó: nhóm ấy chỉ nằm ở LocalStorage như cũ.
+  const MOCK_RESOURCES = {
+    users: "user",
+    zones: "data",
+    hazards: "data",
+    checklists: "data",
+    checklistResults: "data",
+    inspections: "data",
+    correctiveActions: "data",
+    trainings: "data",
+    products: "data",
+    notifications: "data",
+    orders: "data"
+  };
+
+  const mockState = {
+    queue: Promise.resolve(),
+    suppressPush: false,
+    lastError: null,
+    lastPullAt: null,
+    lastPushAt: null
+  };
+
+  function mockGetUrl() {
+    let url = "";
+    try {
+      url = localStorage.getItem(MOCK_URL_KEY) || "";
+    } catch (e) {
+      url = "";
+    }
+    return String(url || CONFIG.MOCKAPI_URL || "").trim().replace(/\/+$/, "");
+  }
+
+  function mockEnabled() {
+    return /^https?:\/\//i.test(mockGetUrl());
+  }
+
+  /**
+   * Cửa ngõ duy nhất ra mạng. Trả JSON; ném Error có nội dung khi MockAPI trả lỗi.
+   * fetch chỉ reject khi lỗi mạng/CORS, còn 404/500 vẫn resolve nên phải kiểm tra response.ok.
+   */
+  async function mockRequest(path, options = {}) {
+    const hasBody = options.body !== undefined;
+    const response = await fetch(`${mockGetUrl()}/${path}`, {
+      ...options,
+      // Chỉ gửi Content-Type khi có body để GET không bị trình duyệt gửi thêm request preflight
+      headers: hasBody ? { "Content-Type": "application/json", ...options.headers } : options.headers,
+      // Cho phép request ghi hoàn tất kể cả khi người dùng chuyển trang ngay sau khi lưu
+      keepalive: hasBody || options.method === "DELETE"
+    });
+    if (!response.ok) {
+      const detail = await response.text();
+      throw new Error(detail || `Máy chủ MockAPI phản hồi lỗi ${response.status}.`);
+    }
+    if (response.status === 204) return null;
+    return response.json();
+  }
+
+  function stableStringify(value) {
+    if (Array.isArray(value)) return `[${value.map(stableStringify).join(",")}]`;
+    if (value && typeof value === "object") {
+      return `{${Object.keys(value)
+        .sort()
+        .map((key) => `${JSON.stringify(key)}:${stableStringify(value[key])}`)
+        .join(",")}}`;
+    }
+    return JSON.stringify(value);
+  }
+
+  // Bản ghi cục bộ -> body gửi lên MockAPI.
+  // Toàn bộ nội dung nằm trong payload; refId là id nghiệp vụ, col là tên nhóm.
+  // Không để các trường phẳng vì resource MockAPI có sẵn trường mặc định (name, avatar) và tự điền
+  // dữ liệu giả vào đó, sẽ lẫn vào dữ liệu của web. Đọc payload thì luôn đúng như lúc lưu.
+  function toRemote(item, collection) {
+    const { id, _mid, ...rest } = item;
+    return { refId: id, col: collection, payload: rest };
+  }
+
+  // Bản ghi MockAPI -> bản ghi cục bộ (id nghiệp vụ lấy lại từ refId)
+  function fromRemote(remote) {
+    const { id, refId, col, payload, ...flat } = remote;
+    // Bản ghi tạo tay trên trang Data của MockAPI không có payload: dùng các trường phẳng
+    const content = payload && typeof payload === "object" ? payload : flat;
+    return { ...content, id: refId || id, _mid: id };
+  }
+
+  // Các resource khác nhau cần gọi mạng (mỗi resource kéo về đúng một lần)
+  function mockDistinctResources() {
+    return Array.from(new Set(Object.values(MOCK_RESOURCES)));
+  }
+
+  // Resource đang dùng chung cho nhiều nhóm thì phải lọc theo col; dùng riêng thì nhận hết
+  function mockIsShared(resource) {
+    return Object.values(MOCK_RESOURCES).filter((r) => r === resource).length > 1;
+  }
+
+  function mockLoadSnapshot() {
+    try {
+      return JSON.parse(localStorage.getItem(MOCK_SNAPSHOT_KEY) || "null");
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function mockSaveSnapshot(snapshot) {
+    try {
+      localStorage.setItem(MOCK_SNAPSHOT_KEY, JSON.stringify(snapshot));
+    } catch (e) {
+      // bỏ qua lỗi quota
+    }
+  }
+
+  // Ảnh chụp "MockAPI đang có gì": { tênNhóm: { idNghiệpVụ: { mid, hash } } }
+  function snapshotFromItems(items, collection) {
+    const map = {};
+    items.forEach((item) => {
+      if (item && item.id != null) {
+        map[item.id] = { mid: item._mid || null, hash: stableStringify(toRemote(item, collection)) };
+      }
+    });
+    return map;
+  }
+
+  /**
+   * So dữ liệu cục bộ với ảnh chụp, gửi phần khác biệt lên MockAPI theo từng bản ghi.
+   * Bản ghi nào gửi lỗi thì giữ nguyên trong ảnh chụp để lần lưu sau tự thử lại.
+   */
+  async function mockPushDiff() {
+    const snapshot = mockLoadSnapshot();
+    // Chưa kéo dữ liệu MockAPI về lần nào thì không biết MockAPI đang có gì, nên chưa đẩy gì lên.
+    if (!snapshot) return;
+
+    const data = getStoredData();
+    let changed = false;
+
+    for (const collection of Object.keys(MOCK_RESOURCES)) {
+      const resource = MOCK_RESOURCES[collection];
+      const items = Array.isArray(data[collection]) ? data[collection] : [];
+      const known = snapshot[collection] || (snapshot[collection] = {});
+      const seen = new Set();
+
+      for (const item of items) {
+        if (!item || item.id == null) continue;
+        seen.add(String(item.id));
+        const body = toRemote(item, collection);
+        const hash = stableStringify(body);
+        const entry = known[item.id];
+        if (entry && entry.hash === hash) continue;
+
+        try {
+          if (entry && entry.mid) {
+            await mockRequest(`${resource}/${encodeURIComponent(entry.mid)}`, {
+              method: "PUT",
+              body: JSON.stringify(body)
+            });
+            known[item.id] = { mid: entry.mid, hash };
+          } else {
+            const created = await mockRequest(resource, { method: "POST", body: JSON.stringify(body) });
+            known[item.id] = { mid: created && created.id, hash };
+          }
+          changed = true;
+        } catch (error) {
+          mockState.lastError = `${resource}: ${error.message}`;
+          console.warn("[SiteSafeApi] Không đồng bộ được lên MockAPI:", mockState.lastError);
+        }
+      }
+
+      for (const id of Object.keys(known)) {
+        if (seen.has(id)) continue;
+        const entry = known[id];
+        if (!entry.mid) {
+          delete known[id];
+          continue;
+        }
+        try {
+          await mockRequest(`${resource}/${encodeURIComponent(entry.mid)}`, { method: "DELETE" });
+          delete known[id];
+          changed = true;
+        } catch (error) {
+          // 404 nghĩa là bản ghi đã không còn trên MockAPI, coi như xóa xong
+          if (/not found/i.test(error.message)) {
+            delete known[id];
+          } else {
+            mockState.lastError = `${resource}: ${error.message}`;
+            console.warn("[SiteSafeApi] Không xóa được trên MockAPI:", mockState.lastError);
+          }
+        }
+      }
+    }
+
+    mockSaveSnapshot(snapshot);
+    if (changed) {
+      mockState.lastPushAt = new Date().toISOString();
+      // Người dùng có thể đã lưu thêm trong lúc chờ MockAPI, nên chỉ gắn _mid vào dữ liệu MỚI NHẤT
+      // (không ghi đè bằng bản đã đọc từ trước) và không kích hoạt lượt đẩy mới.
+      const fresh = getStoredData();
+      let touched = false;
+      Object.keys(MOCK_RESOURCES).forEach((collection) => {
+        const known = snapshot[collection] || {};
+        (Array.isArray(fresh[collection]) ? fresh[collection] : []).forEach((item) => {
+          const entry = item && known[item.id];
+          if (entry && entry.mid && item._mid !== entry.mid) {
+            item._mid = entry.mid;
+            touched = true;
+          }
+        });
+      });
+      if (touched) {
+        mockState.suppressPush = true;
+        try {
+          saveStoredData(fresh);
+        } finally {
+          mockState.suppressPush = false;
+        }
+      }
+    }
+  }
+
+  // Gọi sau mỗi lần lưu. Các lượt đẩy xếp hàng nối tiếp nhau để không tạo bản ghi trùng.
+  function mockSchedulePush() {
+    if (mockState.suppressPush || !mockEnabled()) return;
+    mockState.queue = mockState.queue.then(mockPushDiff).catch((error) => {
+      mockState.lastError = error.message;
+      console.warn("[SiteSafeApi] Lỗi đồng bộ MockAPI:", error);
+    });
+  }
+
+  /**
+   * Kéo dữ liệu từ MockAPI về LocalStorage.
+   * - Resource có dữ liệu: thay nhóm cục bộ bằng dữ liệu MockAPI.
+   * - Resource còn trống: giữ dữ liệu cục bộ, chưa đẩy lên (dùng mock.seedServer() để nạp mẫu).
+   * - Resource chưa tạo / lỗi: bỏ qua nhóm đó, dữ liệu cục bộ giữ nguyên.
+   * Trả về { changed, errors }.
+   */
+  async function mockPull() {
+    if (!mockEnabled()) return { changed: false, errors: [] };
+
+    const before = getStoredData();
+    const oldSnapshot = mockLoadSnapshot() || {};
+    const snapshot = {};
+    const replacements = {};
+    const errors = [];
+
+    // Kéo mỗi resource đúng một lần (nhiều nhóm dùng chung resource "data")
+    const fetched = {};
+    await Promise.all(
+      mockDistinctResources().map(async (resource) => {
+        try {
+          const remote = await mockRequest(resource);
+          if (!Array.isArray(remote)) throw new Error("MockAPI không trả về danh sách.");
+          fetched[resource] = remote;
+        } catch (error) {
+          errors.push(`${resource}: ${error.message}`);
+        }
+      })
+    );
+
+    Object.keys(MOCK_RESOURCES).forEach((collection) => {
+      const resource = MOCK_RESOURCES[collection];
+      const local = Array.isArray(before[collection]) ? before[collection] : [];
+
+      if (!fetched[resource]) {
+        // Lỗi thì không đoán MockAPI đang có gì: giữ ảnh chụp cũ, hoặc coi dữ liệu cục bộ là "đã biết"
+        // để không đẩy trùng bản ghi lên.
+        snapshot[collection] = oldSnapshot[collection] || snapshotFromItems(local, collection);
+        return;
+      }
+
+      const shared = mockIsShared(resource);
+      const remote = fetched[resource].filter((record) => !shared || record.col === collection);
+      if (remote.length === 0) {
+        // MockAPI chưa có gì cho nhóm này: coi dữ liệu cục bộ là "đã biết" để không tự đẩy cả bộ mẫu lên
+        snapshot[collection] = snapshotFromItems(local, collection);
+        return;
+      }
+
+      const mapped = remote.map(fromRemote);
+      if (stableStringify(mapped) !== stableStringify(local)) replacements[collection] = mapped;
+      snapshot[collection] = snapshotFromItems(mapped, collection);
+    });
+
+    mockSaveSnapshot(snapshot);
+    mockState.lastPullAt = new Date().toISOString();
+    mockState.lastError = errors.length ? errors.join(" | ") : null;
+
+    const changed = Object.keys(replacements).length > 0;
+    if (changed) {
+      const fresh = getStoredData(); // đọc lại để không ghi đè thay đổi vừa lưu trong lúc chờ mạng
+      Object.assign(fresh, replacements);
+      mockState.suppressPush = true;
+      try {
+        saveStoredData(fresh);
+      } finally {
+        mockState.suppressPush = false;
+      }
+    }
+    if (errors.length) console.warn("[SiteSafeApi] Một số resource MockAPI lỗi:", errors);
+    return { changed, errors };
+  }
+
+  /**
+   * Đẩy toàn bộ dữ liệu mẫu cục bộ lên các resource MockAPI đang trống (chạy tay một lần).
+   */
+  async function mockSeedServer() {
+    if (!mockEnabled()) throw new Error("Chưa cấu hình địa chỉ MockAPI.");
+    const snapshot = mockLoadSnapshot() || {};
+    const data = getStoredData();
+    // Nhóm nào chưa có bản ghi trên MockAPI thì xóa khỏi ảnh chụp để mọi bản ghi cục bộ được coi là mới
+    for (const collection of Object.keys(MOCK_RESOURCES)) {
+      const items = Array.isArray(data[collection]) ? data[collection] : [];
+      const hasRemote = Object.values(snapshot[collection] || {}).some((entry) => entry.mid);
+      if (!hasRemote) {
+        items.forEach((item) => delete item._mid);
+        snapshot[collection] = {};
+      }
+    }
+    mockSaveSnapshot(snapshot);
+    await mockPushDiff();
+    return { error: mockState.lastError };
+  }
+
+  // Mỗi lần mở trang: kéo dữ liệu MockAPI về; nếu khác dữ liệu đang hiển thị thì tải lại trang
+  // một lần để mọi trang (kể cả code của các thành viên) vẽ lại bằng dữ liệu mới.
+  function mockAutoPull() {
+    if (!mockEnabled() || typeof window === "undefined") return;
+    mockState.queue = mockState.queue
+      .then(mockPull)
+      .then((result) => {
+        try {
+          window.dispatchEvent(new CustomEvent("siteSafeApi:synced", { detail: result }));
+        } catch (e) {
+          // bỏ qua
+        }
+        if (!result.changed) return;
+        let last = 0;
+        try {
+          last = Number(sessionStorage.getItem(MOCK_RELOAD_KEY) || 0);
+        } catch (e) {
+          last = 0;
+        }
+        if (Date.now() - last < 5000) return; // chống lặp tải lại
+        try {
+          sessionStorage.setItem(MOCK_RELOAD_KEY, String(Date.now()));
+        } catch (e) {
+          return;
+        }
+        window.location.reload();
+      })
+      .catch((error) => {
+        mockState.lastError = error.message;
+        console.warn("[SiteSafeApi] Không kéo được dữ liệu MockAPI:", error);
+      });
+  }
+
+  const mock = {
+    enabled: mockEnabled,
+    getUrl: mockGetUrl,
+    setUrl(url) {
+      const clean = String(url || "").trim().replace(/\/+$/, "");
+      try {
+        if (clean) localStorage.setItem(MOCK_URL_KEY, clean);
+        else localStorage.removeItem(MOCK_URL_KEY);
+        localStorage.removeItem(MOCK_SNAPSHOT_KEY); // đổi địa chỉ thì phải kéo lại từ đầu
+      } catch (e) {
+        // bỏ qua
+      }
+      return clean;
+    },
+    status() {
+      return {
+        enabled: mockEnabled(),
+        url: mockGetUrl(),
+        resources: { ...MOCK_RESOURCES },
+        lastPullAt: mockState.lastPullAt,
+        lastPushAt: mockState.lastPushAt,
+        lastError: mockState.lastError
+      };
+    },
+    request: mockRequest,
+    pull: mockPull,
+    seedServer: mockSeedServer
+  };
 
   // ============================================================================
   // 4. CÁC MODULE DỊCH VỤ NGHIỆP VỤ (NAMESPACES)
@@ -2013,6 +2421,7 @@
 
   // Tự động kiểm tra và khởi tạo dữ liệu ngay khi nạp script
   getStoredData();
+  mockAutoPull(); // nếu đã cấu hình MockAPI: kéo dữ liệu mới nhất về
 
   // ============================================================================
   // 7. PHƠI ĐỐI TƯỢNG TOÀN CỤC window.siteSafeApi
@@ -2020,6 +2429,7 @@
   window.siteSafeApi = {
     // Cấu hình
     config: CONFIG,
+    mock,
     init,
     resetData() {
       localStorage.removeItem(STORAGE_KEY);
