@@ -2208,3 +2208,143 @@ body.login-modal-open {
 .login-modal__toggle svg[hidden] {
   display: none;
 }
+
+/* ============================================================
+   Hiệu ứng zoom khi rê chuột (hover) cho trang chủ
+   Dùng thuộc tính `scale` riêng (không dùng `transform`) để không
+   xung đột với hiệu ứng hiện dần khi cuộn (.fade-in dùng transform).
+   Chỉ bật trên thiết bị có chuột và khi người dùng không tắt chuyển động.
+   Chỉnh mức zoom ở 3 biến bên dưới.
+   ============================================================ */
+
+:root {
+  --zoom-large: 1.06;  /* thẻ lớn: card, mục FAQ, khối video */
+  --zoom-medium: 1.12; /* khối vừa: số liệu, dòng thông tin, liên hệ */
+  --zoom-small: 1.2;   /* phần tử nhỏ: nút, icon, nhãn, liên kết, avatar */
+  --zoom-time: 0.25s;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+
+  /* Cho phép phần tử đang zoom nổi lên trên phần tử bên cạnh (áp dụng với phần tử trong flex/grid) */
+  :where(
+    .worker-card, .site-card, .role-card, .faq-item, .rule-item, .process-step, .feature-item,
+    .hero-video-card, .site-stat, .hero-stat, .site-progress, .footer-contact-item, .footer-highlight,
+    .worker-detail-row, .contact-name
+  ):hover {
+    z-index: 5;
+  }
+
+  /* --- Thẻ lớn --- */
+  .worker-card,
+  .site-card,
+  .role-card,
+  .faq-item,
+  .rule-item,
+  .process-step,
+  .feature-item,
+  .hero-video-card {
+    transition: all var(--zoom-time) ease;
+  }
+
+  .worker-card:hover,
+  .site-card:hover,
+  .role-card:hover,
+  .faq-item:hover,
+  .rule-item:hover,
+  .process-step:hover,
+  .feature-item:hover,
+  .hero-video-card:hover {
+    scale: var(--zoom-large);
+  }
+
+  /* --- Khối vừa --- */
+  .site-stat,
+  .hero-stat,
+  .site-progress,
+  .worker-detail-row,
+  .footer-contact-item,
+  .footer-highlight,
+  .contact-name,
+  .section-title,
+  .eyebrow {
+    transition: all var(--zoom-time) ease;
+  }
+
+  .site-stat:hover,
+  .hero-stat:hover,
+  .site-progress:hover,
+  .worker-detail-row:hover,
+  .footer-contact-item:hover,
+  .footer-highlight:hover,
+  .contact-name:hover,
+  .section-title:hover,
+  .eyebrow:hover {
+    scale: var(--zoom-medium);
+  }
+
+  /* --- Phần tử nhỏ: nút, icon, nhãn, liên kết, avatar --- */
+  .btn-primary,
+  .btn-outline,
+  .nav-button,
+  .worker-action-btn,
+  .filter-btn,
+  .menu-toggle,
+  .contact-fb,
+  .brand,
+  .main-nav a,
+  .footer-links a,
+  .feature-icon,
+  .role-icon,
+  .site-icon,
+  .process-number,
+  .worker-avatar,
+  .detail-icon,
+  .status-badge,
+  .rule-tag,
+  .section-badge,
+  .hero-video-label {
+    transition: all var(--zoom-time) ease;
+  }
+
+  .btn-primary:hover,
+  .btn-outline:hover,
+  .nav-button:hover,
+  .worker-action-btn:hover,
+  .filter-btn:hover,
+  .menu-toggle:hover,
+  .contact-fb:hover,
+  .brand:hover,
+  .main-nav a:hover,
+  .footer-links a:hover,
+  .feature-icon:hover,
+  .role-icon:hover,
+  .site-icon:hover,
+  .process-number:hover,
+  .worker-avatar:hover,
+  .detail-icon:hover,
+  .status-badge:hover,
+  .rule-tag:hover,
+  .section-badge:hover,
+  .hero-video-label:hover {
+    scale: var(--zoom-small);
+  }
+
+  /* Khối canh trái, rộng hết khung: phóng ra từ cạnh trái để chữ không bị đẩy ra ngoài mép màn hình */
+  .section-title,
+  .eyebrow {
+    transform-origin: left center;
+  }
+
+  /* Các phần tử hiện dần khi cuộn: giữ nguyên thời gian hiện dần 0.7s, chỉ thêm zoom */
+  .fade-in,
+  .fade-in-left,
+  .fade-in-right {
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out, scale var(--zoom-time) ease;
+  }
+
+  /* Hiện dần xong thì bỏ độ trễ so le, để zoom phản ứng ngay (class do script trong index.html thêm) */
+  .is-settled {
+    transition-delay: 0s !important;
+  }
+}

@@ -977,6 +977,11 @@
 
     animatedElements.forEach(function (el) { observer.observe(el); });
 
+    /* Hiện dần xong thì thêm is-settled để hiệu ứng zoom khi hover không bị trễ */
+    document.addEventListener("transitionend", function (e) {
+      if (e.propertyName === "opacity" && /fade-in/.test(e.target.className)) e.target.classList.add("is-settled");
+    });
+
     /* --- Video hero: khi chạy hết thì phát lại từ đầu (dự phòng cho thuộc tính loop) --- */
     const heroVideo = document.getElementById('heroVideo');
     heroVideo.addEventListener('ended', function () {
