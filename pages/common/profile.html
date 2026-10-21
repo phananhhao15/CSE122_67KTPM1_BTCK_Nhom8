@@ -83,6 +83,7 @@
         </div>
       </div>
     </div>
+    <script src="../../js/api.js"></script>
     <script src="../../js/main.js"></script>
     <script src="../../js/modules/common.js"></script>
     <script>
@@ -98,6 +99,28 @@
           email: email.value.trim(),
           phone: phone.value.trim(),
         };
+        // Cập nhật tài khoản trong api.js để đăng nhập lại và máy khác (qua MockAPI) thấy thông tin mới
+        if (window.siteSafeApi) {
+          const users = siteSafeApi.getUsers();
+          const account = users.find((user) => user.id === profile.id);
+          const emailTaken = users.some(
+            (user) =>
+              user.id !== profile.id &&
+              (user.email || "").toLowerCase() === updatedProfile.email.toLowerCase(),
+          );
+          if (emailTaken) {
+            message.textContent = "Email này đã được tài khoản khác sử dụng.";
+            return;
+          }
+          if (account) {
+            siteSafeApi.saveUser({
+              ...account,
+              fullName: updatedProfile.fullName,
+              email: updatedProfile.email,
+              phone: updatedProfile.phone,
+            });
+          }
+        }
         localStorage.setItem("siteSafeUser", JSON.stringify(updatedProfile));
         message.textContent = "Đã lưu thông tin hồ sơ.";
       });

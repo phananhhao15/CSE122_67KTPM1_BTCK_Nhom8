@@ -12,8 +12,14 @@
     return `../../assets/data/${filename}`;
   }
 
+  // Có api.js thì dùng dữ liệu đào tạo chung (được đồng bộ lên MockAPI).
+  function getApi() {
+    return window.siteSafeApi && window.siteSafeApi.trainings ? window.siteSafeApi : null;
+  }
+
   // Tải danh sách khóa huấn luyện từ assets/data/trainings.json.
   async function loadTrainings() {
+    if (getApi()) return getApi().trainings.getAllSync();
     try {
       const res = await fetch(getDataPath("trainings.json"));
       if (res.ok) {
@@ -49,6 +55,7 @@
 
   // Lấy danh sách đào tạo từ LocalStorage (đồng bộ).
   function getTrainings() {
+    if (getApi()) return getApi().trainings.getAllSync();
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
@@ -111,6 +118,10 @@
 
   // Cập nhật trạng thái và tiến độ của một khóa học.
   function updateTrainingStatus(courseId, nextStatus) {
+    if (getApi()) {
+      getApi().trainings.updateStatusSync(courseId, nextStatus);
+      return getApi().trainings.getAllSync();
+    }
     const list = getTrainings();
     const index = list.findIndex((c) => c.id === courseId);
     if (index >= 0) {
