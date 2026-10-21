@@ -1020,7 +1020,7 @@
 /* Segmented control chọn vai trò */
 .auth-signin-roles {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 4px;
   padding: 4px;
   background: #eef2f7;
