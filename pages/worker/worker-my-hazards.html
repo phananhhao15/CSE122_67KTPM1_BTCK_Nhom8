@@ -1177,6 +1177,58 @@
         if (modal) modal.classList.remove("is-hidden");
       }
 
+      // Lấy ảnh hiện trường và thông tin từ đúng thẻ sự cố được bấm
+      function getCardData(id) {
+        const card = document.getElementById("card_" + id);
+        if (!card) return null;
+        const img = card.querySelector(".worker-card-thumb");
+        const badges = card.querySelectorAll(".worker-card-badges .badge");
+        const text = function (sel) {
+          const el = card.querySelector(sel);
+          return el ? el.textContent.trim() : "";
+        };
+        return {
+          imageSrc: img ? img.getAttribute("src") : "",
+          imageAlt: img ? img.getAttribute("alt") : "",
+          title: text(".worker-card-title"),
+          description: text(".worker-card-desc"),
+          zone: text(".worker-card-zone"),
+          date: text(".worker-card-date"),
+          statusBadge: badges[0] ? badges[0].cloneNode(true) : null,
+          riskBadge: badges[1] ? badges[1].cloneNode(true) : null,
+        };
+      }
+
+      function setBadge(containerId, badge) {
+        const box = document.getElementById(containerId);
+        if (box && badge) box.replaceChildren(badge);
+      }
+
+      function fillDetailModal(id) {
+        const data = getCardData(id);
+        if (!data) return;
+        const image = document.getElementById("detailImage");
+        if (image && data.imageSrc) {
+          image.src = data.imageSrc;
+          image.alt = data.imageAlt || "Hình ảnh hiện trường sự cố";
+        }
+        document.getElementById("detailModalTitle").textContent = data.title || "Chi tiết báo cáo nguy cơ";
+        document.getElementById("detailZone").textContent = data.zone;
+        document.getElementById("detailDate").textContent = data.date;
+        document.getElementById("detailDescription").textContent = data.description;
+        setBadge("detailRisk", data.riskBadge);
+        setBadge("detailStatus", data.statusBadge);
+      }
+
+      function fillEditModal(id) {
+        const data = getCardData(id);
+        if (!data) return;
+        if (editTitle) editTitle.value = data.title;
+        if (editDescription) editDescription.value = data.description;
+      }
+
+      let currentDetailId = "";
+
       document.addEventListener("click", function (e) {
         const target = e.target.closest("[data-action]");
         if (!target) return;
@@ -1185,10 +1237,11 @@
         const id = target.getAttribute("data-id");
 
         if (action === "view-detail") {
+          currentDetailId = id;
+          fillDetailModal(id);
           openModal(detailModal);
         } else if (action === "edit-hazard") {
-          if (editTitle) editTitle.value = "Mép sàn bê tông tầng cao chỉ che lưới cam, thợ đứng thang sát mép";
-          if (editDescription) editDescription.value = "Sàn bê tông tầng cao chưa có lan can cứng, chỉ căng lưới cam; công nhân vẫn dựng thang chữ A sát mép sàn...";
+          fillEditModal(id);
           openModal(editModal);
         } else if (action === "delete-hazard") {
           if (deleteHazardName) deleteHazardName.textContent = id || "Sự cố được chọn";
@@ -1198,6 +1251,7 @@
           closeModal(backdrop);
         } else if (action === "open-edit-from-detail") {
           closeModal(detailModal);
+          fillEditModal(currentDetailId);
           openModal(editModal);
         } else if (action === "reset-filters") {
           const search = document.getElementById("searchInput");

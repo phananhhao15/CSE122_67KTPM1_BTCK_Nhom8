@@ -76,6 +76,13 @@
         encodeURIComponent(
           '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="320"><rect width="100%" height="100%" fill="#e2e8f0"/><text x="50%" y="50%" fill="#64748b" font-family="Arial" font-size="22" text-anchor="middle">SiteSafe</text></svg>',
         );
+      // Ảnh minh họa riêng cho từng khóa học (lưu cục bộ, không phụ thuộc mạng).
+      const courseImages = {
+        "TR-001": "../../assets/images/training/tren-cao.svg",
+        "TR-002": "../../assets/images/training/pccc.svg",
+        "TR-003": "../../assets/images/training/dien.svg",
+        "TR-004": "../../assets/images/training/ho-mong.svg",
+      };
 
       // Escape dữ liệu động trước khi đưa vào innerHTML để tránh XSS.
       function escapeHtml(value) {
@@ -103,9 +110,8 @@
               typeof course.progress === "number"
                 ? course.progress
                 : info.progress;
-            const bgImage = course.image
-              ? `url('${escapeHtml(course.image)}'), `
-              : "";
+            const image = courseImages[course.id] || course.image;
+            const bgImage = image ? `url('${escapeHtml(image)}'), ` : "";
             return `
         <article class="course-card">
           <div class="course-thumbnail" style="background-image: ${bgImage}linear-gradient(135deg, var(--color-primary) 0%, #334155 100%); background-size: cover; background-position: center;">
