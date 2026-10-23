@@ -828,6 +828,10 @@ textarea.worker-form-control {
   color: var(--color-text);
 }
 
+.worker-table td:last-child {
+  white-space: nowrap;
+}
+
 .worker-table tr:hover td {
   background-color: #f8fafc;
 }
