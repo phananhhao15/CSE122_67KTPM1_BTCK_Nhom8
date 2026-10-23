@@ -607,6 +607,78 @@
 }
 
 /* 9. ĐIỀU HƯỚNG DƯỚI ĐÁY FORM (FOOTER NAV) */
+/* Đăng nhập nhanh tài khoản demo (login.html) */
+.demo-login {
+  margin-top: 22px;
+}
+
+.demo-login__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.demo-login__title::before,
+.demo-login__title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.demo-login__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.demo-login__btn {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 10px 12px;
+  font: inherit;
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.demo-login__btn strong {
+  font-size: 0.85rem;
+  color: #0f172a;
+}
+
+.demo-login__btn span {
+  overflow: hidden;
+  font-size: 0.72rem;
+  color: #64748b;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.demo-login__btn:hover {
+  background: #fff7ed;
+  border-color: #fb923c;
+}
+
+.demo-login__btn:focus-visible {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
+}
+
+.demo-login__btn:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
 .auth-footer-nav {
   margin-top: 24px;
   padding-top: 18px;

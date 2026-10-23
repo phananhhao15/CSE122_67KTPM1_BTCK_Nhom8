@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="css/landing.css" />
 </head>
 
-<body>
+<body data-default-theme="dark">
 
   <!-- ============ STICKY NAVBAR ============ -->
   <header class="site-header" id="siteHeader">
@@ -23,12 +23,13 @@
     </a>
 
     <nav class="main-nav" id="mainNav" aria-label="Điều hướng chính">
-      <a href="#gioi-thieu" class="active">Tổng quan</a>
-      <a href="#tinh-nang">Tính năng</a>
-      <a href="#cong-nhan">Quản lý</a>
-      <a href="pages/worker/worker-safety-checklist.html">Checklist</a>
-      <a href="pages/worker/worker-hazard-create.html">Báo cáo</a>
-      <a href="pages/training/safety-training.html">Huấn luyện</a>
+      <!-- data-sections: các phần trên trang làm sáng mục menu này khi cuộn tới -->
+      <a href="#gioi-thieu" class="active" data-sections="gioi-thieu">Tổng quan</a>
+      <a href="#tinh-nang" data-sections="tinh-nang quy-trinh">Tính năng</a>
+      <a href="#cong-nhan" data-sections="cong-nhan dia-diem">Quản lý</a>
+      <a href="pages/worker/worker-safety-checklist.html" data-sections="vai-tro">Checklist</a>
+      <a href="pages/worker/worker-hazard-create.html" data-sections="hoi-dap">Báo cáo</a>
+      <a href="pages/training/safety-training.html" data-sections="quy-tac">Huấn luyện</a>
     </nav>
 
     <div class="header-actions">
@@ -97,6 +98,25 @@
 
         <button class="login-modal__submit" id="loginModalSubmit" type="submit">Đăng nhập</button>
       </form>
+
+      <!-- Đăng nhập nhanh bằng tài khoản demo (bấm là vào thẳng trang của vai trò) -->
+      <div class="demo-login" role="group" aria-labelledby="demoLoginTitle">
+        <p class="demo-login__title" id="demoLoginTitle">Hoặc vào nhanh bằng tài khoản demo</p>
+        <div class="demo-login__grid">
+          <button type="button" class="demo-login__btn" data-demo-role="WORKER">
+            <strong>Công nhân</strong><span>hao.pa@sitesafe.test</span>
+          </button>
+          <button type="button" class="demo-login__btn" data-demo-role="SAFETY_OFFICER">
+            <strong>Cán bộ an toàn</strong><span>antoan.hoang@sitesafe.test</span>
+          </button>
+          <button type="button" class="demo-login__btn" data-demo-role="SITE_MANAGER">
+            <strong>Quản lý công trường</strong><span>quan.pm@sitesafe.test</span>
+          </button>
+          <button type="button" class="demo-login__btn" data-demo-role="ADMIN">
+            <strong>Quản trị viên</strong><span>admin@sitesafe.test</span>
+          </button>
+        </div>
+      </div>
 
       <p class="login-modal__foot">Chưa có tài khoản? <a href="pages/auth/register.html">Đăng ký tài khoản mới</a></p>
     </div>
@@ -913,6 +933,25 @@
           passInput.focus();
         }
       });
+
+      // Đăng nhập nhanh bằng tài khoản demo
+      const demoButtons = modal.querySelectorAll(".demo-login__btn");
+      demoButtons.forEach(function (btn) {
+        btn.addEventListener("click", async function () {
+          clearErrors();
+          demoButtons.forEach(function (b) { b.disabled = true; });
+          submitBtn.disabled = true;
+          try {
+            const sessionUser = await window.siteSafeAuth.loginDemo(btn.getAttribute("data-demo-role"));
+            showAlert("Đăng nhập demo thành công! Đang chuyển hướng...", "success");
+            setTimeout(function () { window.location.href = redirectUrl(sessionUser.role); }, 400);
+          } catch (err) {
+            demoButtons.forEach(function (b) { b.disabled = false; });
+            submitBtn.disabled = false;
+            showAlert(err.message || "Không đăng nhập được tài khoản demo");
+          }
+        });
+      });
     })();
   </script>
   <script>
@@ -933,7 +972,7 @@
 
     /* --- Active nav link tracking on scroll --- */
     const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.main-nav a[href^="#"]');
+    const navLinks = document.querySelectorAll('.main-nav a[data-sections]');
 
     function updateActiveNav() {
       let current = '';
@@ -943,11 +982,14 @@
           current = section.getAttribute('id');
         }
       });
+      // Phần cuối trang thấp, không cuộn lên được tới đỉnh: chạm đáy trang thì chọn phần cuối
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      if (atBottom && sections.length) {
+        current = sections[sections.length - 1].getAttribute('id');
+      }
       navLinks.forEach(function (link) {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === '#' + current) {
-          link.classList.add('active');
-        }
+        const linkSections = link.dataset.sections.split(' ');
+        link.classList.toggle('active', linkSections.includes(current));
       });
     }
     let navTicking = false;

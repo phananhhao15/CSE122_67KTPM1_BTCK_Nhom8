@@ -269,6 +269,36 @@
     return setCurrentUser(updatedUser);
   }
 
+  // Tài khoản demo: mỗi vai trò một tài khoản có sẵn trong DEFAULT_USERS
+  const DEMO_EMAILS = {
+    WORKER: "hao.pa@sitesafe.test",
+    SAFETY_OFFICER: "antoan.hoang@sitesafe.test",
+    SITE_MANAGER: "quan.pm@sitesafe.test",
+    ADMIN: "admin@sitesafe.test",
+  };
+
+  /**
+   * Đăng nhập nhanh bằng tài khoản demo của một vai trò (nút demo ở trang đăng nhập / trang chủ).
+   * Dữ liệu trên MockAPI có thể bị sửa (đổi mật khẩu, khóa tài khoản) khi demo, nên nếu đăng nhập
+   * thường thất bại thì tạo phiên trực tiếp từ DEFAULT_USERS để buổi demo không bị gián đoạn.
+   * @param {string} role - WORKER | SAFETY_OFFICER | SITE_MANAGER | ADMIN
+   */
+  async function loginDemo(role) {
+    const email = DEMO_EMAILS[role];
+    const demoUser = DEFAULT_USERS.find(function (u) {
+      return u.email === email;
+    });
+    if (!demoUser) {
+      throw new Error("Không có tài khoản demo cho vai trò này.");
+    }
+
+    try {
+      return await login({ emailOrUsername: demoUser.email, password: demoUser.password, role: role });
+    } catch (error) {
+      return setCurrentUser(demoUser);
+    }
+  }
+
   /**
    * Đăng ký tài khoản người dùng mới qua api.js
    */
@@ -384,6 +414,7 @@
     getCurrentUser,
     setCurrentUser,
     login,
+    loginDemo,
     logout,
     register,
     forgotPassword,

@@ -2348,3 +2348,188 @@ body.login-modal-open {
     transition-delay: 0s !important;
   }
 }
+
+/* ---------- 20b. Đăng nhập nhanh tài khoản demo (trong modal đăng nhập) ---------- */
+.demo-login {
+  margin-top: 20px;
+}
+
+.demo-login__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.demo-login__title::before,
+.demo-login__title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-hover);
+}
+
+.demo-login__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.demo-login__btn {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 10px 12px;
+  font: inherit;
+  text-align: left;
+  background: var(--bg-card);
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.demo-login__btn strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+}
+
+.demo-login__btn span {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.demo-login__btn:hover {
+  background: rgba(255, 139, 43, 0.1);
+  border-color: var(--accent-color);
+}
+
+.demo-login__btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.demo-login__btn:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+/* ---------- 21. Giao diện sáng (nút mặt trời/mặt trăng trên thanh điều hướng) ----------
+   Trang chủ mặc định tối. js/main.js đặt <html data-theme="light"> khi người dùng chọn
+   giao diện sáng (lựa chọn lưu chung với các trang bên trong ở localStorage "siteSafeTheme"). */
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Đang tối: hiện mặt trời (bấm để sang sáng); đang sáng: hiện mặt trăng */
+.wcl-theme-btn__sun,
+html[data-theme="light"] .wcl-theme-btn__moon {
+  display: grid;
+}
+
+.wcl-theme-btn__moon,
+html[data-theme="light"] .wcl-theme-btn__sun {
+  display: none;
+}
+
+.wcl-theme-btn__sun {
+  color: #fbbf24;
+}
+
+html[data-theme="light"] {
+  --bg-color: #f4f6fa;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fafc;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --border-color: rgba(15, 23, 42, 0.09);
+  --border-hover: rgba(15, 23, 42, 0.18);
+  --primary-light: #2563eb;
+  --accent-color: #ea580c;
+  --white: #0f172a;
+  --shadow-card: 0 4px 24px rgba(15, 23, 42, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(15, 23, 42, 0.08);
+}
+
+html[data-theme="light"] .site-header,
+html[data-theme="light"] .site-header.scrolled {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06);
+}
+
+html[data-theme="light"] .main-nav a:hover,
+html[data-theme="light"] .nav-button--login:hover,
+html[data-theme="light"] .menu-toggle:hover,
+html[data-theme="light"] .worker-action-btn,
+html[data-theme="light"] .site-stat,
+html[data-theme="light"] .footer-social-link,
+html[data-theme="light"] .login-modal__close:hover {
+  background: rgba(15, 23, 42, 0.05);
+}
+
+html[data-theme="light"] .site-progress-bar {
+  background: rgba(15, 23, 42, 0.08);
+}
+
+/* Chữ nằm trên nền màu đậm hoặc trên ảnh/video: giữ màu trắng */
+html[data-theme="light"] .btn-primary,
+html[data-theme="light"] .worker-avatar,
+html[data-theme="light"] .contact-fb,
+html[data-theme="light"] .hero-video-label {
+  color: #ffffff;
+}
+
+html[data-theme="light"] .btn-outline,
+html[data-theme="light"] .btn-outline:hover {
+  color: var(--text-primary);
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.3);
+}
+
+/* Cam nhạt khó đọc trên nền sáng: dùng cam đậm cho nhãn */
+html[data-theme="light"] .eyebrow,
+html[data-theme="light"] .rule-tag {
+  color: #c2410c;
+}
+
+html[data-theme="light"] .status-badge--present { color: #16a34a; }
+html[data-theme="light"] .status-badge--absent { color: #dc2626; }
+html[data-theme="light"] .status-badge--warning { color: #b45309; }
+html[data-theme="light"] .status-badge--ok { color: #0e7490; }
+
+html[data-theme="light"] .login-modal__alert {
+  color: #b91c1c;
+}
+
+html[data-theme="light"] .login-modal__alert--success {
+  color: #15803d;
+}
