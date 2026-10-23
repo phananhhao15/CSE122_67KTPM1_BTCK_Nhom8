@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../../css/responsive.css" />
   <style>
     .inspection-page {
-      width: min(1200px, calc(100% - 32px));
+      width: 100%;
       margin: 0 auto;
       padding: 30px 0;
     }
@@ -75,7 +75,9 @@
       font-weight: 600;
     }
 
-    .filter-card .btn {
+    .filter-card .btn,
+    .filter-card .form-control {
+      height: 44px;
       min-height: 44px;
     }
 
@@ -84,8 +86,57 @@
       -webkit-overflow-scrolling: touch;
     }
 
+    /* Tiêu đề danh sách: tên bên trái; số lượng + nút "Thêm đợt" cùng một hàng bên phải */
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      color: var(--color-primary);
+      font-size: 1.35rem;
+    }
+
+    .section-heading > div {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Mỗi đợt kiểm tra nằm gọn trên một dòng ngang: không bẻ chữ, nút thao tác xếp liền một hàng */
     .inspection-table {
-      min-width: 900px;
+      min-width: 0;
+    }
+
+    .inspection-table th,
+    .inspection-table td {
+      padding: 14px 8px;
+      font-size: 0.86rem;
+      white-space: nowrap;
+    }
+
+    .inspection-table th:first-child,
+    .inspection-table td:first-child {
+      padding-left: 12px;
+    }
+
+    .inspection-table th:last-child,
+    .inspection-table td:last-child {
+      padding-right: 12px;
+      text-align: right;
+    }
+
+    .inspection-table td:last-child .btn {
+      padding: 6px 10px;
+      font-size: 0.82rem;
+    }
+
+    .inspection-table td:last-child .btn + .btn {
+      margin-left: 4px;
     }
 
     .inspection-form {
