@@ -1,0 +1,553 @@
+/* ==========================================================================
+   GIAO DIỆN TỐI DÙNG CHUNG
+   Nạp cho mọi trang qua @import ở đầu css/style.css.
+   js/main.js đặt <html data-theme="dark"> trên các trang có topbar khi người dùng
+   bấm nút đổi giao diện (lưu ở localStorage "siteSafeTheme").
+   Mọi luật đều bắt đầu bằng html[data-theme="dark"] để thắng luật sáng trong
+   css từng trang mà không phải sửa các file đó.
+   ========================================================================== */
+
+/* 1. BIẾN MÀU */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --color-primary: #e2e8f0;
+  --color-border: #263248;
+  --color-background: #0b1220;
+  --color-text: #cbd5e1;
+  --dk-surface: #131c2e;
+  --dk-surface-2: #1a2539;
+  --dk-border-strong: #33415c;
+  --dk-muted: #94a3b8;
+}
+
+html[data-theme="dark"] .wcl-app {
+  --wcl-bg: #0b1220;
+  --wcl-surface: #131c2e;
+  --wcl-border: #263248;
+  --wcl-text: #e2e8f0;
+  --wcl-muted: #94a3b8;
+  --wcl-subtle: #64748b;
+  --wcl-orange-dark: #fb923c;
+  --wcl-orange-soft: rgba(249, 115, 22, 0.14);
+  --wcl-green-soft: rgba(34, 197, 94, 0.12);
+  --wcl-green-border: rgba(34, 197, 94, 0.35);
+  --wcl-red-soft: rgba(239, 68, 68, 0.12);
+  --wcl-red-border: rgba(239, 68, 68, 0.38);
+  --wcl-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+html[data-theme="dark"] body {
+  background-color: var(--color-background);
+}
+
+/* 2. KHUNG TOPBAR (css/shell.css) */
+html[data-theme="dark"] .wcl-topbar {
+  background: rgba(11, 18, 32, 0.9);
+}
+
+html[data-theme="dark"] .wcl-icon-btn,
+html[data-theme="dark"] .wcl-btn--ghost,
+html[data-theme="dark"] .wcl-search input,
+html[data-theme="dark"] .wcl-search input:focus {
+  background: var(--dk-surface);
+}
+
+html[data-theme="dark"] .wcl-icon-btn:hover,
+html[data-theme="dark"] .wcl-btn--ghost:hover {
+  border-color: var(--dk-border-strong);
+}
+
+html[data-theme="dark"] .wcl-icon-btn__dot {
+  border-color: var(--dk-surface);
+}
+
+/* Nút đổi giao diện: hiện mặt trăng ở chế độ sáng, mặt trời ở chế độ tối */
+.wcl-theme-btn .wcl-theme-btn__moon,
+html[data-theme="dark"] .wcl-theme-btn .wcl-theme-btn__sun {
+  display: grid;
+}
+
+.wcl-theme-btn .wcl-theme-btn__sun,
+html[data-theme="dark"] .wcl-theme-btn .wcl-theme-btn__moon {
+  display: none;
+}
+
+html[data-theme="dark"] .wcl-theme-btn .wcl-theme-btn__sun {
+  color: #fbbf24;
+}
+
+/* 3. THÀNH PHẦN CHUNG (css/style.css) */
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .table,
+html[data-theme="dark"] .form-control {
+  background-color: var(--dk-surface);
+}
+
+html[data-theme="dark"] .form-control {
+  border-color: var(--dk-border-strong);
+}
+
+html[data-theme="dark"] .table th {
+  background-color: var(--dk-surface-2);
+}
+
+html[data-theme="dark"] .btn {
+  color: #fff;
+  background-color: #334155;
+  border-color: #334155;
+}
+
+html[data-theme="dark"] .btn-warning {
+  background-color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+html[data-theme="dark"] .btn-danger {
+  background-color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+html[data-theme="dark"] .btn-success {
+  background-color: #16a34a;
+  border-color: #16a34a;
+}
+
+html[data-theme="dark"] .badge {
+  background-color: #2a3650;
+}
+
+html[data-theme="dark"] .badge-warning,
+html[data-theme="dark"] .badge-high {
+  color: #fdba74;
+  background-color: rgba(249, 115, 22, 0.16);
+}
+
+html[data-theme="dark"] .badge-danger,
+html[data-theme="dark"] .badge-critical {
+  color: #fca5a5;
+  background-color: rgba(239, 68, 68, 0.16);
+}
+
+html[data-theme="dark"] .badge-success,
+html[data-theme="dark"] .badge-completed {
+  color: #86efac;
+  background-color: rgba(34, 197, 94, 0.14);
+}
+
+html[data-theme="dark"] .badge-medium {
+  color: #fde047;
+  background-color: rgba(234, 179, 8, 0.14);
+}
+
+html[data-theme="dark"] .badge-scheduled {
+  color: #93c5fd;
+  background-color: rgba(59, 130, 246, 0.16);
+}
+
+/* 4. QUẢN TRỊ VIÊN (css/admin.css) */
+html[data-theme="dark"] .users-banner,
+html[data-theme="dark"] .template-banner,
+html[data-theme="dark"] .zones-banner,
+html[data-theme="dark"] .role-admin {
+  background: #1e293b;
+}
+
+html[data-theme="dark"] .action-buttons .btn-edit,
+html[data-theme="dark"] .user-actions .edit-user,
+html[data-theme="dark"] .zone-actions .edit-zone {
+  color: var(--color-primary);
+  background-color: var(--dk-surface-2);
+  border-color: var(--dk-border-strong);
+}
+
+html[data-theme="dark"] .action-buttons .btn-edit:hover,
+html[data-theme="dark"] .user-actions .edit-user:hover,
+html[data-theme="dark"] .zone-actions .edit-zone:hover {
+  color: #0b1220;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+html[data-theme="dark"] .question-note {
+  color: var(--dk-muted);
+}
+
+/* 5. QUẢN LÝ CÔNG TRƯỜNG (css/manager.css) */
+html[data-theme="dark"] .actions-banner,
+html[data-theme="dark"] .report-banner {
+  background: #1e293b;
+}
+
+html[data-theme="dark"] .map-panel,
+html[data-theme="dark"] .zone-card,
+html[data-theme="dark"] .donut::after {
+  background: var(--dk-surface);
+}
+
+html[data-theme="dark"] .zone-card:hover {
+  border-color: var(--dk-border-strong);
+}
+
+html[data-theme="dark"] .bar {
+  background: #64748b;
+}
+
+html[data-theme="dark"] .summary-card {
+  border-top-color: #64748b;
+}
+
+html[data-theme="dark"] td .action-context {
+  color: var(--dk-muted);
+}
+
+/* 6. HUẤN LUYỆN (css/training.css) */
+html[data-theme="dark"] .course-card,
+html[data-theme="dark"] .course-badge {
+  background: var(--dk-surface);
+}
+
+/* Ảnh khóa học dựng nền bằng style nội tuyến từ biến màu: giữ màu tối gốc */
+html[data-theme="dark"] .course-thumbnail {
+  --color-primary: #1e293b;
+}
+
+html[data-theme="dark"] .course-badge {
+  color: #e2e8f0;
+}
+
+html[data-theme="dark"] .course-card:hover {
+  border-color: var(--dk-border-strong);
+}
+
+html[data-theme="dark"] .btn-course {
+  background: var(--dk-surface-2);
+}
+
+html[data-theme="dark"] .btn-course:hover {
+  color: #0b1220;
+  background: var(--color-primary);
+}
+
+/* 7. CÁN BỘ AN TOÀN & TÀI KHOẢN (khối <style> trong trang) */
+html[data-theme="dark"] .urgent-table tbody tr[data-detail-url]:focus {
+  background-color: rgba(59, 130, 246, 0.12);
+}
+
+html[data-theme="dark"] .section-heading a {
+  color: #60a5fa;
+}
+
+html[data-theme="dark"] .officer-profile img {
+  border-color: #1e3a8a;
+}
+
+html[data-theme="dark"] .inspection-form {
+  background: var(--dk-surface-2);
+}
+
+html[data-theme="dark"] .info-description {
+  color: var(--color-text);
+}
+
+html[data-theme="dark"] .notification small,
+html[data-theme="dark"] .setting small,
+html[data-theme="dark"] .dashboard-header p,
+html[data-theme="dark"] .stat-label,
+html[data-theme="dark"] .zone-name,
+html[data-theme="dark"] .detail-header p,
+html[data-theme="dark"] .photo-caption,
+html[data-theme="dark"] .info-list dt,
+html[data-theme="dark"] .assignment-actions p,
+html[data-theme="dark"] .inspection-header p,
+html[data-theme="dark"] .inspection-meta,
+html[data-theme="dark"] .empty-row {
+  color: var(--dk-muted);
+}
+
+/* 8. CÔNG NHÂN (css/worker.css) */
+
+/* 8.1 Nền thẻ, ô nhập, bảng */
+html[data-theme="dark"] .worker-stat-card,
+html[data-theme="dark"] .worker-active-filter__clear,
+html[data-theme="dark"] .worker-state,
+html[data-theme="dark"] .worker-state--empty,
+html[data-theme="dark"] .worker-card,
+html[data-theme="dark"] .worker-form-control,
+html[data-theme="dark"] .worker-filter-bar,
+html[data-theme="dark"] .worker-search-input,
+html[data-theme="dark"] .worker-filter-select,
+html[data-theme="dark"] .worker-sort-select,
+html[data-theme="dark"] .worker-view-btn--active,
+html[data-theme="dark"] .worker-hazard-card,
+html[data-theme="dark"] .worker-icon-btn,
+html[data-theme="dark"] .worker-card-btn--detail,
+html[data-theme="dark"] .worker-table-wrap,
+html[data-theme="dark"] .worker-pagination-wrap,
+html[data-theme="dark"] .worker-btn-load-more,
+html[data-theme="dark"] .worker-page-btn,
+html[data-theme="dark"] .worker-progress-wrap,
+html[data-theme="dark"] .worker-checklist-row,
+html[data-theme="dark"] .worker-item-notes-textarea,
+html[data-theme="dark"] .worker-item-photo-btn,
+html[data-theme="dark"] .worker-ai-summary-card,
+html[data-theme="dark"] .worker-ai-reason-box,
+html[data-theme="dark"] .worker-ai-btn--edit,
+html[data-theme="dark"] .worker-modal,
+html[data-theme="dark"] .worker-timeline-dot,
+html[data-theme="dark"] .wcl-field__input,
+html[data-theme="dark"] .wcl-tab.is-active,
+html[data-theme="dark"] .wcl-item,
+html[data-theme="dark"] .wcl-detail__note,
+html[data-theme="dark"] .wcl-severity label,
+html[data-theme="dark"] .wcl-photo-add,
+html[data-theme="dark"] .worker-btn-retry {
+  background-color: var(--dk-surface);
+}
+
+html[data-theme="dark"] .worker-state--loading {
+  background: rgba(19, 28, 46, 0.9);
+}
+
+html[data-theme="dark"] .wcl-app select.worker-form-control {
+  background-color: var(--dk-surface);
+}
+
+/* 8.2 Nền phụ (xám nhạt) */
+html[data-theme="dark"] .worker-stat-icon,
+html[data-theme="dark"] .worker-state__icon,
+html[data-theme="dark"] .worker-form-control:disabled,
+html[data-theme="dark"] .worker-filter-reset,
+html[data-theme="dark"] .worker-view-toggle,
+html[data-theme="dark"] .worker-card-actions,
+html[data-theme="dark"] .worker-table th,
+html[data-theme="dark"] .worker-table tr:hover td,
+html[data-theme="dark"] .worker-checklist-item-type,
+html[data-theme="dark"] .worker-choice-group,
+html[data-theme="dark"] .worker-item-expand,
+html[data-theme="dark"] .worker-upload-box,
+html[data-theme="dark"] .worker-ai-standard-ref,
+html[data-theme="dark"] .worker-modal__footer,
+html[data-theme="dark"] .worker-detail-box,
+html[data-theme="dark"] .worker-timeline-content,
+html[data-theme="dark"] .worker-count-pill--na,
+html[data-theme="dark"] .wcl-tabs,
+html[data-theme="dark"] .wcl-item[data-status="NA"],
+html[data-theme="dark"] .wcl-seg,
+html[data-theme="dark"] .wcl-stat {
+  background: var(--dk-surface-2);
+}
+
+html[data-theme="dark"] .worker-icon-btn:hover,
+html[data-theme="dark"] .worker-card-btn--detail:hover,
+html[data-theme="dark"] .worker-page-btn:hover,
+html[data-theme="dark"] .worker-item-photo-btn:hover,
+html[data-theme="dark"] .worker-ai-btn--edit:hover,
+html[data-theme="dark"] .worker-modal__close:hover,
+html[data-theme="dark"] .worker-filter-reset:hover,
+html[data-theme="dark"] .worker-choice-btn:hover,
+html[data-theme="dark"] .wcl-tab__count {
+  background: #26324a;
+}
+
+/* 8.3 Đường viền */
+html[data-theme="dark"] .worker-state--empty,
+html[data-theme="dark"] .worker-hazard-card:hover,
+html[data-theme="dark"] .worker-icon-btn,
+html[data-theme="dark"] .worker-card-btn--detail,
+html[data-theme="dark"] .worker-filter-reset,
+html[data-theme="dark"] .worker-checklist-row:hover,
+html[data-theme="dark"] .worker-choice-group,
+html[data-theme="dark"] .worker-item-expand,
+html[data-theme="dark"] .worker-item-photo-btn,
+html[data-theme="dark"] .worker-upload-box,
+html[data-theme="dark"] .worker-ai-reason-box,
+html[data-theme="dark"] .worker-ai-btn--edit,
+html[data-theme="dark"] .worker-timeline-content,
+html[data-theme="dark"] .worker-count-pill--na,
+html[data-theme="dark"] .wcl-item[data-status="NA"],
+html[data-theme="dark"] .wcl-photo-add,
+html[data-theme="dark"] .wcl-field__input:hover,
+html[data-theme="dark"] .wcl-app .worker-form-control:hover {
+  border-color: var(--dk-border-strong);
+}
+
+html[data-theme="dark"] .worker-card-meta,
+html[data-theme="dark"] .worker-table td {
+  border-color: var(--color-border);
+}
+
+html[data-theme="dark"] .worker-progress-bar,
+html[data-theme="dark"] .worker-timeline::before {
+  background: var(--dk-border-strong);
+}
+
+/* 8.4 Chữ xám */
+html[data-theme="dark"] .worker-header__desc,
+html[data-theme="dark"] .worker-active-filter,
+html[data-theme="dark"] .worker-active-filter__count,
+html[data-theme="dark"] .worker-stat-icon,
+html[data-theme="dark"] .worker-stat-label,
+html[data-theme="dark"] .worker-state__icon,
+html[data-theme="dark"] .worker-state__desc,
+html[data-theme="dark"] .worker-filter-reset,
+html[data-theme="dark"] .worker-view-btn,
+html[data-theme="dark"] .worker-card-desc,
+html[data-theme="dark"] .worker-icon-btn,
+html[data-theme="dark"] .worker-table-desc,
+html[data-theme="dark"] .worker-pagination-info,
+html[data-theme="dark"] .worker-checklist-table thead th,
+html[data-theme="dark"] .worker-checklist-item-type,
+html[data-theme="dark"] .worker-choice-btn,
+html[data-theme="dark"] .worker-item-photo-btn,
+html[data-theme="dark"] .worker-upload-hint,
+html[data-theme="dark"] .worker-ai-actions-list,
+html[data-theme="dark"] .worker-ai-btn--retry,
+html[data-theme="dark"] .worker-detail-label,
+html[data-theme="dark"] .worker-timeline-desc,
+html[data-theme="dark"] .worker-count-pill--na,
+html[data-theme="dark"] .wcl-severity label,
+html[data-theme="dark"] .wcl-stat span {
+  color: var(--dk-muted);
+}
+
+/* 8.5 Nền nhạt theo trạng thái → nền trong suốt cùng tông */
+html[data-theme="dark"] .worker-stat-card.is-active,
+html[data-theme="dark"] .worker-upload-box:focus,
+html[data-theme="dark"] .worker-ai-actions-box,
+html[data-theme="dark"] .wcl-severity label[data-level="MEDIUM"].is-selected {
+  background: rgba(245, 158, 11, 0.12);
+}
+
+html[data-theme="dark"] .worker-stat-card.is-active .worker-stat-num,
+html[data-theme="dark"] .worker-btn-load-more,
+html[data-theme="dark"] .worker-ai-actions-title,
+html[data-theme="dark"] .wcl-severity label[data-level="MEDIUM"].is-selected {
+  color: #fbbf24;
+}
+
+html[data-theme="dark"] .worker-ai-actions-box {
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+html[data-theme="dark"] .worker-btn-load-more:hover {
+  color: #fcd34d;
+  background: rgba(245, 158, 11, 0.16);
+}
+
+html[data-theme="dark"] .worker-stat-icon--warning,
+html[data-theme="dark"] .worker-state__icon--empty,
+html[data-theme="dark"] .worker-icon-btn--edit,
+html[data-theme="dark"] .worker-card-btn--edit {
+  color: #fb923c;
+  background: rgba(249, 115, 22, 0.14);
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+html[data-theme="dark"] .worker-icon-btn--edit:hover,
+html[data-theme="dark"] .worker-card-btn--edit:hover {
+  background: rgba(249, 115, 22, 0.22);
+}
+
+html[data-theme="dark"] .worker-stat-icon--danger,
+html[data-theme="dark"] .worker-state--error,
+html[data-theme="dark"] .worker-state__icon--error,
+html[data-theme="dark"] .worker-icon-btn--trash,
+html[data-theme="dark"] .worker-card-btn--delete,
+html[data-theme="dark"] .worker-count-pill--fail,
+html[data-theme="dark"] .worker-fail-alert,
+html[data-theme="dark"] .worker-btn-create-hazard,
+html[data-theme="dark"] .worker-ai-btn--dismiss,
+html[data-theme="dark"] .worker-btn-retry,
+html[data-theme="dark"] .wcl-detail__note.is-invalid {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+html[data-theme="dark"] .worker-icon-btn--trash:hover,
+html[data-theme="dark"] .worker-card-btn--delete:hover,
+html[data-theme="dark"] .worker-btn-create-hazard:hover,
+html[data-theme="dark"] .worker-ai-btn--dismiss:hover,
+html[data-theme="dark"] .worker-btn-retry:hover,
+html[data-theme="dark"] .wcl-hazard-link:hover {
+  background: rgba(239, 68, 68, 0.22);
+}
+
+html[data-theme="dark"] .worker-state--error .worker-state__title {
+  color: #fca5a5;
+}
+
+html[data-theme="dark"] .worker-fail-alert {
+  border-left-color: #ef4444;
+}
+
+html[data-theme="dark"] .worker-checklist-row--fail,
+html[data-theme="dark"] .wcl-item[data-status="FAIL"] {
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+
+html[data-theme="dark"] .worker-stat-icon--success,
+html[data-theme="dark"] .worker-state--success,
+html[data-theme="dark"] .worker-count-pill--pass,
+html[data-theme="dark"] .worker-ai-tag,
+html[data-theme="dark"] .worker-ai-applied-notice,
+html[data-theme="dark"] .worker-ai-confidence {
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+html[data-theme="dark"] .worker-state--success .worker-state__title,
+html[data-theme="dark"] .worker-item-photo-preview,
+html[data-theme="dark"] .wcl-severity label[data-level="LOW"].is-selected,
+html[data-theme="dark"] .wcl-stat--pass span {
+  color: #86efac;
+}
+
+html[data-theme="dark"] .wcl-item[data-status="PASS"] {
+  background: rgba(34, 197, 94, 0.07);
+}
+
+/* Nhãn nằm trên ảnh: nền trong suốt không đọc được nên dùng nền tối đặc */
+html[data-theme="dark"] .worker-card-badges .badge {
+  background-color: rgba(11, 18, 32, 0.88);
+}
+
+/* 8.6 Bảng gợi ý AI */
+html[data-theme="dark"] .worker-ai-panel {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.08) 100%);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+html[data-theme="dark"] .worker-ai-brand,
+html[data-theme="dark"] .worker-ai-loading-text,
+html[data-theme="dark"] .worker-ai-category-label,
+html[data-theme="dark"] .worker-ai-standard-ref {
+  color: #6ee7b7;
+}
+
+html[data-theme="dark"] .worker-ai-summary-card {
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+html[data-theme="dark"] .worker-ai-progress-bar {
+  background: rgba(16, 185, 129, 0.25);
+}
+
+/* 8.7 Phần còn lại của trang công nhân */
+html[data-theme="dark"] .wcl-submit:disabled {
+  background: #334155;
+}
+
+html[data-theme="dark"] .wcl-hc__ai-bar {
+  border-color: rgba(249, 115, 22, 0.35);
+}
+
+/* Style nội tuyến trong modal chi tiết / xóa sự cố (worker-my-hazards.html) */
+html[data-theme="dark"] #detailDescription {
+  color: var(--color-text) !important;
+}
+
+html[data-theme="dark"] #deleteHazardName {
+  background: var(--dk-surface-2) !important;
+}

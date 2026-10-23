@@ -129,6 +129,8 @@ const shellIcons = {
   menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
   chevron: '<path d="m9 18 6-6-6-6"/>',
   logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
+  moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>',
 };
 
 function shellIcon(name, size) {
@@ -250,6 +252,81 @@ function loadSidebarMenu() {
     .addEventListener("click", logoutUser);
 }
 
+// Giao diện sáng/tối: lưu lựa chọn ở localStorage để giữ nguyên khi chuyển trang.
+// Áp dụng cho trang có khung sidebar/topbar (mặc định sáng) và trang chủ (mặc định tối,
+// khai báo bằng <body data-default-theme="dark">). Trang đăng nhập/đăng ký giữ nguyên.
+const THEME_STORAGE_KEY = "siteSafeTheme";
+
+function getSavedTheme() {
+  let savedTheme = null;
+
+  try {
+    savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+  } catch (error) {
+    // Trình duyệt chặn lưu trữ: dùng giao diện mặc định của trang.
+  }
+
+  if (savedTheme === "dark" || savedTheme === "light") {
+    return savedTheme;
+  }
+  return document.body.dataset.defaultTheme === "dark" ? "dark" : "light";
+}
+
+function supportsTheme() {
+  return Boolean(document.querySelector(".app-layout, .wcl-app, .site-header"));
+}
+
+function applyTheme(theme) {
+  if (!supportsTheme()) {
+    return;
+  }
+
+  document.documentElement.dataset.theme = theme;
+  document.querySelectorAll(".wcl-theme-btn").forEach((button) => {
+    const isDark = theme === "dark";
+    button.setAttribute("aria-pressed", String(isDark));
+    button.setAttribute("aria-label", isDark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối");
+    button.title = isDark ? "Giao diện sáng" : "Giao diện tối";
+  });
+}
+
+function toggleTheme() {
+  const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+  } catch (error) {
+    // Trình duyệt chặn lưu trữ: vẫn đổi giao diện cho trang hiện tại.
+  }
+
+  applyTheme(nextTheme);
+}
+
+// Gắn nút đổi giao diện vào topbar (cả topbar do main.js dựng lẫn topbar viết sẵn ở trang worker)
+// hoặc vào cụm nút Đăng nhập/Đăng ký trên thanh điều hướng trang chủ.
+function mountThemeToggle() {
+  const topbar = document.querySelector(".wcl-topbar");
+  const landingActions = document.querySelector(".site-header .header-actions");
+  const container = topbar || landingActions;
+
+  if (!container || container.querySelector(".wcl-theme-btn")) {
+    return;
+  }
+
+  const button = document.createElement("button");
+  button.className = topbar ? "wcl-icon-btn wcl-theme-btn" : "theme-toggle wcl-theme-btn";
+  button.type = "button";
+  button.innerHTML = `<span class="wcl-theme-btn__moon">${shellIcon("moon", 20)}</span><span class="wcl-theme-btn__sun">${shellIcon("sun", 20)}</span>`;
+  button.addEventListener("click", toggleTheme);
+
+  if (topbar) {
+    topbar.insertBefore(button, topbar.querySelector(".wcl-topbar-user"));
+  } else {
+    landingActions.prepend(button);
+  }
+  applyTheme(getSavedTheme());
+}
+
 // Đọc phiên đăng nhập hiện tại.
 function getCurrentUser() {
   const savedUser = localStorage.getItem("siteSafeUser");
@@ -294,14 +371,17 @@ function logoutUser() {
   window.location.href = `${getProjectRootPrefix()}pages/auth/login.html`;
 }
 
-// main.js nạp ở cuối <body> nên dựng khung ngay để tránh nháy giao diện cũ.
+// main.js nạp ở cuối <body> nên dựng khung và áp giao diện ngay để tránh nháy giao diện cũ.
+applyTheme(getSavedTheme());
 if (document.readyState === "loading") {
   loadSidebarMenu();
+  mountThemeToggle();
 }
 
 // Chạy các chức năng dùng chung khi trang đã sẵn sàng.
 document.addEventListener("DOMContentLoaded", function () {
   loadSidebarMenu();
+  mountThemeToggle();
   const currentUser = checkAuthState();
 
   if (currentUser) {
@@ -316,4 +396,5 @@ window.siteSafeMain = {
   getCurrentUser,
   loadSidebarMenu,
   logoutUser,
+  toggleTheme,
 };

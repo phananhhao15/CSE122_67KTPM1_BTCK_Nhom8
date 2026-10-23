@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 /* Khung sidebar/topbar dùng chung cho mọi trang (xem css/shell.css). */
 @import url('shell.css');
+/* Màu giao diện tối, bật bằng nút trên topbar (xem css/theme.css). */
+@import url('theme.css');
 
 /* Màu dùng chung cho toàn bộ ứng dụng. */
 :root {
@@ -189,12 +191,15 @@ body {
 /* Nhãn trạng thái ngắn gọn. */
 .badge {
   display: inline-block;
-  padding: 4px 8px;
+  max-width: 100%;
+  padding: 4px 12px;
   color: var(--color-primary);
   background-color: #e2e8f0;
   border-radius: 999px;
   font-size: 0.875rem;
   font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
 .badge-warning {
