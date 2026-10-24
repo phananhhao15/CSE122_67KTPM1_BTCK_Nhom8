@@ -36,6 +36,8 @@
     API_BASE_URL: "https://api.sitesafe.vn/v1",
     SIMULATE_LATENCY: 120, // Độ trễ giả lập (ms) mô phỏng mạng thật
     // Địa chỉ MockAPI của dự án, dạng https://<project-id>.mockapi.io (không có dấu / ở cuối).
+    // >>> LINK MOCKAPI CỦA DỰ ÁN NẰM Ở DÒNG MOCKAPI_URL BÊN DƯỚI <<<
+    // Hai resource đang dùng: /user (tài khoản) và /data (các nhóm còn lại) - xem MOCK_RESOURCES ở mục 3b.
     // Để trống thì chạy hoàn toàn bằng LocalStorage. Có thể thử nhanh bằng siteSafeApi.mock.setUrl(...)
     MOCKAPI_URL: "https://6ad86fff95e98f36aef364ba.mockapi.io",
   };

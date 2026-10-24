@@ -218,6 +218,8 @@
             <p class="worker-state__desc" id="successDesc">
               Báo cáo sự cố của bạn đã được lưu vào hệ thống và gửi thông báo đến cán bộ an toàn phụ trách.
             </p>
+            <!-- Nội dung báo cáo vừa gửi (render bằng JS khi gửi) -->
+            <section class="wcl-review is-hidden" id="hazardReview" aria-label="Nội dung báo cáo đã gửi"></section>
             <div class="wcl-hc__state-actions">
               <a class="wcl-btn wcl-btn--primary" id="viewHazardsAfterCreateBtn" href="worker-my-hazards.html">Xem danh sách sự cố đã gửi</a>
               <button class="wcl-btn wcl-btn--ghost" id="createAnotherBtn" data-action="create-another" type="button">Gửi báo cáo mới khác</button>
@@ -824,6 +826,17 @@
           if (descErr) descErr.classList.add("is-hidden");
         }
 
+        // Cuộn tới ô lỗi đầu tiên để người dùng thấy ngay
+        if (!valid) {
+          const firstBad = [["hazardZone", !zoneVal], ["hazardTitle", !titleVal], ["hazardDescription", !descVal]]
+            .filter(function (p) { return p[1]; })[0];
+          const fieldEl = firstBad && document.getElementById(firstBad[0]);
+          if (fieldEl) {
+            fieldEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            fieldEl.focus({ preventScroll: true });
+          }
+        }
+
         return valid;
       }
 
@@ -841,6 +854,32 @@
         btn.disabled = isLoading;
         if (spinner) spinner.classList.toggle("is-hidden", !isLoading);
         if (btnText) btnText.textContent = isLoading ? "Đang gửi..." : "Gửi báo cáo nguy cơ";
+      }
+
+      // Hiển thị lại nội dung báo cáo vừa gửi (chỉ đọc)
+      function renderSubmittedHazard(h) {
+        const box = document.getElementById("hazardReview");
+        if (!box || !h) return;
+        const esc = worker.escapeHtml;
+        const d = new Date(h.reportedAt);
+        const p = function (n) { return String(n).padStart(2, "0"); };
+        const when = isNaN(d.getTime()) ? "" : p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds()) +
+          " " + p(d.getDate()) + "/" + p(d.getMonth() + 1) + "/" + d.getFullYear();
+        const row = function (label, value) {
+          return '<div class="wcl-hreview__row"><span>' + label + "</span><div>" + value + "</div></div>";
+        };
+        box.innerHTML =
+          '<h3 class="wcl-review__title">Báo cáo ' + esc(h.id) + (when ? " · " + when : "") + "</h3>" +
+          (h.image ? '<img class="wcl-hreview__img" src="' + esc(h.image) + '" alt="Ảnh hiện trường đã gửi" />' : "") +
+          row("Tiêu đề", "<strong>" + esc(h.title) + "</strong>") +
+          row("Khu vực", esc(h.zoneName)) +
+          row("Nhóm nguy cơ", esc(h.category)) +
+          row("Mức rủi ro", '<span class="badge ' + worker.getRiskBadgeClass(h.riskLevel) + '">' + esc(worker.getRiskLabel(h.riskLevel)) + "</span>") +
+          row("Trạng thái", '<span class="badge ' + worker.getStatusBadgeClass(h.status) + '">' + esc(worker.getStatusLabel(h.status)) + "</span>") +
+          row("Mô tả", esc(h.description)) +
+          (h.aiClassified ? row("Gợi ý AI-1", esc(h.aiCategory) + " · " + esc(worker.getRiskLabel(h.aiRiskLevel)) +
+            (h.aiConfidence ? " · độ tin cậy " + esc(h.aiConfidence) + "%" : "")) : "");
+        box.classList.remove("is-hidden");
       }
 
       if (hazardFormEl) {
@@ -894,7 +933,9 @@
             if (successDescEl) {
               successDescEl.textContent = "Báo cáo sự cố \"" + titleVal + "\" tại " + zoneName + " đã được lưu (Mã: " + (saved.id || "N/A") + ").";
             }
+            renderSubmittedHazard(saved);
             showPageState("pageSuccessState");
+            window.scrollTo({ top: 0, behavior: "smooth" });
           } catch (err) {
             showPageError("Không thể gửi báo cáo: " + (err && err.message ? err.message : String(err)));
           } finally {

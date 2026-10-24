@@ -247,12 +247,27 @@
   // Báo cáo nguy cơ mới qua api.js
   function reportHazard(hazardData) {
     const api = getApi();
+    const reportedAt = hazardData.reportedAt || new Date().toISOString();
     const newHazard = {
       ...hazardData,
+      // Mỗi lần gửi là một báo cáo riêng, mã theo ngày giờ gửi: HZ-yyyyMMdd-HHmmss
+      id: hazardData.id || makeStampId("HZ", new Date(reportedAt)),
       status: hazardData.status || "OPEN",
-      reportedAt: hazardData.reportedAt || new Date().toISOString(),
+      reportedAt: reportedAt,
     };
     return api.saveHazard(newHazard);
+  }
+
+  // Báo cáo do người dùng gửi từ trang tạo nguy cơ (mã dạng HZ-yyyyMMdd-HHmmss), mới nhất trước
+  function getSubmittedHazards(userOrEmail) {
+    const email = String(typeof userOrEmail === "object" && userOrEmail ? userOrEmail.email : userOrEmail || "")
+      .trim().toLowerCase();
+    return getApi().getHazards()
+      .filter(function (h) {
+        return h && /^HZ-\d{8}-\d{6}$/.test(String(h.id)) &&
+          (!email || String(h.reportedBy || "").trim().toLowerCase() === email);
+      })
+      .sort(function (a, b) { return String(b.reportedAt).localeCompare(String(a.reportedAt)); });
   }
 
   // Cập nhật thông tin nguy cơ qua api.js
@@ -271,11 +286,36 @@
   // Lưu kết quả kiểm tra checklist ca làm việc qua api.js
   function submitChecklist(resultData) {
     const api = getApi();
+    const submittedAt = resultData.submittedAt || new Date().toISOString();
     const record = {
       ...resultData,
-      submittedAt: resultData.submittedAt || new Date().toISOString(),
+      // Mỗi lần nộp là một phiếu riêng, mã theo ngày giờ nộp: PKT-yyyyMMdd-HHmmss
+      id: resultData.id || makeStampId("PKT", new Date(submittedAt)),
+      submittedAt: submittedAt,
     };
     return api.saveChecklistResult(record);
+  }
+
+  function makeStampId(prefix, d) {
+    const p = function (n) { return String(n).padStart(2, "0"); };
+    return prefix + "-" + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) +
+      "-" + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds());
+  }
+
+  // Lịch sử phiếu kiểm tra an toàn đã nộp của người dùng (mới nhất trước)
+  function getMyChecklistSubmissions(userOrEmail) {
+    const api = getApi();
+    const all = api.checklists && api.checklists.getResultsSync ? api.checklists.getResultsSync() : [];
+    const email = String(typeof userOrEmail === "object" && userOrEmail ? userOrEmail.email : userOrEmail || "")
+      .trim().toLowerCase();
+    return all
+      .filter(function (r) {
+        // Chỉ lấy phiếu do trang này tạo (có summary) và thuộc về người dùng
+        if (!r || !r.summary || !Array.isArray(r.items)) return false;
+        const owner = String(r.workerEmail || r.submittedBy || "").trim().toLowerCase();
+        return !email || owner === email;
+      })
+      .sort(function (a, b) { return String(b.submittedAt).localeCompare(String(a.submittedAt)); });
   }
 
   // ==========================================================================
@@ -626,6 +666,8 @@
     updateHazard,
     deleteHazard,
     submitChecklist,
+    getMyChecklistSubmissions,
+    getSubmittedHazards,
     classifyHazard,
     escapeHtml,
     formatDate,
