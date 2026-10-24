@@ -263,6 +263,7 @@
               <!-- Nút đặt lại lọc -->
               <button class="worker-filter-reset" id="resetFilterBtn" data-action="reset-filters" type="button">Đặt lại lọc</button>
               <button class="worker-filter-reset" id="exportCsvBtn" data-action="export-csv" type="button">Xuất CSV</button>
+              <button class="worker-filter-reset" id="exportJsonBtn" data-action="export-json" type="button">Xuất JSON</button>
             </div>
           </section>
 
@@ -1331,6 +1332,56 @@
         a.click();
         a.remove();
         URL.revokeObjectURL(a.href);
+      });
+    })();
+  </script>
+  <script>
+    // Xuất JSON các sự cố đang hiển thị và tự cập nhật khi dữ liệu đổi ở tab khác
+    (function () {
+      var jsonBtn = document.getElementById("exportJsonBtn");
+      var table = document.getElementById("hazardsTable");
+      if (jsonBtn && table) {
+        jsonBtn.addEventListener("click", function () {
+          var heads = Array.prototype.slice.call(table.querySelectorAll("thead th"))
+            .slice(0, -1)
+            .map(function (th) { return th.textContent.replace(/\s+/g, " ").trim(); });
+          var rows = [];
+          table.querySelectorAll("tbody tr").forEach(function (tr) {
+            if (tr.classList.contains("is-hidden")) return;
+            var cells = tr.querySelectorAll("td");
+            var item = {};
+            heads.forEach(function (name, i) {
+              item[name] = cells[i] ? cells[i].textContent.replace(/\s+/g, " ").trim() : "";
+            });
+            rows.push(item);
+          });
+          var blob = new Blob([JSON.stringify(rows, null, 2)], { type: "application/json;charset=utf-8" });
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "su-co-cua-toi.json";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(a.href);
+        });
+      }
+
+      // Đồng bộ giữa các tab: khi danh sách sự cố thay đổi ở tab khác thì tải lại trang này
+      var DATA_KEY = "siteSafeData";
+      var GUARD_KEY = "siteSafeMyHazardsSyncAt";
+      function hazardsOf(raw) {
+        try { return JSON.stringify((JSON.parse(raw) || {}).hazards || []); } catch (err) { return ""; }
+      }
+      window.addEventListener("storage", function (e) {
+        if (e.key !== DATA_KEY || !e.newValue) return;
+        if (hazardsOf(e.oldValue) === hazardsOf(e.newValue)) return;
+        try {
+          // Chặn vòng lặp tải lại liên tục nếu hai tab cùng ghi dữ liệu
+          var last = Number(sessionStorage.getItem(GUARD_KEY) || 0);
+          if (Date.now() - last < 3000) return;
+          sessionStorage.setItem(GUARD_KEY, String(Date.now()));
+        } catch (err) { /* bỏ qua nếu không dùng được sessionStorage */ }
+        window.location.reload();
       });
     })();
   </script>
