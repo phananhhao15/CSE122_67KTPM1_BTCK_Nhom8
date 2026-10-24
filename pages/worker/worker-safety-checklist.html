@@ -272,8 +272,9 @@
             Kết quả kiểm tra an toàn ca trực của bạn đã được ghi nhận vào cơ sở dữ liệu chung SiteSafe.
           </p>
           <!-- Bản xem lại nội dung phiếu vừa nộp (render bằng JS khi nộp) -->
-          <section class="wcl-review is-hidden" id="checklistReview" aria-label="Nội dung phiếu kiểm tra đã nộp"></section>
-          <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+          <section class="wcl-review is-hidden" id="checklistReview" aria-label="Nội dung phiếu kiểm tra đã nộp">
+          </section>
+          <div class="wcl-btn-row">
             <button class="wcl-btn wcl-btn--primary" id="doAnotherChecklistBtn" data-action="new-checklist"
               type="button">Thực hiện ca kiểm tra mới</button>
             <a class="wcl-btn wcl-btn--ghost" id="viewMyHazardsBtn" href="worker-my-hazards.html">Xem sự cố của
@@ -730,7 +731,6 @@
           '<a class="wcl-hazard-link" id="createHazardBtn_' + id + '" href="worker-hazard-create.html" data-action="create-hazard-from-item" data-item-id="' + id + '" data-item-title="' + title + '">' +
           icon("alert", 16) + "Tạo hazard từ mục này</a>" +
           "</div></div>";
-
         return article;
       }
 

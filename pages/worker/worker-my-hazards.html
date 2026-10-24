@@ -249,7 +249,7 @@
               </select>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="worker-inline-row">
               <!-- Nút chuyển chế độ xem (Grid / Table) -->
               <div class="worker-view-toggle" role="group" aria-label="Chuyển chế độ hiển thị">
                 <button class="worker-view-btn worker-view-btn--active" id="viewGridBtn" data-action="view-grid" type="button" title="Chế độ Thẻ (Grid)">
@@ -262,6 +262,7 @@
 
               <!-- Nút đặt lại lọc -->
               <button class="worker-filter-reset" id="resetFilterBtn" data-action="reset-filters" type="button">Đặt lại lọc</button>
+              <button class="worker-filter-reset" id="exportCsvBtn" data-action="export-csv" type="button">Xuất CSV</button>
             </div>
           </section>
 
@@ -556,13 +557,13 @@
             <table class="worker-table" id="hazardsTable">
               <thead>
                 <tr>
-                  <th scope="col" style="width: 90px;">Mã</th>
+                  <th scope="col" class="worker-th-id">Mã</th>
                   <th scope="col">Tiêu đề & Nội dung nguy cơ</th>
                   <th scope="col">Khu vực</th>
                   <th scope="col">Mức rủi ro</th>
                   <th scope="col">Trạng thái</th>
                   <th scope="col">Ngày gửi</th>
-                  <th scope="col" style="text-align: right; width: 170px;">Thao tác</th>
+                  <th scope="col" class="worker-th-actions">Thao tác</th>
                 </tr>
               </thead>
               <tbody id="hazardsTableBody">
@@ -576,7 +577,7 @@
                   <td><span class="badge badge-danger">Mức cao</span></td>
                   <td><span class="badge badge-warning">Đang chờ duyệt</span></td>
                   <td>12/10/2026</td>
-                  <td style="text-align: right;">
+                  <td class="worker-cell-right">
                     <button class="worker-icon-btn worker-icon-btn--eye" data-action="view-detail" data-id="HZ-101" type="button" title="Xem chi tiết" aria-label="Xem chi tiết"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--edit" data-action="edit-hazard" data-id="HZ-101" type="button" title="Chỉnh sửa" aria-label="Chỉnh sửa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--trash" data-action="delete-hazard" data-id="HZ-101" type="button" title="Xóa" aria-label="Xóa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
@@ -592,7 +593,7 @@
                   <td><span class="badge badge-danger">Nghiêm trọng</span></td>
                   <td><span class="badge badge-success">Đã khắc phục</span></td>
                   <td>10/10/2026</td>
-                  <td style="text-align: right;">
+                  <td class="worker-cell-right">
                     <button class="worker-icon-btn worker-icon-btn--eye" data-action="view-detail" data-id="HZ-102" type="button" title="Xem chi tiết" aria-label="Xem chi tiết"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--edit" data-action="edit-hazard" data-id="HZ-102" type="button" title="Chỉnh sửa" aria-label="Chỉnh sửa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--trash" data-action="delete-hazard" data-id="HZ-102" type="button" title="Xóa" aria-label="Xóa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
@@ -608,7 +609,7 @@
                   <td><span class="badge badge-danger">Nghiêm trọng</span></td>
                   <td><span class="badge badge-warning">Đang chờ duyệt</span></td>
                   <td>13/10/2026</td>
-                  <td style="text-align: right;">
+                  <td class="worker-cell-right">
                     <button class="worker-icon-btn worker-icon-btn--eye" data-action="view-detail" data-id="HZ-103" type="button" title="Xem chi tiết" aria-label="Xem chi tiết"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--edit" data-action="edit-hazard" data-id="HZ-103" type="button" title="Chỉnh sửa" aria-label="Chỉnh sửa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--trash" data-action="delete-hazard" data-id="HZ-103" type="button" title="Xóa" aria-label="Xóa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
@@ -624,7 +625,7 @@
                   <td><span class="badge badge-primary">Mức vừa</span></td>
                   <td><span class="badge badge-warning">Đang chờ duyệt</span></td>
                   <td>14/10/2026</td>
-                  <td style="text-align: right;">
+                  <td class="worker-cell-right">
                     <button class="worker-icon-btn worker-icon-btn--eye" data-action="view-detail" data-id="HZ-104" type="button" title="Xem chi tiết" aria-label="Xem chi tiết"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--edit" data-action="edit-hazard" data-id="HZ-104" type="button" title="Chỉnh sửa" aria-label="Chỉnh sửa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--trash" data-action="delete-hazard" data-id="HZ-104" type="button" title="Xóa" aria-label="Xóa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
@@ -640,7 +641,7 @@
                   <td><span class="badge badge-danger">Mức cao</span></td>
                   <td><span class="badge badge-primary">Đang khắc phục</span></td>
                   <td>09/10/2026</td>
-                  <td style="text-align: right;">
+                  <td class="worker-cell-right">
                     <button class="worker-icon-btn worker-icon-btn--eye" data-action="view-detail" data-id="HZ-105" type="button" title="Xem chi tiết" aria-label="Xem chi tiết"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--edit" data-action="edit-hazard" data-id="HZ-105" type="button" title="Chỉnh sửa" aria-label="Chỉnh sửa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--trash" data-action="delete-hazard" data-id="HZ-105" type="button" title="Xóa" aria-label="Xóa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
@@ -656,7 +657,7 @@
                   <td><span class="badge badge-danger">Mức cao</span></td>
                   <td><span class="badge badge-primary">Đang khắc phục</span></td>
                   <td>11/10/2026</td>
-                  <td style="text-align: right;">
+                  <td class="worker-cell-right">
                     <button class="worker-icon-btn worker-icon-btn--eye" data-action="view-detail" data-id="HZ-106" type="button" title="Xem chi tiết" aria-label="Xem chi tiết"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--edit" data-action="edit-hazard" data-id="HZ-106" type="button" title="Chỉnh sửa" aria-label="Chỉnh sửa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--trash" data-action="delete-hazard" data-id="HZ-106" type="button" title="Xóa" aria-label="Xóa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
@@ -672,7 +673,7 @@
                   <td><span class="badge badge-danger">Mức cao</span></td>
                   <td><span class="badge badge-success">Đã khắc phục</span></td>
                   <td>06/10/2026</td>
-                  <td style="text-align: right;">
+                  <td class="worker-cell-right">
                     <button class="worker-icon-btn worker-icon-btn--eye" data-action="view-detail" data-id="HZ-108" type="button" title="Xem chi tiết" aria-label="Xem chi tiết"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--edit" data-action="edit-hazard" data-id="HZ-108" type="button" title="Chỉnh sửa" aria-label="Chỉnh sửa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--trash" data-action="delete-hazard" data-id="HZ-108" type="button" title="Xóa" aria-label="Xóa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
@@ -688,7 +689,7 @@
                   <td><span class="badge badge-primary">Mức vừa</span></td>
                   <td><span class="badge badge-warning">Đang chờ duyệt</span></td>
                   <td>17/10/2026</td>
-                  <td style="text-align: right;">
+                  <td class="worker-cell-right">
                     <button class="worker-icon-btn worker-icon-btn--eye" data-action="view-detail" data-id="HZ-109" type="button" title="Xem chi tiết" aria-label="Xem chi tiết"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--edit" data-action="edit-hazard" data-id="HZ-109" type="button" title="Chỉnh sửa" aria-label="Chỉnh sửa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--trash" data-action="delete-hazard" data-id="HZ-109" type="button" title="Xóa" aria-label="Xóa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
@@ -704,7 +705,7 @@
                   <td><span class="badge badge-danger">Mức cao</span></td>
                   <td><span class="badge badge-warning">Đang chờ duyệt</span></td>
                   <td>16/10/2026</td>
-                  <td style="text-align: right;">
+                  <td class="worker-cell-right">
                     <button class="worker-icon-btn worker-icon-btn--eye" data-action="view-detail" data-id="HZ-110" type="button" title="Xem chi tiết" aria-label="Xem chi tiết"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--edit" data-action="edit-hazard" data-id="HZ-110" type="button" title="Chỉnh sửa" aria-label="Chỉnh sửa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--trash" data-action="delete-hazard" data-id="HZ-110" type="button" title="Xóa" aria-label="Xóa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
@@ -720,7 +721,7 @@
                   <td><span class="badge badge-primary">Mức vừa</span></td>
                   <td><span class="badge badge-success">Đã khắc phục</span></td>
                   <td>05/10/2026</td>
-                  <td style="text-align: right;">
+                  <td class="worker-cell-right">
                     <button class="worker-icon-btn worker-icon-btn--eye" data-action="view-detail" data-id="HZ-111" type="button" title="Xem chi tiết" aria-label="Xem chi tiết"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--edit" data-action="edit-hazard" data-id="HZ-111" type="button" title="Chỉnh sửa" aria-label="Chỉnh sửa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
                     <button class="worker-icon-btn worker-icon-btn--trash" data-action="delete-hazard" data-id="HZ-111" type="button" title="Xóa" aria-label="Xóa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button>
@@ -784,9 +785,9 @@
           </div>
         </div>
 
-        <div style="margin-bottom: 20px;">
-          <h4 style="margin: 0 0 6px; font-size: 0.92rem; color: var(--color-primary);">Nội dung chi tiết hiện trường:</h4>
-          <p id="detailDescription" style="margin: 0; color: #475569; line-height: 1.5; font-size: 0.9rem;">
+        <div class="worker-detail-block">
+          <h4 class="worker-detail-heading">Nội dung chi tiết hiện trường:</h4>
+          <p id="detailDescription" class="worker-detail-text">
             Sàn bê tông tầng cao chưa có lan can cứng, chỉ căng lưới cam; công nhân vẫn dựng thang chữ A sát mép sàn để thao tác trên trần, nguy cơ ngã từ trên cao.
           </p>
         </div>
@@ -871,7 +872,7 @@
             </select>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="worker-form-grid-2">
             <div class="worker-form-group">
               <label class="worker-label" for="editRiskLevel">Mức độ rủi ro</label>
               <select class="worker-form-control" id="editRiskLevel" name="riskLevel" data-field="riskLevel">
@@ -902,19 +903,19 @@
 
   <!-- 3. Modal Xác nhận Xóa sự cố -->
   <div class="worker-modal-backdrop is-hidden" id="deleteModal" data-modal="delete" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
-    <div class="worker-modal" style="width: min(440px, 100%);">
+    <div class="worker-modal worker-modal--sm">
       <div class="worker-modal__header">
-        <h3 class="worker-modal__title" id="deleteModalTitle" style="color: #dc2626;">Xác nhận xóa sự cố</h3>
+        <h3 class="worker-modal__title worker-modal__title--danger" id="deleteModalTitle">Xác nhận xóa sự cố</h3>
         <button class="worker-modal__close" id="closeDeleteModalBtn" data-action="close-modal" type="button" aria-label="Đóng cửa sổ"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       </div>
       <div class="worker-modal__body">
-        <p style="margin: 0 0 10px; color: var(--color-text);">
+        <p class="worker-delete-lead">
           Bạn có chắc chắn muốn xóa vĩnh viễn báo cáo này không?
         </p>
-        <p id="deleteHazardName" style="font-weight: 700; color: var(--color-primary); background: #f1f5f9; padding: 10px; border-radius: 6px; margin: 0;">
+        <p id="deleteHazardName" class="worker-delete-name">
           Mép sàn bê tông tầng cao chỉ che lưới cam, thợ đứng thang sát mép
         </p>
-        <p style="font-size: 0.82rem; color: #dc2626; margin: 10px 0 0;">
+        <p class="worker-delete-warning">
           * Thao tác này sẽ xóa bản ghi khỏi hệ thống dữ liệu chung SiteSafe.
         </p>
       </div>
@@ -1118,7 +1119,7 @@
           "<td>" + esc(h.zoneName) + "</td>" +
           '<td><span class="badge ' + w.getRiskBadgeClass(h.riskLevel) + '">' + esc(w.getRiskLabel(h.riskLevel)) + "</span></td>" +
           '<td><span class="badge ' + w.getStatusBadgeClass(h.status) + '">' + esc(w.getStatusLabel(h.status)) + "</span></td>" +
-          "<td>" + stampText(h.reportedAt) + '</td><td style="text-align: right;">' +
+          "<td>" + stampText(h.reportedAt) + '</td><td class="worker-cell-right">' +
           '<button class="worker-icon-btn worker-icon-btn--eye" data-action="view-detail" data-id="' + id +
           '" type="button" title="Xem chi tiết" aria-label="Xem chi tiết">' + ICON_EYE + "</button></td></tr>";
       }
@@ -1301,6 +1302,35 @@
         m.addEventListener("click", function (e) {
           if (e.target === m) closeModal(m);
         });
+      });
+    })();
+  </script>
+  <script>
+    // Xuất danh sách sự cố đang hiển thị (sau khi lọc) ra tệp CSV
+    (function () {
+      var btn = document.getElementById("exportCsvBtn");
+      var table = document.getElementById("hazardsTable");
+      if (!btn || !table) return;
+      function csvCell(text) {
+        var v = String(text || "").replace(/\s+/g, " ").trim();
+        return '"' + v.replace(/"/g, '""') + '"';
+      }
+      btn.addEventListener("click", function () {
+        var heads = Array.prototype.slice.call(table.querySelectorAll("thead th")).slice(0, -1);
+        var lines = [heads.map(function (th) { return csvCell(th.textContent); }).join(",")];
+        table.querySelectorAll("tbody tr").forEach(function (tr) {
+          if (tr.classList.contains("is-hidden")) return;
+          var cells = Array.prototype.slice.call(tr.querySelectorAll("td")).slice(0, heads.length);
+          lines.push(cells.map(function (td) { return csvCell(td.textContent); }).join(","));
+        });
+        var blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "su-co-cua-toi.csv";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(a.href);
       });
     })();
   </script>

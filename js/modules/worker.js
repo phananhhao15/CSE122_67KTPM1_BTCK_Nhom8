@@ -4,7 +4,6 @@
 // ==========================================================================
 (function (window) {
   "use strict";
-
   function getApi() {
     if (!window.siteSafeApi) {
       throw new Error("Cần nạp js/api.js trước khi nạp js/modules/worker.js");
@@ -329,6 +328,16 @@
       setTimeout(function () {
         const text = `${title || ""} ${description || ""}`.toLowerCase();
 
+        // AI Failure UX: mô tả quá ngắn thì không đoán, trả về trạng thái thiếu dữ liệu
+        if (String(description || "").trim().length < 10) {
+          resolve({
+            insufficient: true,
+            confidence: 0,
+            message: "AI chưa đủ dữ liệu để phân tích chính xác. Mô tả cần ít nhất 10 ký tự.",
+          });
+          return;
+        }
+
         // 1. Nhóm An toàn điện (ELECTRICAL)
         const electricalKeywords = [
           "điện", "cáp điện", "dây điện", "ổ cắm", "tủ điện", "hở điện",
@@ -545,7 +554,8 @@
             categoryCode: "GENERAL",
             riskLevel: "MEDIUM",
             riskLevelLabel: "Mức vừa",
-            confidence: 82,
+            confidence: 42,
+            lowConfidence: true,
             summary: "Phát hiện điều kiện chưa đảm bảo an toàn cần cán bộ chuyên môn kiểm tra chi tiết.",
             matchedKeywords: ["quan sát hiện trường"],
             standardRef: "Nội quy an toàn lao động chung công trường SiteSafe",

@@ -3835,3 +3835,184 @@ html[data-theme="dark"] .worker-icon-btn--edit,
 html[data-theme="dark"] .worker-card-btn--edit {
   color: #fdba74;
 }
+
+/* AI-1: kích thước spinner (thay cho style inline) */
+.worker-spinner.worker-spinner--sm {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  border-width: 2px;
+}
+
+.wcl-hc__actions .worker-spinner.worker-spinner--btn {
+  width: 16px;
+  height: 16px;
+  margin: 0 6px 0 0;
+  border-width: 2px;
+}
+
+/* AI-1: trạng thái AI không chắc chắn / thiếu dữ liệu */
+.worker-ai-uncertain {
+  margin: 0 0 14px;
+  padding: 14px 16px;
+  border: 1px solid #fcd34d;
+  border-left: 4px solid #f59e0b;
+  border-radius: 10px;
+  background: #fffbeb;
+  color: #78350f;
+}
+
+.worker-ai-uncertain__title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.worker-ai-uncertain__text {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.worker-ai-uncertain__chips,
+.worker-ai-uncertain__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.worker-ai-uncertain__chips {
+  margin-bottom: 10px;
+}
+
+.worker-ai-chip {
+  padding: 6px 12px;
+  border: 1px solid #f59e0b;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #92400e;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.worker-ai-chip:hover {
+  background: #fef3c7;
+}
+
+.worker-ai-chip:focus-visible,
+.worker-sort-select:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+}
+
+.worker-sort-select:focus {
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+}
+
+html[data-theme="dark"] .worker-ai-uncertain {
+  background: #2a2111;
+  border-color: #92400e;
+  color: #fde68a;
+}
+
+html[data-theme="dark"] .worker-ai-chip {
+  background: #1f2937;
+  color: #fcd34d;
+}
+
+html[data-theme="dark"] .worker-ai-chip:hover {
+  background: #3b2f12;
+}
+
+/* Trang Sự cố của tôi: class thay cho style inline */
+.worker-th-id {
+  width: 90px;
+}
+
+.worker-th-actions {
+  width: 170px;
+  text-align: right;
+}
+
+.worker-cell-right {
+  text-align: right;
+}
+
+.worker-inline-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.worker-detail-block {
+  margin-bottom: 20px;
+}
+
+.worker-detail-heading {
+  margin: 0 0 6px;
+  font-size: 0.92rem;
+  color: var(--color-primary);
+}
+
+.worker-detail-text {
+  margin: 0;
+  color: #475569;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.worker-form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.worker-modal.worker-modal--sm {
+  width: min(440px, 100%);
+}
+
+.worker-modal__title--danger {
+  color: #dc2626;
+}
+
+.worker-delete-lead {
+  margin: 0 0 10px;
+  color: var(--color-text);
+}
+
+.worker-delete-name {
+  font-weight: 700;
+  color: var(--color-primary);
+  background: #f1f5f9;
+  padding: 10px;
+  border-radius: 6px;
+  margin: 0;
+}
+
+.worker-delete-warning {
+  font-size: 0.82rem;
+  color: #dc2626;
+  margin: 10px 0 0;
+}
+
+html[data-theme="dark"] .worker-detail-text {
+  color: #cbd5e1;
+}
+
+html[data-theme="dark"] .worker-delete-name {
+  background: #1f2937;
+  color: #e5e7eb;
+}
+
+@media (max-width: 480px) {
+  .worker-form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wcl-btn-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}

@@ -294,8 +294,23 @@
               <div class="worker-ai-loading is-hidden" id="aiLoading" data-state="ai-loading">
                 <div class="worker-ai-progress-bar" id="aiProgressBar"></div>
                 <div class="worker-ai-loading-text">
-                  <span class="worker-spinner" style="width: 18px; height: 18px; margin: 0; border-width: 2px;"></span>
+                  <span class="worker-spinner worker-spinner--sm"></span>
                   <span id="aiStepText">Đang trích xuất từ khóa và đối chiếu quy chuẩn QCVN 18:2021/BXD...</span>
+                </div>
+              </div>
+
+              <!-- AI Failure / Uncertainty UX: thiếu dữ liệu hoặc độ tin cậy thấp -->
+              <div class="worker-ai-uncertain is-hidden" id="aiUncertain" role="alert" data-state="ai-uncertain">
+                <div class="worker-ai-uncertain__title" id="aiUncertainTitle">AI chưa đủ dữ liệu để phân tích chính xác</div>
+                <p class="worker-ai-uncertain__text" id="aiUncertainText"></p>
+                <div class="worker-ai-uncertain__chips" id="aiPromptChips" aria-label="Gợi ý mô tả mẫu">
+                  <button class="worker-ai-chip" type="button" data-chip="Cáp điện hở nằm trong vũng nước gần khu vực thi công">Cáp điện hở trong vũng nước</button>
+                  <button class="worker-ai-chip" type="button" data-chip="Công nhân làm việc trên giàn giáo không có lan can và dây an toàn">Giàn giáo thiếu lan can</button>
+                  <button class="worker-ai-chip" type="button" data-chip="Vật liệu xếp cao mất ổn định cạnh lối đi của công nhân">Vật liệu xếp cao mất ổn định</button>
+                </div>
+                <div class="worker-ai-uncertain__actions">
+                  <button class="worker-ai-btn worker-ai-btn--edit" id="aiAddInfoBtn" type="button"><span>✎ Bổ sung mô tả</span></button>
+                  <button class="worker-ai-btn worker-ai-btn--dismiss" id="aiManualBtn" type="button"><span>Nhập thủ công</span></button>
                 </div>
               </div>
 
@@ -404,7 +419,7 @@
               <div class="worker-upload-box" id="uploadBox" data-action="click-upload" tabindex="0" role="button" aria-label="Bấm để tải ảnh sự cố">
                 <div class="worker-upload-icon">📷</div>
                 <p class="worker-upload-hint">Bấm vào đây để chọn hoặc kéo thả ảnh chụp nguy cơ tại hiện trường.</p>
-                <input class="worker-upload-input" id="hazardImage" name="image" data-field="image" type="file" accept="image/*" />
+                <input class="worker-upload-input" id="hazardImage" name="image" data-field="image" type="file" accept="image/*" aria-label="Chọn ảnh chụp nguy cơ" />
               </div>
               <div class="worker-upload-preview-wrap is-hidden" id="previewWrap" data-container="image-preview">
                 <img class="worker-upload-preview" id="imagePreview" alt="Xem trước ảnh hiện trường sự cố" />
@@ -416,7 +431,7 @@
             <div class="wcl-hc__actions">
               <a class="wcl-btn wcl-btn--ghost" id="cancelCreateHazardBtn" href="worker-my-hazards.html">Hủy bỏ</a>
               <button class="wcl-btn wcl-btn--primary" id="submitHazardBtn" data-action="submit-hazard" type="submit">
-                <span id="submitSpinner" class="worker-spinner is-hidden" style="width: 16px; height: 16px; margin: 0 6px 0 0; border-width: 2px;"></span>
+                <span id="submitSpinner" class="worker-spinner worker-spinner--btn is-hidden"></span>
                 <span id="submitBtnText">Gửi báo cáo nguy cơ</span>
               </button>
             </div>
@@ -611,6 +626,16 @@
       const aiActionsList = document.getElementById("aiActionsList");
       const aiAppliedNotice = document.getElementById("aiAppliedNotice");
       const aiStepText = document.getElementById("aiStepText");
+      const aiUncertain = document.getElementById("aiUncertain");
+      const aiUncertainTitle = document.getElementById("aiUncertainTitle");
+      const aiUncertainText = document.getElementById("aiUncertainText");
+
+      // Hiển thị hộp cảnh báo khi AI thiếu dữ liệu hoặc độ tin cậy thấp
+      function showAiUncertain(title, text) {
+        if (aiUncertainTitle) aiUncertainTitle.textContent = title;
+        if (aiUncertainText) aiUncertainText.textContent = text;
+        if (aiUncertain) aiUncertain.classList.remove("is-hidden");
+      }
 
       // Các bước loading giả lập
       const AI_STEPS = [
@@ -625,6 +650,7 @@
         if (aiLoading) aiLoading.classList.remove("is-hidden");
         if (aiResultContent) aiResultContent.classList.add("is-hidden");
         if (aiAppliedNotice) aiAppliedNotice.classList.add("is-hidden");
+        if (aiUncertain) aiUncertain.classList.add("is-hidden");
 
         let stepIdx = 0;
         const stepInterval = setInterval(function () {
@@ -635,9 +661,29 @@
       }
 
       function showAiResult(result) {
-        lastAiResult = result;
         if (aiLoading) aiLoading.classList.add("is-hidden");
+
+        // Thiếu dữ liệu: không đưa kết quả giả, chỉ hiển thị cảnh báo và gợi ý
+        if (result.insufficient) {
+          lastAiResult = null;
+          if (aiResultContent) aiResultContent.classList.add("is-hidden");
+          if (aiConfidenceBadge) aiConfidenceBadge.textContent = "Độ tin cậy: chưa xác định";
+          showAiUncertain("AI chưa đủ dữ liệu để phân tích chính xác", result.message || "");
+          return;
+        }
+
+        lastAiResult = result;
         if (aiResultContent) aiResultContent.classList.remove("is-hidden");
+
+        // Độ tin cậy thấp: vẫn hiện gợi ý nhưng yêu cầu cán bộ an toàn xác nhận
+        if (result.lowConfidence || (result.confidence || 0) < 60) {
+          showAiUncertain(
+            "AI chưa chắc chắn (độ tin cậy " + (result.confidence || 0) + "%)",
+            "Không khớp rõ với nhóm nguy cơ nào. Hãy bổ sung mô tả cụ thể hơn hoặc tự chọn phân loại; cán bộ an toàn sẽ xác nhận."
+          );
+        } else if (aiUncertain) {
+          aiUncertain.classList.add("is-hidden");
+        }
 
         // Cập nhật badge confidence
         if (aiConfidenceBadge) aiConfidenceBadge.textContent = "Độ tin cậy: " + (result.confidence || 0) + "%";
@@ -779,6 +825,31 @@
         aiDismissBtn.addEventListener("click", function () {
           aiPanel.classList.add("is-hidden");
           lastAiResult = null;
+        });
+      }
+
+      // Gợi ý mẫu câu, bổ sung mô tả, nhập thủ công (AI Failure UX)
+      const descField = document.getElementById("hazardDescription");
+      document.querySelectorAll("#aiPromptChips [data-chip]").forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          if (!descField) return;
+          descField.value = chip.getAttribute("data-chip");
+          descField.dispatchEvent(new Event("input", { bubbles: true }));
+          descField.focus();
+        });
+      });
+      const aiAddInfoBtn = document.getElementById("aiAddInfoBtn");
+      if (aiAddInfoBtn) {
+        aiAddInfoBtn.addEventListener("click", function () {
+          if (descField) descField.focus();
+        });
+      }
+      const aiManualBtn = document.getElementById("aiManualBtn");
+      if (aiManualBtn) {
+        aiManualBtn.addEventListener("click", function () {
+          if (aiPanel) aiPanel.classList.add("is-hidden");
+          const categoryField = document.getElementById("hazardCategory");
+          if (categoryField) categoryField.focus();
         });
       }
 
