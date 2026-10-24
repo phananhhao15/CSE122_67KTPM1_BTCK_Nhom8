@@ -24,6 +24,7 @@ Tôi nhờ Claude Code, theo ý chính (không chép nguyên văn), lần lượ
 7. Thêm đăng nhập nhanh 4 tài khoản demo, giao diện sáng/tối và chỉnh menu trang chủ.
 8. Chỉnh các trang quản lý kiểm tra, bảng sự cố, mã phiếu và lịch sử phiếu kiểm tra.
 9. Đối chiếu dự án với barem CSE122, sửa AI-1 khi thiếu dữ liệu, thêm xuất CSV và JSON, bỏ style inline, xóa `safety-store`, viết tài liệu trong `docs/`.
+10. Khắc phục 3 điểm yếu ở trang `worker-my-hazards.html`: chuyển 10 thẻ tĩnh sang render động từ dữ liệu, gắn xử lý logic xóa/sửa (kết nối `worker.js`) và hỗ trợ phím Esc đóng modal.
 
 ### 1.3. Phần AI sinh ra (theo các commit có dòng Co-Authored-By)
 
@@ -44,6 +45,7 @@ Tôi nhờ Claude Code, theo ý chính (không chép nguyên văn), lần lượ
 | Mã phiếu theo ngày giờ, xem lại và lịch sử phiếu kiểm tra, bỏ N/A | Sonnet 5.5 |
 | AI-1 xử lý thiếu dữ liệu và độ tin cậy thấp, nút Xuất CSV, chuyển style inline sang class, `docs/screen-inventory.md` | Sonnet 5.5 |
 | Xóa module cửa hàng `safety-store` | Sonnet 5.5 |
+| Hoàn thiện CRUD sự cố (xóa/sửa), chuyển 10 thẻ tĩnh sang render động từ dữ liệu, thêm phím Esc đóng modal: `worker-my-hazards.html`, `worker.js`, `worker.css` | Claude / Antigravity |
 
 Ngoài ra, Claude Code còn soạn các tài liệu trong `docs/` (`project-proposal.md`, `roles-and-features.md`, `team-assignment.md`), `README.md` gốc, và nút Xuất JSON cùng cơ chế đồng bộ giữa các tab ở trang "Sự cố đã gửi".
 

@@ -4016,3 +4016,12 @@ html[data-theme="dark"] .worker-delete-name {
   flex-wrap: wrap;
   justify-content: center;
 }
+
+/* Trang Sự cố đã gửi: ô lỗi trong form sửa và thông báo nổi báo lỗi */
+.worker-form-control.is-invalid {
+  border-color: #ef4444;
+}
+
+.worker-toast.worker-toast--error {
+  background: #b91c1c;
+}

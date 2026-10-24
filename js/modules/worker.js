@@ -282,6 +282,204 @@
     return true;
   }
 
+  // ==========================================================================
+  // DỮ LIỆU MẪU CHO TRANG "SỰ CỐ ĐÃ GỬI"
+  // Danh sách sự cố hiển thị sẵn cho công nhân. Lưu riêng cho từng người dùng trong
+  // localStorage (khóa siteSafeWorkerSamples:<email>) nên Sửa/Xóa vẫn còn sau khi F5
+  // và không làm thay đổi dữ liệu chung của các vai trò khác.
+  // ==========================================================================
+  const WORKER_SAMPLE_HAZARDS = [
+    {
+      id: "HZ-101",
+      title: "Mép sàn bê tông tầng cao chỉ che lưới cam, thợ đứng thang sát mép",
+      description: "Sàn bê tông tầng cao chưa có lan can cứng, chỉ căng lưới cam; công nhân vẫn dựng thang chữ A sát mép sàn để thao tác trên trần, nguy cơ ngã từ trên cao.",
+      zoneId: "ZONE-001",
+      zoneName: "Tòa A - Khối tháp 25 tầng",
+      riskLevel: "HIGH",
+      status: "OPEN",
+      reportedAt: "2026-10-12T08:00:00.000Z",
+      image: "../../assets/images/hazards/hz-101.jpg",
+    },
+    {
+      id: "HZ-102",
+      title: "Dây cáp vải cẩu bị sờn rách phần lõi vẫn còn treo ở bãi tập kết",
+      description: "Dây cáp vải dùng cẩu cấu kiện bị sờn, đứt một phần sợi ở giữa dây nhưng vẫn để lẫn cùng các dây tốt. Đã thu hồi, hủy và thay dây mới.",
+      zoneId: "ZONE-002",
+      zoneName: "Kho vật tư và nhiên liệu",
+      riskLevel: "CRITICAL",
+      status: "RESOLVED",
+      reportedAt: "2026-10-10T08:00:00.000Z",
+      image: "../../assets/images/hazards/hz-102.jpg",
+    },
+    {
+      id: "HZ-103",
+      title: "Thợ di chuyển trên dầm thép tầng cao khi đang cẩu dầm, chưa thấy móc dây an toàn",
+      description: "Hai công nhân đứng và đi lại trên dầm thép ở tầng cao trong lúc cẩu hạ dầm khác vào vị trí. Không thấy dây an toàn móc vào cáp neo hay lưới chống rơi bên dưới.",
+      zoneId: "ZONE-001",
+      zoneName: "Tòa A - Khối tháp 25 tầng",
+      riskLevel: "CRITICAL",
+      status: "OPEN",
+      reportedAt: "2026-10-13T08:00:00.000Z",
+      image: "../../assets/images/hazards/hz-103.jpg",
+    },
+    {
+      id: "HZ-104",
+      title: "Dây nguồn máy bắn đinh kéo lê trên sàn ván tạm, nằm ngang lối đi",
+      description: "Dây điện máy bắn đinh nằm ngang lối đi trên sàn tạm, nhiều vòng cuộn rối và chưa có giá treo dây, dễ gây vấp ngã và hỏng vỏ cách điện khi bị giẫm lên.",
+      zoneId: "ZONE-006",
+      zoneName: "Khu cơ điện và trạm biến áp",
+      riskLevel: "MEDIUM",
+      status: "OPEN",
+      reportedAt: "2026-10-14T08:00:00.000Z",
+      image: "../../assets/images/hazards/hz-104.jpg",
+    },
+    {
+      id: "HZ-105",
+      title: "Thợ đứng bậc trên cùng thang chữ A để đóng khung mái bằng búa",
+      description: "Công nhân đứng ở bậc gần trên cùng của thang chữ A cao khi đóng khung mái gỗ, thang chưa có người giữ và chưa khóa thanh giằng chống xòe chân.",
+      zoneId: "ZONE-001",
+      zoneName: "Tòa A - Khối tháp 25 tầng",
+      riskLevel: "HIGH",
+      status: "IN_PROGRESS",
+      reportedAt: "2026-10-09T08:00:00.000Z",
+      image: "../../assets/images/hazards/hz-105.jpg",
+    },
+    {
+      id: "HZ-106",
+      title: "Thợ đứng trên thanh khung mái, máy bắn đinh treo lủng lẳng bằng dây nguồn",
+      description: "Thợ lắp khung mái đứng trên thanh khung ở độ cao lớn, điểm neo dây an toàn chưa được kiểm tra; máy bắn đinh treo bằng dây nguồn dễ rơi xuống người bên dưới.",
+      zoneId: "ZONE-003",
+      zoneName: "Khu điều hành và hạ tầng",
+      riskLevel: "HIGH",
+      status: "IN_PROGRESS",
+      reportedAt: "2026-10-11T08:00:00.000Z",
+      image: "../../assets/images/hazards/hz-106.jpg",
+    },
+    {
+      id: "HZ-108",
+      title: "Bu lông mắt cẩu ren dài, không thấy dấu tải trọng, dùng móc hộp chống vách",
+      description: "Bu lông mắt dùng để móc cẩu hộp chống vách có thân ren dài, không thấy dấu tải trọng làm việc an toàn. Đã thu hồi và thay bu lông đúng chuẩn có kiểm định.",
+      zoneId: "ZONE-002",
+      zoneName: "Kho vật tư và nhiên liệu",
+      riskLevel: "HIGH",
+      status: "RESOLVED",
+      reportedAt: "2026-10-06T08:00:00.000Z",
+      image: "../../assets/images/hazards/hz-108.jpg",
+    },
+    {
+      id: "HZ-109",
+      title: "Thang lên xuống hố chống vách chưa buộc cố định vào hộp",
+      description: "Thang nhôm dùng lên xuống hộp chống vách chỉ tựa vào thành hộp, chưa buộc cố định và chưa kiểm tra chiều cao thang vượt miệng hố theo quy định.",
+      zoneId: "ZONE-004",
+      zoneName: "Mố cầu phía Đông",
+      riskLevel: "MEDIUM",
+      status: "OPEN",
+      reportedAt: "2026-10-17T08:00:00.000Z",
+      image: "../../assets/images/hazards/hz-109.jpg",
+    },
+    {
+      id: "HZ-110",
+      title: "Hai thợ chung một thang chữ A lắp xà gồ, người trên đứng bậc cao nhất",
+      description: "Hai công nhân cùng làm việc trên một thang chữ A để lắp xà gồ mái, người phía trên đứng trên bậc cao nhất, thang đặt gần cạnh khung chưa chống trượt và không dây an toàn.",
+      zoneId: "ZONE-001",
+      zoneName: "Tòa A - Khối tháp 25 tầng",
+      riskLevel: "HIGH",
+      status: "OPEN",
+      reportedAt: "2026-10-16T08:00:00.000Z",
+      image: "../../assets/images/hazards/hz-110.jpg",
+    },
+    {
+      id: "HZ-111",
+      title: "Thang dựa mái nhà thấp tầng chưa buộc đầu, thợ leo lên mái",
+      description: "Hai thợ leo thang dựa vào mái nhà thấp tầng, đầu thang chưa buộc cố định vào mái; đã bổ sung móc neo đầu thang và nhắc nhở đội thi công.",
+      zoneId: "ZONE-003",
+      zoneName: "Khu điều hành và hạ tầng",
+      riskLevel: "MEDIUM",
+      status: "RESOLVED",
+      reportedAt: "2026-10-05T08:00:00.000Z",
+      image: "../../assets/images/hazards/hz-111.jpg",
+    },
+  ];
+
+  function workerSamplesKey(email) {
+    return "siteSafeWorkerSamples:" + String(email || "").trim().toLowerCase();
+  }
+
+  function getUserEmail(userOrEmail) {
+    return String(typeof userOrEmail === "object" && userOrEmail ? userOrEmail.email : userOrEmail || "")
+      .trim().toLowerCase();
+  }
+
+  // Đọc danh sách mẫu của người dùng; lần đầu chưa có thì tạo từ WORKER_SAMPLE_HAZARDS
+  function readWorkerSamples(userOrEmail) {
+    const email = getUserEmail(userOrEmail);
+    const key = workerSamplesKey(email);
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw === null) {
+        const initial = WORKER_SAMPLE_HAZARDS.map(function (h) {
+          return Object.assign({}, h, { reportedBy: email });
+        });
+        localStorage.setItem(key, JSON.stringify(initial));
+        return initial;
+      }
+      const list = JSON.parse(raw);
+      return Array.isArray(list) ? list : [];
+    } catch (error) {
+      return WORKER_SAMPLE_HAZARDS.map(function (h) {
+        return Object.assign({}, h, { reportedBy: email });
+      });
+    }
+  }
+
+  function writeWorkerSamples(userOrEmail, list) {
+    try {
+      localStorage.setItem(workerSamplesKey(getUserEmail(userOrEmail)), JSON.stringify(list));
+    } catch (error) {
+      // bỏ qua nếu trình duyệt chặn lưu trữ
+    }
+  }
+
+  // Toàn bộ sự cố của một công nhân: mẫu + báo cáo đã gửi, mới nhất trước
+  function getWorkerHazards(userOrEmail) {
+    const merged = readWorkerSamples(userOrEmail).concat(getSubmittedHazards(userOrEmail));
+    return merged.sort(function (a, b) {
+      return String(b.reportedAt).localeCompare(String(a.reportedAt));
+    });
+  }
+
+  function isWorkerSample(userOrEmail, id) {
+    return readWorkerSamples(userOrEmail).some(function (h) { return h.id === id; });
+  }
+
+  // Cập nhật một sự cố: mẫu lưu ở khóa riêng, báo cáo đã gửi lưu qua api.js
+  function updateWorkerHazard(userOrEmail, hazardData) {
+    if (!hazardData || !hazardData.id) {
+      throw new Error("Thiếu mã sự cố cần cập nhật.");
+    }
+    if (isWorkerSample(userOrEmail, hazardData.id)) {
+      const list = readWorkerSamples(userOrEmail).map(function (h) {
+        return h.id === hazardData.id ? Object.assign({}, h, hazardData) : h;
+      });
+      writeWorkerSamples(userOrEmail, list);
+      return list.find(function (h) { return h.id === hazardData.id; });
+    }
+    const existing = getHazardById(hazardData.id);
+    if (!existing) {
+      throw new Error("Không tìm thấy sự cố " + hazardData.id + ".");
+    }
+    return updateHazard(Object.assign({}, existing, hazardData));
+  }
+
+  // Xóa một sự cố của công nhân
+  function deleteWorkerHazard(userOrEmail, id) {
+    if (isWorkerSample(userOrEmail, id)) {
+      writeWorkerSamples(userOrEmail, readWorkerSamples(userOrEmail).filter(function (h) { return h.id !== id; }));
+      return true;
+    }
+    return deleteHazard(id);
+  }
+
   // Lưu kết quả kiểm tra checklist ca làm việc qua api.js
   function submitChecklist(resultData) {
     const api = getApi();
@@ -678,6 +876,9 @@
     submitChecklist,
     getMyChecklistSubmissions,
     getSubmittedHazards,
+    getWorkerHazards,
+    updateWorkerHazard,
+    deleteWorkerHazard,
     classifyHazard,
     escapeHtml,
     formatDate,
