@@ -8,6 +8,8 @@
 
 Mỗi thành viên tự làm trọn các màn hình của mình: mockup, HTML, CSS, JavaScript, dữ liệu, commit trên nhánh cá nhân, video OBS.
 
+Bảng công việc Trello: https://trello.com/b/1SE0OZ9d/d%E1%BB%B1-an-sitesafe
+
 Bảng kiểm kê chi tiết (Task ID, màn hình, nhánh, video): `docs/screen-inventory.md`.
 
 *Phần trách nhiệm chéo của Sơn và Hoàng được ghi theo mô tả chung trong README của dự án. Hai bạn cần xác nhận lại cho đúng thực tế.*
