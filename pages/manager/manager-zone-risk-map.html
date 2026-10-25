@@ -566,7 +566,7 @@
           // Bảng chi tiết (ẩn ban đầu)
           var detail = '<div class="ai3-hi-detail is-hidden" id="ai3-detail-' + rec.id + '">';
           if (!rec.hotspots || rec.hotspots.length === 0) {
-            detail += '<div style="padding:12px;text-align:center;color:#64748b;font-size:0.85rem;background:#ffffff;border-radius:6px;border:1px dashed #cbd5e1">Không có điểm nóng nào trong đợt phân tích này (0 sự cố thỏa điều kiện lọc).</div>';
+            detail += '<div class="ai3-hi-empty-detail">Không có điểm nóng nào trong đợt phân tích này (0 sự cố thỏa điều kiện lọc).</div>';
           } else {
             rec.hotspots.forEach(function(h, hi) {
               detail += '<div class="ai3-hi-detail-row">' +
