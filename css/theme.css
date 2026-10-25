@@ -200,6 +200,326 @@ html[data-theme="dark"] td .action-context {
   color: var(--dk-muted);
 }
 
+/* 5.1 BẢN ĐỒ RỦI RO & KHỐI AI-3 RISK HOTSPOT INSIGHT (manager-zone-risk-map.html) */
+html[data-theme="dark"] .ai3-panel {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.14) 0%, rgba(19, 28, 46, 0.98) 100%), var(--dk-surface);
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+html[data-theme="dark"] .ai3-header {
+  border-bottom-color: var(--dk-border-strong);
+}
+
+html[data-theme="dark"] .ai3-badge {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.4);
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .ai3-header h2,
+html[data-theme="dark"] .ai3-step-title,
+html[data-theme="dark"] .ai3-loading-title,
+html[data-theme="dark"] .ai3-hotspot-name,
+html[data-theme="dark"] .ai3-hi-zone {
+  color: #f1f5f9;
+}
+
+html[data-theme="dark"] .ai3-header p,
+html[data-theme="dark"] .ai3-loading-sub,
+html[data-theme="dark"] .ai3-result-summary,
+html[data-theme="dark"] .ai3-saved-sub,
+html[data-theme="dark"] .ai3-empty,
+html[data-theme="dark"] .ai3-hotspot-cat,
+html[data-theme="dark"] .ai3-hotspot-sup,
+html[data-theme="dark"] .ai3-hi-time,
+html[data-theme="dark"] .ai3-hi-cat {
+  color: var(--dk-muted);
+}
+
+html[data-theme="dark"] .ai3-step-num {
+  background: #6366f1;
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .ai3-field label {
+  color: #cbd5e1;
+}
+
+html[data-theme="dark"] .ai3-field select {
+  background-color: var(--dk-surface-2);
+  color: #e2e8f0;
+  border-color: var(--dk-border-strong);
+}
+
+html[data-theme="dark"] .ai3-field select:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+html[data-theme="dark"] .ai3-field select option {
+  background-color: #1a2539;
+  color: #e2e8f0;
+}
+
+html[data-theme="dark"] .ai3-run-btn {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+html[data-theme="dark"] .ai3-run-btn:hover {
+  opacity: 0.92;
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.45);
+}
+
+/* Loading */
+html[data-theme="dark"] .ai3-spinner {
+  border-color: rgba(99, 102, 241, 0.2);
+  border-top-color: #818cf8;
+}
+
+html[data-theme="dark"] .ai3-progress-track {
+  background: rgba(99, 102, 241, 0.18);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+html[data-theme="dark"] .ai3-progress-fill {
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+}
+
+/* Độ tin cậy (Confidence badge) */
+html[data-theme="dark"] .ai3-confidence-badge {
+  background: rgba(99, 102, 241, 0.18);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+
+html[data-theme="dark"] .ai3-confidence-badge.ai3-conf-high {
+  background: rgba(34, 197, 94, 0.16);
+  color: #86efac;
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+html[data-theme="dark"] .ai3-confidence-badge.ai3-conf-mid {
+  background: rgba(234, 179, 8, 0.16);
+  color: #fde047;
+  border-color: rgba(234, 179, 8, 0.35);
+}
+
+html[data-theme="dark"] .ai3-confidence-badge.ai3-conf-low {
+  background: rgba(239, 68, 68, 0.16);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+/* Thẻ điểm nóng (Hotspot cards) */
+html[data-theme="dark"] .ai3-hotspot-card {
+  background: var(--dk-surface);
+  border-top: 1px solid var(--dk-border-strong);
+  border-right: 1px solid var(--dk-border-strong);
+  border-bottom: 1px solid var(--dk-border-strong);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+html[data-theme="dark"] .ai3-hotspot-card:hover {
+  background: var(--dk-surface-2);
+  border-color: #475569;
+}
+
+html[data-theme="dark"] .ai3-hotspot-rank {
+  color: #818cf8;
+}
+
+html[data-theme="dark"] .ai3-badge-critical {
+  background: rgba(239, 68, 68, 0.16);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+html[data-theme="dark"] .ai3-badge-open {
+  background: rgba(234, 179, 8, 0.16);
+  color: #fde047;
+  border: 1px solid rgba(234, 179, 8, 0.35);
+}
+
+html[data-theme="dark"] .ai3-hotspot-score {
+  color: #a5b4fc;
+}
+
+/* Khối giải thích AI */
+html[data-theme="dark"] .ai3-explain {
+  background: rgba(79, 70, 229, 0.08);
+  border: 1.5px solid rgba(99, 102, 241, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+html[data-theme="dark"] .ai3-explain h4 {
+  color: #a5b4fc;
+}
+
+html[data-theme="dark"] .ai3-explain p {
+  color: #cbd5e1;
+}
+
+/* Nút thao tác */
+html[data-theme="dark"] #ai3AcceptBtn {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-color: #6366f1;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+}
+
+html[data-theme="dark"] #ai3AcceptBtn:hover {
+  opacity: 0.92;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.5);
+}
+
+html[data-theme="dark"] .btn-outline {
+  background-color: var(--dk-surface-2) !important;
+  color: var(--color-text) !important;
+  border: 1.5px solid var(--dk-border-strong) !important;
+}
+
+html[data-theme="dark"] .btn-outline:hover {
+  background-color: #26334d !important;
+  color: #ffffff !important;
+  border-color: #475569 !important;
+}
+
+html[data-theme="dark"] .ai3-reject-btn {
+  color: #fca5a5 !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  background-color: rgba(239, 68, 68, 0.12) !important;
+}
+
+html[data-theme="dark"] .ai3-reject-btn:hover {
+  background-color: rgba(239, 68, 68, 0.22) !important;
+  border-color: #ef4444 !important;
+  color: #fee2e2 !important;
+}
+
+/* Đã lưu */
+html[data-theme="dark"] .ai3-saved {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+html[data-theme="dark"] .ai3-saved-title {
+  color: #86efac;
+}
+
+html[data-theme="dark"] .ai3-saved-record {
+  background: var(--dk-surface);
+  border: 1px solid var(--dk-border-strong);
+}
+
+/* Lỗi / Từ chối */
+html[data-theme="dark"] .ai3-error-box {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+html[data-theme="dark"] .ai3-error-title {
+  color: #fca5a5;
+}
+
+html[data-theme="dark"] .ai3-error-box p {
+  color: var(--color-text);
+}
+
+/* Lịch sử phân tích AI-3 */
+html[data-theme="dark"] .ai3-history {
+  background: var(--dk-surface);
+  border: 1.5px solid var(--dk-border-strong);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+html[data-theme="dark"] .ai3-history-header {
+  border-bottom-color: var(--dk-border-strong);
+}
+
+html[data-theme="dark"] .ai3-history-clear {
+  color: #fca5a5 !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  background-color: rgba(239, 68, 68, 0.12) !important;
+}
+
+html[data-theme="dark"] .ai3-history-clear:hover {
+  background-color: rgba(239, 68, 68, 0.22) !important;
+  border-color: #ef4444 !important;
+  color: #fee2e2 !important;
+}
+
+html[data-theme="dark"] .ai3-history-item {
+  background: var(--dk-surface-2);
+  border: 1.5px solid var(--dk-border-strong);
+}
+
+html[data-theme="dark"] .ai3-history-item:hover {
+  border-color: #475569;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .ai3-hi-index {
+  background: rgba(99, 102, 241, 0.22);
+  color: #a5b4fc;
+}
+
+html[data-theme="dark"] .ai3-hi-id {
+  background: #111827;
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .ai3-hi-toggle {
+  background: rgba(99, 102, 241, 0.15) !important;
+  color: #a5b4fc !important;
+  border: 1.5px solid rgba(99, 102, 241, 0.35) !important;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .ai3-hi-toggle:hover {
+  background: rgba(99, 102, 241, 0.25) !important;
+  color: #c7d2fe !important;
+  border-color: #818cf8 !important;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+}
+
+html[data-theme="dark"] .ai3-hi-delete {
+  color: #94a3b8 !important;
+  background: transparent !important;
+}
+
+html[data-theme="dark"] .ai3-hi-delete:hover {
+  color: #fca5a5 !important;
+  background: rgba(239, 68, 68, 0.15) !important;
+}
+
+html[data-theme="dark"] .ai3-hi-summary {
+  color: var(--color-text);
+}
+
+html[data-theme="dark"] .ai3-hi-detail {
+  border-top-color: var(--dk-border-strong);
+}
+
+html[data-theme="dark"] .ai3-hi-detail-row {
+  background: var(--dk-surface);
+  border: 1px solid var(--dk-border-strong);
+}
+
+html[data-theme="dark"] .ai3-hi-score {
+  background: rgba(99, 102, 241, 0.18);
+  color: #a5b4fc;
+}
+
+html[data-theme="dark"] .ai3-hi-empty-detail {
+  background: var(--dk-surface) !important;
+  border: 1px dashed var(--dk-border-strong) !important;
+  color: var(--dk-muted) !important;
+}
+
 /* 6. HUẤN LUYỆN (css/training.css) */
 html[data-theme="dark"] .course-card,
 html[data-theme="dark"] .course-badge {
