@@ -399,3 +399,616 @@ td .action-context {
   border-radius: 6px;
   font-weight: 600;
 }
+
+/* ============================================================
+   AI-3: RISK HOTSPOT INSIGHT PANEL
+   ============================================================ */
+
+.ai3-panel {
+  margin-top: 40px;
+  padding: 32px;
+  border-radius: 16px;
+  border: 2px solid #e0e7ff;
+  background: linear-gradient(135deg, #f0f4ff 0%, #fafafa 100%);
+}
+
+.ai3-header {
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 20px;
+}
+
+.ai3-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  letter-spacing: 0.04em;
+}
+
+.ai3-header h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+}
+
+.ai3-header p {
+  font-size: 0.9rem;
+  color: var(--color-text);
+  opacity: 0.75;
+}
+
+/* Bước / Step common */
+.ai3-step {
+  animation: ai3FadeIn 0.3s ease;
+}
+
+@keyframes ai3FadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ai3-step-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+}
+
+.ai3-step-num {
+  background: #4f46e5;
+  color: #fff;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* Form Bước 1 */
+.ai3-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.ai3-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ai3-field label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.ai3-field select {
+  padding: 9px 12px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 0.88rem;
+  background: var(--color-white);
+  color: var(--color-text);
+  transition: border-color 0.2s;
+}
+
+.ai3-field select:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.ai3-run-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border: none;
+  color: #fff;
+  padding: 11px 22px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.ai3-run-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+/* Loading Bước 2 */
+.ai3-loading {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.ai3-spinner {
+  width: 36px;
+  height: 36px;
+  border: 4px solid #e0e7ff;
+  border-top-color: #4f46e5;
+  border-radius: 50%;
+  animation: ai3Spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes ai3Spin {
+  to { transform: rotate(360deg); }
+}
+
+.ai3-loading-title {
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 4px;
+}
+
+.ai3-loading-sub {
+  font-size: 0.85rem;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+.ai3-progress-track {
+  height: 10px;
+  background: #e0e7ff;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ai3-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4f46e5, #7c3aed);
+  border-radius: 6px;
+  transition: width 0.2s ease;
+}
+
+/* Kết quả Bước 3 */
+.ai3-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.ai3-confidence-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: #e0e7ff;
+  color: #4f46e5;
+}
+
+.ai3-confidence-badge.ai3-conf-high { background: #dcfce7; color: #16a34a; }
+.ai3-confidence-badge.ai3-conf-mid  { background: #fef9c3; color: #ca8a04; }
+.ai3-confidence-badge.ai3-conf-low  { background: #fee2e2; color: #dc2626; }
+
+.ai3-result-summary {
+  font-size: 0.9rem;
+  color: var(--color-text);
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+/* Hotspot cards */
+.ai3-hotspot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.ai3-hotspot-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border-left: 5px solid #e2e8f0;
+  background: var(--color-white);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: transform 0.15s;
+}
+
+.ai3-hotspot-card:hover { transform: translateX(3px); }
+.ai3-hotspot-card--critical { border-left-color: #ef4444; }
+.ai3-hotspot-card--high     { border-left-color: #f97316; }
+.ai3-hotspot-card--medium   { border-left-color: #eab308; }
+.ai3-hotspot-card--low      { border-left-color: #22c55e; }
+
+.ai3-hotspot-rank {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #4f46e5;
+  min-width: 36px;
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.ai3-hotspot-info { flex: 1; }
+
+.ai3-hotspot-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+}
+
+.ai3-hotspot-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.ai3-badge-critical {
+  background: #fee2e2;
+  color: #dc2626;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.ai3-badge-open {
+  background: #fef9c3;
+  color: #854d0e;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.ai3-hotspot-cat, .ai3-hotspot-sup {
+  font-size: 0.8rem;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+.ai3-hotspot-score {
+  font-weight: 800;
+  color: #4f46e5;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  padding-top: 4px;
+}
+
+/* Bước 4: Giải thích */
+.ai3-explain {
+  padding: 18px 20px;
+  background: #f8faff;
+  border: 1.5px solid #c7d2fe;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.ai3-explain h4 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #4f46e5;
+  margin-bottom: 10px;
+}
+
+.ai3-explain p {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  line-height: 1.65;
+}
+
+/* Bước 5: Action buttons */
+.ai3-actions-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.ai3-reject-btn {
+  color: #dc2626 !important;
+  border-color: #fecaca !important;
+}
+
+.ai3-reject-btn:hover {
+  background: #fee2e2 !important;
+}
+
+/* Bước 6: Saved */
+.ai3-saved {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px;
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.ai3-saved-title {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #16a34a;
+  margin-bottom: 4px;
+}
+
+.ai3-saved-sub {
+  font-size: 0.8rem;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+.ai3-saved-record {
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  background: var(--color-white);
+  border-radius: 10px;
+}
+
+/* Error box */
+.ai3-error-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  background: #fff1f2;
+  border: 1.5px solid #fecaca;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.ai3-error-title {
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 4px;
+}
+
+.ai3-empty {
+  text-align: center;
+  padding: 24px;
+  color: var(--color-text);
+  opacity: 0.6;
+  font-size: 0.9rem;
+}
+
+/* ============================================================
+   AI-3: LỊCH SỬ KẾT QUẢ ĐÃ LƯU (HISTORY LIST)
+   ============================================================ */
+
+.ai3-history {
+  margin-top: 36px;
+  padding: 28px;
+  border-radius: 16px;
+  border: 1.5px solid #e2e8f0;
+  background: var(--color-white);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.ai3-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ai3-history-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.ai3-history-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  color: #dc2626 !important;
+  border-color: #fecaca !important;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ai3-history-clear:hover {
+  background: #fee2e2 !important;
+  border-color: #ef4444 !important;
+}
+
+.ai3-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ai3-history-item {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  background: #f8fafc;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.ai3-history-item:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.ai3-hi-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.ai3-hi-index {
+  font-weight: 800;
+  color: #4f46e5;
+  font-size: 0.85rem;
+  background: #e0e7ff;
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+
+.ai3-hi-id {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #334155;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.ai3-hi-time {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin-right: auto;
+}
+
+/* Nút outline chung cho trang manager */
+.btn-outline {
+  background-color: #ffffff !important;
+  color: var(--color-primary) !important;
+  border: 1.5px solid var(--color-border) !important;
+}
+
+.btn-outline:hover {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+.ai3-hi-toggle {
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #ffffff !important;
+  color: #4f46e5 !important;
+  border: 1.5px solid #c7d2fe !important;
+  box-shadow: 0 1px 3px rgba(79, 70, 229, 0.08);
+  transition: all 0.2s ease;
+}
+
+.ai3-hi-toggle:hover {
+  background: #eef2ff !important;
+  color: #4338ca !important;
+  border-color: #818cf8 !important;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.15);
+}
+
+.ai3-hi-delete {
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: #94a3b8 !important;
+  border: 1px solid transparent !important;
+  background: transparent;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.ai3-hi-delete:hover {
+  color: #dc2626 !important;
+  background: #fee2e2 !important;
+}
+
+.ai3-hi-summary {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-size: 0.86rem;
+  color: var(--color-text);
+  padding: 4px 0;
+}
+
+.ai3-hi-detail {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: ai3FadeIn 0.2s ease;
+}
+
+.ai3-hi-detail.is-hidden {
+  display: none;
+}
+
+.ai3-hi-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  background: #ffffff;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  border: 1px solid #e2e8f0;
+}
+
+.ai3-hi-rank {
+  font-weight: 800;
+  color: #4f46e5;
+  min-width: 26px;
+}
+
+.ai3-hi-zone {
+  font-weight: 700;
+  color: var(--color-primary);
+  min-width: 140px;
+}
+
+.ai3-hi-cat {
+  color: #64748b;
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.ai3-hi-score {
+  margin-left: auto;
+  font-weight: 800;
+  color: #4f46e5;
+  background: #eef2ff;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
