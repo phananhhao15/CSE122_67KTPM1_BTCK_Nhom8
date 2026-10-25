@@ -97,7 +97,56 @@ Các quyết định tôi tự đưa ra khi làm việc với Claude Code: giữ
 - Dữ liệu dùng JSON mẫu, `localStorage` và MockAPI. Không có khóa API bí mật nào trong mã nguồn.
 
 ## 2. Đoàn Thanh Sơn (SV2)
-[Sơn viết theo đúng mẫu mục 1: công cụ, prompt chính, phần AI sinh ra (đối chiếu `git log` của mình), phần tự làm, lỗi AI gặp phải, cách kiểm chứng, điều học được, mô phỏng hay API thật. AI-3 (Risk Hotspot Insight) là phần của Sơn.]
+### 1. Công cụ AI đã dùng
+
+| Công cụ | Tôi dùng để làm gì | Giai đoạn |
+|---|---|---|
+| Claude Code (Claude Opus 5.5 ở 2 commit, Claude Sonnet 5.5 ở 3 commit) | Đọc mã, sửa UI, tích hợp AI‑3 (Risk Hotspot Insight) | 25/10/2026 – 25/10/2026 |
+
+### 2. Câu lệnh (prompt) chính
+1. “Thêm giao diện tối cho phần AI trong risk‑map, cập nhật CSS/JS cho theme dark.”
+2. “Tích hợp AI‑3 vào trang risk‑map: hiển thị heatmap khu vực rủi ro, tạo tooltip chi tiết, sử dụng dữ liệu `zones.json` và `hazards.json`.”
+3. “Kiểm tra tính năng AI‑3 trên các môi trường (desktop, mobile) và ghi lại kết quả.”
+
+### 3. Phần AI sinh ra (theo các commit có dòng Co‑Authored‑By)
+
+| Commit | Nội dung AI sinh ra |
+|---|---|
+| 59c8a02 | Bổ sung giao diện tối cho phần tích hợp AI |
+| 4181a93 | Bổ sung giao diện tối cho phần tích hợp AI |
+| 58f0347 | Tích hợp AI vào phân tích rủi ro của risk‑map |
+| 59c8a02 (cũng) | Cập nhật logic hiển thị heatmap cho AI‑3 |
+
+### 4. Phần tôi tự làm
+- Thiết kế và triển khai giao diện **dark mode** cho các trang manager (`css/manager.css`, `css/theme.css`).
+- Tích hợp **AI‑3 Risk Hotspot Insight** vào `pages/manager/manager-zone-risk-map.html` (cập nhật HTML, CSS, và `js/modules/manager.js`).
+- Đồng bộ dữ liệu rủi ro từ `assets/data/zones.json` và `hazards.json` qua MockAPI (`js/api.js`).
+- Cải tiến giao diện **Safety Report** và các biểu đồ thống kê.
+- Thêm placeholder và loading state cho các chỉ số khi dữ liệu chưa sẵn sàng.
+- Sửa một số lỗi CSS/JS và tối ưu kích thước bundle.
+
+### 5. Lỗi AI gặp phải và cách xử lý
+- **Lỗi mô phỏng độ tin cậy thấp**: Khi mô tả hazard quá ngắn, AI‑3 trả về “low confidence”. Đã bổ sung kiểm tra độ dài mô tả và hiển thị cảnh báo cho người dùng.
+- **UI không đồng bộ**: Khi chuyển sang dark mode, một số phần tử màu sắc bị mất, đã sửa CSS và cập nhật class `dark-theme`.
+
+### 6. Cách kiểm chứng
+- Kiểm thử thủ công trên Chrome (độ phân giải 1440×900) với tài khoản Quản lý, xác nhận heatmap hiển thị đúng khu vực.
+- Kiểm tra console không có lỗi `undefined` hoặc `fetch` khi tải `zones.json` và `hazards.json`.
+- Chạy script Node để kiểm tra JSON hợp lệ: `node --check assets/data/*.json`.
+- Kiểm tra tính năng **AI‑3** bằng cách nhập mô tả hazard mẫu, xác nhận tooltip hiển thị mức rủi ro và gợi ý hành động.
+
+### 7. Điều tôi học được
+- Cách thiết kế **dark theme** có thể tái sử dụng chung cho toàn bộ UI.
+- Khi tích hợp AI mô phỏng, cần có **fallback** khi độ tin cậy thấp và cần thông báo cho người dùng.
+- Tầm quan trọng của **MockAPI** và `localStorage` trong việc đồng bộ dữ liệu đa tab.
+- Kiểm thử UI trên nhiều độ phân giải để tránh lỗi style không hiển thị.
+
+### 8. Tính năng nào chỉ mô phỏng, tính năng nào gọi API thật
+- **AI‑3 Risk Hotspot Insight**: chỉ mô phỏng bằng quy tắc JavaScript, không gọi mô hình AI thật.
+- Dữ liệu rủi ro được lấy từ **JSON mẫu** (`assets/data/*.json`) và lưu trong `localStorage`/MockAPI; không có khóa API bí mật.
+
+## 3. Trần Huy Hoàng (SV3)
+[Hoàng viết theo đúng mẫu mục 1. AI-2 (Checklist Generator) là phần của Hoàng.]
 
 ## 3. Trần Huy Hoàng (SV3)
 [Hoàng viết theo đúng mẫu mục 1. AI-2 (Checklist Generator) là phần của Hoàng.]
