@@ -54,15 +54,27 @@
         </div>
       </div>
     <script>
-      // Đảm bảo quyền truy cập trang Quản lý công trường khi mở trực tiếp file:// hoặc chuyển đổi role từ trang quản trị
+      // =========================================================================
+      // KHỐI SCRIPT 1: KIỂM TRA QUYỀN ĐĂNG NHẬP (ROLE: SITE_MANAGER)
+      // =========================================================================
       try {
+        // CÚ PHÁP "||" (Toán tử HOẶC / Default Value):
+        // - localStorage.getItem("siteSafeUser"): đọc dữ liệu lưu trữ từ trình duyệt.
+        // - Nếu chưa đăng nhập (kết quả trả về null), biểu thức "|| 'null'" sẽ lấy chuỗi 'null',
+        //   để JSON.parse('null') trả về null an toàn mà không quăng Exception.
         const existingUser = JSON.parse(
           localStorage.getItem("siteSafeUser") || "null",
         );
+
+        // CÚ PHÁP "||" (Toán tử logic OR trong điều kiện):
+        // - Nếu chưa có existingUser HOẶC vai trò role khác SITE_MANAGER thì tự động tạo tài khoản mẫu.
         if (!existingUser || existingUser.role !== "SITE_MANAGER") {
           localStorage.setItem(
             "siteSafeUser",
             JSON.stringify({
+              // CÚ PHÁP "&&" (Toán tử VÀ / Guarding) kết hợp "? :" (Toán tử 3 ngôi / Ternary Operator):
+              // - "existingUser && existingUser.fullName": Bảo vệ tránh lỗi nếu existingUser là null.
+              // - "? :": Nếu existingUser có fullName thì dùng tên đó, ngược lại lấy tên mặc định "Phạm Minh Quân".
               fullName:
                 existingUser && existingUser.fullName
                   ? existingUser.fullName
@@ -92,7 +104,13 @@
     <script src="../../js/main.js"></script>
     <script src="../../js/modules/manager.js"></script>
     <script>
+      // =========================================================================
+      // KHỐI SCRIPT 2: LUỒNG RENDER BẢN ĐỒ RỦI RO KHU VỰC
+      // =========================================================================
+
+      // Hàm escape các ký tự đặc biệt để an toàn trước tấn công XSS
       function escapeHtml(value) {
+        // CÚ PHÁP "? :": Nếu value là null hoặc undefined (value == null) thì thay bằng rỗng "", ngược lại giữ value
         return String(value == null ? "" : value).replace(
           /[&<>'"]/g,
           function (character) {
@@ -107,18 +125,21 @@
         );
       }
 
+      // Bảng ánh xạ nhãn mức độ rủi ro sang tiếng Việt
       const riskLabels = {
         CRITICAL: "Nghiêm trọng",
         HIGH: "Cao",
         MEDIUM: "Trung bình",
         LOW: "Thấp",
       };
+      // Bảng ánh xạ class CSS cho khung hiển thị sơ đồ và thẻ khu vực
       const savedZoneClass = {
         CRITICAL: "critical",
         HIGH: "high",
         MEDIUM: "medium",
         LOW: "low",
       };
+      // Bảng ánh xạ màu sắc nhãn Badge
       const riskBadgeClass = {
         CRITICAL: "badge-danger",
         HIGH: "badge-warning",
@@ -126,37 +147,63 @@
         LOW: "badge-success",
       };
 
+      // Hàm chính: Tải dữ liệu và render Bản đồ cùng Danh sách thẻ khu vực
       async function initRiskMap() {
         const mapLayout = document.getElementById("mapLayout");
         const zoneGrid = document.getElementById("zoneGrid");
         mapLayout.innerHTML = "";
         zoneGrid.innerHTML = "";
 
+        // BIẾN "zones" ĐẾN TỪ ĐÂU?
+        // - "zones" là một mảng (Array) các đối tượng khu vực, được trả về từ hàm bất đồng bộ siteSafeManager.loadZones().
+        // - Hàm loadZones() nằm trong file js/modules/manager.js, nạp dữ liệu từ assets/data/zones.json hoặc LocalStorage.
         const zones = await siteSafeManager.loadZones();
 
+        // BIẾN "zone" ĐẾN TỪ ĐÂU?
+        // - "zone" chính là THAM SỐ của hàm callback trong vòng lặp zones.forEach().
+        // - Khi duyệt mảng "zones", ở mỗi lượt lặp, JavaScript sẽ lấy ra một phần tử (khu vực) và gán vào biến "zone".
+        // - Cấu trúc 1 "zone" mẫu:
+        //   { id: "ZONE-001", code: "LM-A", name: "Tòa A", riskLevel: "CRITICAL", hazardsCount: 12, supervisor: "..." }
         zones.forEach(function (zone) {
+          // CÚ PHÁP "||" (Fallback / Giá trị mặc định):
+          // - Nếu zone.riskLevel bị undefined/null hoặc rỗng, lấy mặc định "MEDIUM".
           const riskKey = zone.riskLevel || "MEDIUM";
+
+          // CÚ PHÁP "||": Tra cứu trong object savedZoneClass. Nếu không tìm thấy, lấy giá trị fallback là "medium".
           const riskClass = savedZoneClass[riskKey] || "medium";
+
+          // CÚ PHÁP "||": Tra cứu class badge. Nếu không có, fallback sang "badge-warning".
           const badgeClass = riskBadgeClass[riskKey] || "badge-warning";
+
+          // CÚ PHÁP "||": Chuyển hazardsCount thành kiểu Number. Nếu bị NaN hoặc 0/undefined thì lấy 0.
           const hazardsCount = Number(zone.hazardsCount) || 0;
 
-          // Render khối trên sơ đồ
+          // -------------------------------------------------------------------
+          // 1. Render khối hiển thị trên Sơ đồ trực quan (mapLayout)
+          // -------------------------------------------------------------------
           const mapZone = document.createElement("div");
           mapZone.className = `map-zone map-zone--${riskClass}`;
+          // CÚ PHÁP "||": Nếu có zone.code thì hiển thị zone.code, nếu không có thì lấy zone.id làm dự phòng
           mapZone.textContent = `${zone.code || zone.id} · ${zone.name}`;
           mapLayout.appendChild(mapZone);
 
-          // Render thẻ chi tiết từng vùng
+          // -------------------------------------------------------------------
+          // 2. Render thẻ Card chi tiết của từng khu vực (zoneGrid)
+          // -------------------------------------------------------------------
           const card = document.createElement("article");
           card.className = `card zone-card zone-card--${riskClass}`;
           card.innerHTML = `
             <div class="zone-card-header">
+              <!-- CÚ PHÁP "||": Lấy mã code, nếu rỗng thì lấy id -->
               <h2>${escapeHtml(zone.code || zone.id)}</h2>
+              <!-- CÚ PHÁP "||": Tra cứu nhãn tiếng Việt từ riskLabels, nếu không có lấy "Chưa phân loại" -->
               <span class="badge ${badgeClass}">${escapeHtml(riskLabels[riskKey] || "Chưa phân loại")}</span>
             </div>
+            <!-- CÚ PHÁP "||": Nếu zone.description rỗng thì hiển thị "Chưa có mô tả." -->
             <p>${escapeHtml(zone.description || "Chưa có mô tả.")}</p>
             <div class="zone-meta">
               <span>${hazardsCount} sự cố</span>
+              <!-- CÚ PHÁP "||": Nếu zone.supervisor rỗng thì hiển thị "Chưa phân công" -->
               <span>Giám sát: ${escapeHtml(zone.supervisor || "Chưa phân công")}</span>
             </div>
           `;
@@ -164,6 +211,7 @@
         });
       }
 
+      // Khởi chạy hàm khi trang load xong
       initRiskMap();
     </script>
   </body>
