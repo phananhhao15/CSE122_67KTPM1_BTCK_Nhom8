@@ -1,217 +1,456 @@
 <!doctype html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng ký tài khoản | SiteSafe</title>
-    <link rel="stylesheet" href="../../css/style.css" />
-    <link rel="stylesheet" href="../../css/auth.css" />
-    <link rel="stylesheet" href="../../css/responsive.css" />
-    <style>
-      .register-page {
-        display: grid;
-        grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
-        gap: 32px;
-        align-items: center;
-        width: min(1080px, calc(100% - 32px));
-        min-height: 100vh;
-        margin: 0 auto;
-        padding: 32px 0;
-      }
 
-      .register-banner {
-        min-height: 560px;
-        padding: 32px;
-        color: var(--color-white);
-        background-image:
-          linear-gradient(rgb(15 23 42 / 35%), rgb(15 23 42 / 72%)),
-          url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80");
-        background-position: center;
-        background-size: cover;
-        border-radius: 8px;
-        display: flex;
-        align-items: flex-end;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Đăng ký tài khoản tham gia hệ thống quản lý an toàn công trường SiteSafe." />
+  <title>Đăng ký tài khoản | SiteSafe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/auth.css" />
+  <link rel="stylesheet" href="../../css/responsive.css" />
+</head>
 
-      .register-banner h1 {
-        margin: 0 0 8px;
-        font-size: clamp(1.8rem, 4vw, 2.8rem);
-        line-height: 1.15;
-      }
+<body>
+  <div class="auth-signin">
 
-      .register-banner p {
-        max-width: 420px;
-        margin: 0;
-        color: var(--color-neutral-200);
-      }
+    <!-- Cột trái: khu vực thương hiệu -->
+    <aside class="auth-signin-brand" aria-label="Giới thiệu SiteSafe">
+      <a class="auth-signin-logo" href="../../index.html" title="Trang chủ SiteSafe">
+        <svg class="auth-signin-logo-icon" viewBox="0 0 32 36" width="32" height="36" fill="none" aria-hidden="true">
+          <path d="M16 2 3 7v9c0 8.5 5.4 15.3 13 18 7.6-2.7 13-9.5 13-18V7L16 2Z" stroke="#f97316" stroke-width="2.4"
+            stroke-linejoin="round" />
+          <path d="m10.5 17.5 4 4 7-8" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <span class="auth-signin-logo-text">site<span>safe</span></span>
+      </a>
 
-      .register-form {
-        max-width: 520px;
-        width: 100%;
-        margin: 0 auto;
-      }
-
-      .register-form h2 {
-        margin-top: 0;
-        color: var(--color-primary);
-      }
-
-      .register-form .form-group {
-        margin-bottom: 16px;
-      }
-
-      .register-form label {
-        display: block;
-        margin-bottom: 6px;
-        color: var(--color-primary);
-        font-weight: 600;
-      }
-
-      .register-form .btn {
-        width: 100%;
-        margin-top: 8px;
-        text-align: center;
-      }
-
-      .register-note {
-        margin: 16px 0 0;
-        color: var(--color-neutral-500);
-        font-size: 0.9rem;
-        text-align: center;
-      }
-
-      .register-note a {
-        color: var(--color-info);
-      }
-
-      @media (max-width: 768px) {
-        .register-page {
-          grid-template-columns: 1fr;
-          width: min(560px, calc(100% - 24px));
-          padding: 24px 0;
-        }
-
-        .register-banner {
-          min-height: 260px;
-          padding: 24px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <main class="register-page">
-      <!-- Thay URL ảnh banner tại background-image bằng ảnh công trường chính thức của dự án. -->
-      <!-- Prompt AI: "Realistic construction site with workers wearing safety helmets and reflective vests, clean organized work area, warm natural light, professional safety documentary photography." -->
-      <section class="register-banner" aria-label="Giới thiệu SiteSafe">
-        <div>
-          <h1>Tham gia SiteSafe</h1>
-          <p>
-            Tạo tài khoản để cùng xây dựng môi trường làm việc an toàn, rõ ràng
-            và hiệu quả hơn.
-          </p>
-        </div>
-      </section>
-
-      <section class="card register-form" aria-labelledby="register-title">
-        <h2 id="register-title">Đăng ký tài khoản</h2>
-        <p>
-          Nhập email và mật khẩu giả để tạo tài khoản demo trên trình duyệt này.
+      <div class="auth-signin-hero">
+        <h2 class="auth-signin-hero-title">Đồng hành cùng<br /><span>sự an toàn</span> trên mọi công trình.</h2>
+        <p class="auth-signin-hero-desc">
+          Tham gia nền tảng SiteSafe để kiểm tra an toàn ca trực hằng ngày, báo cáo nguy cơ tức thời và bảo vệ bản thân
+          cùng đồng nghiệp trong từng ca làm việc.
         </p>
 
-        <form id="registerForm" novalidate>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              class="form-control"
-              id="email"
-              name="email"
-              type="email"
-              placeholder="demo@example.com"
-              autocomplete="email"
-              required
-            />
+        <ul class="auth-signin-features">
+          <li>
+            <span class="auth-signin-tick" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="12" height="12" fill="none"><path d="m3.5 8.5 3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+            Thực hiện checklist an toàn ca trực chỉ trong 2 phút
+          </li>
+          <li>
+            <span class="auth-signin-tick" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="12" height="12" fill="none"><path d="m3.5 8.5 3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+            Gửi báo cáo sự cố kèm hình ảnh hiện trường trực quan
+          </li>
+          <li>
+            <span class="auth-signin-tick" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="12" height="12" fill="none"><path d="m3.5 8.5 3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+            Mô-đun AI hỗ trợ phân loại mức độ rủi ro tức thì
+          </li>
+        </ul>
+      </div>
+
+      <div class="auth-signin-stripe" aria-hidden="true"></div>
+    </aside>
+
+    <!-- Cột phải: form đăng ký -->
+    <main class="auth-signin-panel" aria-labelledby="registerHeading">
+      <!-- Logo chỉ hiện trên mobile (cột trái bị ẩn) -->
+      <a class="auth-signin-logo auth-signin-logo--mobile" href="../../index.html" title="Trang chủ SiteSafe">
+        <svg class="auth-signin-logo-icon" viewBox="0 0 32 36" width="30" height="34" fill="none" aria-hidden="true">
+          <path d="M16 2 3 7v9c0 8.5 5.4 15.3 13 18 7.6-2.7 13-9.5 13-18V7L16 2Z" stroke="#f97316" stroke-width="2.4"
+            stroke-linejoin="round" />
+          <path d="m10.5 17.5 4 4 7-8" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <span class="auth-signin-logo-text">site<span>safe</span></span>
+      </a>
+
+      <section class="auth-signin-card">
+        <h1 class="auth-signin-title" id="registerHeading">Tạo tài khoản mới</h1>
+        <p class="auth-signin-sub">Điền thông tin bên dưới để bắt đầu sử dụng các tính năng an toàn lao động.</p>
+
+        <!-- Màn hình trạng thái thành công (ẩn mặc định) -->
+        <div class="auth-signin-success" id="registerSuccessBox" data-auth-state="success" role="status" hidden>
+          <span class="auth-signin-success-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="m8 12.5 3 3 5-6" /></svg>
+          </span>
+          <h2 class="auth-signin-success-title">Đăng ký thành công!</h2>
+          <p class="auth-signin-success-desc" id="registerSuccessMessage" data-auth-success-message>
+            Tài khoản của bạn đã được khởi tạo trong hệ thống SiteSafe. Vui lòng chuyển tới trang đăng nhập để tiếp tục.
+          </p>
+          <a class="auth-signin-submit" id="registerSuccessLoginBtn" href="login.html" data-auth-action="go-to-login">
+            Đến trang đăng nhập ngay
+          </a>
+        </div>
+
+        <!-- Form đăng ký theo cấu trúc users.json -->
+        <form id="registerForm" data-auth-form="register" novalidate>
+          <!-- Họ và tên (fullName) -->
+          <div class="auth-signin-group">
+            <label class="auth-signin-label" for="registerFullName">Họ và tên <span class="auth-label-required">*</span></label>
+            <div class="auth-signin-field">
+              <svg class="auth-signin-field-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 20c0-3.9 3.6-7 8-7s8 3.1 8 7" />
+              </svg>
+              <input class="auth-signin-input" id="registerFullName" name="fullName" type="text"
+                placeholder="Ví dụ: Nguyễn Văn An" autocomplete="name" data-auth-field="fullName"
+                aria-describedby="registerFullNameError" required />
+            </div>
+            <span class="auth-field-error" id="registerFullNameError" data-auth-error="fullName" hidden></span>
           </div>
 
-          <div class="form-group">
-            <label for="password">Mật khẩu</label>
-            <input
-              class="form-control"
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Nhập mật khẩu demo"
-              autocomplete="new-password"
-              minlength="6"
-              required
-            />
+          <!-- Địa chỉ Email (email) -->
+          <div class="auth-signin-group">
+            <label class="auth-signin-label" for="registerEmail">Địa chỉ Email <span class="auth-label-required">*</span></label>
+            <div class="auth-signin-field">
+              <svg class="auth-signin-field-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="m3.5 7 8.5 6 8.5-6" />
+              </svg>
+              <input class="auth-signin-input" id="registerEmail" name="email" type="email"
+                placeholder="ten@sitesafe.test" autocomplete="email" autocapitalize="off" spellcheck="false"
+                data-auth-field="email" aria-describedby="registerEmailError" required />
+            </div>
+            <span class="auth-field-error" id="registerEmailError" data-auth-error="email" hidden></span>
           </div>
 
-          <button class="btn btn-success" type="submit">Tạo tài khoản</button>
-          <p
-            class="form-message"
-            id="registerMessage"
-            role="alert"
-            aria-live="polite"
-          ></p>
+          <!-- Số điện thoại (phone) -->
+          <div class="auth-signin-group">
+            <label class="auth-signin-label" for="registerPhone">Số điện thoại</label>
+            <div class="auth-signin-field">
+              <svg class="auth-signin-field-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" />
+              </svg>
+              <input class="auth-signin-input" id="registerPhone" name="phone" type="tel"
+                placeholder="0912345678" autocomplete="tel" data-auth-field="phone"
+                aria-describedby="registerPhoneError" />
+            </div>
+            <span class="auth-field-error" id="registerPhoneError" data-auth-error="phone" hidden></span>
+          </div>
+
+          <!-- Vai trò đăng ký (role) -->
+          <div class="auth-signin-group">
+            <span class="auth-signin-label" id="registerRoleLabel">Vai trò đăng ký <span class="auth-label-required">*</span></span>
+            <div class="auth-signin-roles" id="registerRole" role="group" aria-labelledby="registerRoleLabel" data-auth-field="role">
+              <button type="button" class="auth-signin-role is-active" data-role="WORKER" aria-pressed="true">Công nhân</button>
+              <button type="button" class="auth-signin-role" data-role="SAFETY_OFFICER" aria-pressed="false">An toàn viên</button>
+              <button type="button" class="auth-signin-role" data-role="SITE_MANAGER" aria-pressed="false">Quản lý</button>
+              <button type="button" class="auth-signin-role" data-role="ADMIN" aria-pressed="false">Quản trị viên</button>
+            </div>
+            <span class="auth-field-error" id="registerRoleError" data-auth-error="role" hidden></span>
+          </div>
+
+          <!-- Mật khẩu (password) -->
+          <div class="auth-signin-group">
+            <div class="auth-signin-label-row">
+              <label class="auth-signin-label" for="registerPassword">Mật khẩu <span class="auth-label-required">*</span></label>
+              <span class="auth-signin-hint">Tối thiểu 6 ký tự</span>
+            </div>
+            <div class="auth-signin-field">
+              <svg class="auth-signin-field-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="4" y="11" width="16" height="10" rx="2" />
+                <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+              </svg>
+              <input class="auth-signin-input auth-signin-input--password" id="registerPassword" name="password"
+                type="password" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password" minlength="6"
+                data-auth-field="password" aria-describedby="registerPasswordError" required />
+              <button class="auth-signin-toggle" id="toggleRegisterPasswordBtn" type="button" aria-label="Hiện mật khẩu"
+                aria-pressed="false" data-auth-action="toggle-password" data-target-input="registerPassword">
+                <svg class="auth-signin-eye" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg class="auth-signin-eye-off" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+                  <path d="M3 3l18 18" />
+                  <path d="M10.6 5.1A10.5 10.5 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.5 6.6C3.7 8.4 2 12 2 12s3.6 7 10 7c1.7 0 3.2-.4 4.5-1.1" />
+                  <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+                </svg>
+              </button>
+            </div>
+            <span class="auth-field-error" id="registerPasswordError" data-auth-error="password" hidden></span>
+          </div>
+
+          <!-- Xác nhận mật khẩu (confirmPassword) -->
+          <div class="auth-signin-group">
+            <label class="auth-signin-label" for="registerConfirmPassword">Xác nhận mật khẩu <span class="auth-label-required">*</span></label>
+            <div class="auth-signin-field">
+              <svg class="auth-signin-field-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="4" y="11" width="16" height="10" rx="2" />
+                <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+              </svg>
+              <input class="auth-signin-input auth-signin-input--password" id="registerConfirmPassword"
+                name="confirmPassword" type="password" placeholder="Nhập lại mật khẩu vừa tạo"
+                autocomplete="new-password" data-auth-field="confirmPassword"
+                aria-describedby="registerConfirmPasswordError" required />
+              <button class="auth-signin-toggle" id="toggleRegisterConfirmPasswordBtn" type="button"
+                aria-label="Hiện mật khẩu xác nhận" aria-pressed="false" data-auth-action="toggle-password"
+                data-target-input="registerConfirmPassword">
+                <svg class="auth-signin-eye" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg class="auth-signin-eye-off" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+                  <path d="M3 3l18 18" />
+                  <path d="M10.6 5.1A10.5 10.5 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.5 6.6C3.7 8.4 2 12 2 12s3.6 7 10 7c1.7 0 3.2-.4 4.5-1.1" />
+                  <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+                </svg>
+              </button>
+            </div>
+            <span class="auth-field-error" id="registerConfirmPasswordError" data-auth-error="confirmPassword" hidden></span>
+          </div>
+
+          <!-- Điều khoản cam kết -->
+          <div class="auth-signin-group">
+            <label class="auth-signin-remember auth-signin-terms">
+              <input type="checkbox" id="registerTerms" name="terms" data-auth-field="terms"
+                aria-describedby="registerTermsError" required />
+              <span>Tôi đồng ý tuân thủ quy chuẩn an toàn lao động và điều khoản sử dụng nền tảng SiteSafe.</span>
+            </label>
+            <span class="auth-field-error" id="registerTermsError" data-auth-error="terms" hidden></span>
+          </div>
+
+          <!-- Thông báo lỗi chung nằm phía trên nút -->
+          <div class="auth-alert auth-alert--error" id="registerAlert" data-auth-alert="general" role="alert"
+            aria-live="polite" hidden>
+            <span class="auth-alert-icon" id="registerAlertIcon" data-auth-alert-icon aria-hidden="true"></span>
+            <div class="auth-alert-content">
+              <div id="registerAlertMessage" data-auth-alert-message></div>
+            </div>
+          </div>
+
+          <button class="auth-signin-submit" id="registerSubmitBtn" type="submit" data-auth-action="submit">
+            <span class="auth-btn-spinner" data-auth-spinner></span>
+            <span class="auth-btn-text-default" data-auth-btn-text="default">Đăng ký tài khoản</span>
+            <span class="auth-btn-text-loading" data-auth-btn-text="loading">Đang khởi tạo tài khoản…</span>
+          </button>
         </form>
 
-        <p class="register-note">
-          Đã có tài khoản? <a href="login.html">Đăng nhập</a>
-        </p>
+        <!-- Điều hướng quay lại đăng nhập -->
+        <div class="auth-footer-nav" id="registerFooterNav">
+          Đã có tài khoản SiteSafe?
+          <a href="login.html" data-auth-link="login">Đăng nhập ngay</a>
+        </div>
       </section>
     </main>
+  </div>
 
-    <script src="../../js/api.js"></script>
-    <script>
-      const registerForm = document.getElementById("registerForm");
-      const registerMessage = document.getElementById("registerMessage");
+  <!-- Nạp đúng thứ tự bắt buộc: api.js -> main.js -> auth.js -->
+  <script src="../../js/api.js"></script>
+  <script src="../../js/main.js"></script>
+  <script src="../../js/modules/auth.js"></script>
 
-      registerForm.addEventListener("submit", function (event) {
-        event.preventDefault();
+  <!-- Script đăng ký đầy đủ: UI + Logic kết nối siteSafeAuth -->
+  <script>
+    (function () {
+      "use strict";
 
-        const email = document
-          .getElementById("email")
-          .value.trim()
-          .toLowerCase();
-        const password = document.getElementById("password").value;
+      // ── Phần tử DOM ──────────────────────────────────────────────
+      const registerForm     = document.getElementById("registerForm");
+      const fullNameInput    = document.getElementById("registerFullName");
+      const emailInput       = document.getElementById("registerEmail");
+      const phoneInput       = document.getElementById("registerPhone");
+      const roleButtons      = document.querySelectorAll(".auth-signin-role");
+      const passwordInput    = document.getElementById("registerPassword");
+      const confirmPassInput = document.getElementById("registerConfirmPassword");
+      const termsCheckbox    = document.getElementById("registerTerms");
+      const submitBtn        = document.getElementById("registerSubmitBtn");
+      const alertBox         = document.getElementById("registerAlert");
+      const alertIcon        = document.getElementById("registerAlertIcon");
+      const alertMessage     = document.getElementById("registerAlertMessage");
+      const successBox       = document.getElementById("registerSuccessBox");
+      const successMessage   = document.getElementById("registerSuccessMessage");
+      const footerNav        = document.getElementById("registerFooterNav");
 
-        if (!email || !email.includes("@")) {
-          registerMessage.textContent =
-            "Vui lòng nhập email demo hợp lệ, ví dụ demo@example.com.";
-          return;
-        }
+      const fullNameError    = document.getElementById("registerFullNameError");
+      const emailError       = document.getElementById("registerEmailError");
+      const passwordError    = document.getElementById("registerPasswordError");
+      const confirmPassError = document.getElementById("registerConfirmPasswordError");
+      const termsError       = document.getElementById("registerTermsError");
 
-        if (password.length < 6) {
-          registerMessage.textContent = "Mật khẩu demo cần có ít nhất 6 ký tự.";
-          return;
-        }
+      const ICON_ERROR = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17.5v.01"/></svg>';
 
-        const existingUser = siteSafeApi
-          .getUsers()
-          .find((user) => user.email.toLowerCase() === email);
-
-        if (existingUser) {
-          registerMessage.textContent =
-            "Email này đã được đăng ký trong dữ liệu demo.";
-          return;
-        }
-
-        siteSafeApi.saveUser({
-          fullName: email.split("@")[0],
-          email,
-          password,
-          role: "WORKER",
-          roleLabel: "Công nhân hiện trường",
-          status: "ACTIVE",
+      // ── Chọn vai trò (bắt buộc, luôn có một vai trò được chọn) ──
+      let selectedRole = "WORKER";
+      roleButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          selectedRole = btn.getAttribute("data-role");
+          roleButtons.forEach(function (b) {
+            const on = b === btn;
+            b.classList.toggle("is-active", on);
+            b.setAttribute("aria-pressed", String(on));
+          });
         });
-
-        const next = new URLSearchParams(window.location.search).get("next");
-        const nextUrl =
-          next && next.startsWith("pages/")
-            ? `?next=${encodeURIComponent(next)}`
-            : "";
-        window.location.href = `login.html${nextUrl}`;
       });
-    </script>
-  </body>
+
+      // ── Nút ẩn/hiện mật khẩu (dùng chung cho 2 ô) ───────────────
+      document.querySelectorAll("[data-auth-action='toggle-password']").forEach(function (btn) {
+        const input = document.getElementById(btn.dataset.targetInput);
+        if (!input) return;
+        const label = btn.dataset.targetInput === "registerConfirmPassword" ? "mật khẩu xác nhận" : "mật khẩu";
+        btn.addEventListener("click", function () {
+          const show = input.type === "password";
+          input.type = show ? "text" : "password";
+          btn.setAttribute("aria-label", (show ? "Ẩn " : "Hiện ") + label);
+          btn.setAttribute("aria-pressed", String(show));
+          btn.querySelector(".auth-signin-eye").hidden = show;
+          btn.querySelector(".auth-signin-eye-off").hidden = !show;
+        });
+      });
+
+      // ── Tiện ích hiển thị ────────────────────────────────────────
+      function setLoading(on) {
+        submitBtn.disabled = on;
+        submitBtn.classList.toggle("auth-btn--loading", on);
+      }
+
+      function showAlert(msg) {
+        alertBox.className = "auth-alert auth-alert--error";
+        alertIcon.innerHTML = ICON_ERROR;
+        alertMessage.textContent = msg;
+        alertBox.hidden = false;
+      }
+
+      function showFieldError(inputEl, errorEl, msg) {
+        if (inputEl) {
+          inputEl.classList.add("is-invalid");
+          inputEl.setAttribute("aria-invalid", "true");
+        }
+        errorEl.textContent = msg;
+        errorEl.hidden = false;
+      }
+
+      function clearFieldError(inputEl, errorEl) {
+        if (inputEl) {
+          inputEl.classList.remove("is-invalid");
+          inputEl.removeAttribute("aria-invalid");
+        }
+        errorEl.hidden = true;
+      }
+
+      function clearErrors() {
+        alertBox.hidden = true;
+        clearFieldError(fullNameInput, fullNameError);
+        clearFieldError(emailInput, emailError);
+        clearFieldError(passwordInput, passwordError);
+        clearFieldError(confirmPassInput, confirmPassError);
+        clearFieldError(null, termsError);
+      }
+
+      // Lỗi của từng ô biến mất khi người dùng nhập lại
+      [
+        [fullNameInput, fullNameError],
+        [emailInput, emailError],
+        [passwordInput, passwordError],
+        [confirmPassInput, confirmPassError],
+      ].forEach(function (pair) {
+        pair[0].addEventListener("input", function () {
+          clearFieldError(pair[0], pair[1]);
+          alertBox.hidden = true;
+        });
+      });
+      termsCheckbox.addEventListener("change", function () { clearFieldError(null, termsError); });
+
+      // ── Validate đầy đủ trước khi gọi API ───────────────────────
+      function validateForm() {
+        clearErrors();
+        let ok = true;
+        let firstFocus = null;
+
+        const fullName = fullNameInput.value.trim();
+        const email    = emailInput.value.trim();
+        const password = passwordInput.value;
+        const confirmP = confirmPassInput.value;
+
+        // Họ tên
+        if (!fullName) {
+          showFieldError(fullNameInput, fullNameError, "Họ và tên không được để trống.");
+          firstFocus = firstFocus || fullNameInput;
+          ok = false;
+        }
+
+        // Email
+        if (!email || !email.includes("@")) {
+          showFieldError(emailInput, emailError, "Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại.");
+          firstFocus = firstFocus || emailInput;
+          ok = false;
+        }
+
+        // Mật khẩu (tối thiểu 6 ký tự)
+        if (!password || password.length < 6) {
+          showFieldError(passwordInput, passwordError, "Mật khẩu phải có ít nhất 6 ký tự.");
+          firstFocus = firstFocus || passwordInput;
+          ok = false;
+        }
+
+        // Xác nhận mật khẩu
+        if (!confirmP) {
+          showFieldError(confirmPassInput, confirmPassError, "Vui lòng nhập lại mật khẩu để xác nhận.");
+          firstFocus = firstFocus || confirmPassInput;
+          ok = false;
+        } else if (password && confirmP !== password) {
+          showFieldError(confirmPassInput, confirmPassError, "Mật khẩu xác nhận không khớp. Vui lòng kiểm tra lại.");
+          firstFocus = firstFocus || confirmPassInput;
+          ok = false;
+        }
+
+        // Điều khoản
+        if (!termsCheckbox.checked) {
+          showFieldError(null, termsError, "Bạn cần đồng ý điều khoản an toàn lao động để tiếp tục đăng ký.");
+          firstFocus = firstFocus || termsCheckbox;
+          ok = false;
+        }
+
+        if (firstFocus) firstFocus.focus();
+        return ok;
+      }
+
+      // ── Xử lý submit đăng ký ────────────────────────────────────
+      registerForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        setLoading(true);
+        try {
+          // TODO nối API thật: POST /auth/register
+          const savedUser = await window.siteSafeAuth.register({
+            fullName: fullNameInput.value.trim(),
+            email:    emailInput.value.trim(),
+            password: passwordInput.value,
+            phone:    phoneInput.value.trim(),
+            role:     selectedRole || "WORKER",
+          });
+
+          // Ẩn form, hiển thị màn hình thành công
+          registerForm.hidden = true;
+          footerNav.hidden = true;
+          successMessage.textContent =
+            "Tài khoản \"" + (savedUser && savedUser.fullName ? savedUser.fullName : emailInput.value.trim()) +
+            "\" đã được đăng ký thành công trong hệ thống SiteSafe. Bấm nút bên dưới để đăng nhập.";
+          successBox.hidden = false;
+          successBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        } catch (err) {
+          setLoading(false);
+          showAlert(err.message || "Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.");
+          // Nếu lỗi email trùng → focus vào ô email
+          if (err.message && err.message.toLowerCase().includes("email")) {
+            emailInput.classList.add("is-invalid");
+            emailInput.focus();
+          }
+        }
+      });
+
+    })();
+  </script>
+</body>
+
 </html>

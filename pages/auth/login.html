@@ -1,477 +1,385 @@
 <!doctype html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng nhập | SiteSafe</title>
-    <link rel="stylesheet" href="../../css/style.css" />
-    <link rel="stylesheet" href="../../css/responsive.css" />
-    <style>
-      :root {
-        --background: #0f172a;
-        --card: #ffffff;
-        --text: #0f172a;
-        --muted: #64748b;
-        --border: #cbd5e1;
-        --primary: var(--color-primary);
-        --primary-dark: #0f172a;
-        --error: #b91c1c;
-      }
 
-      * {
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Đăng nhập hệ thống quản lý an toàn công trường SiteSafe. Kết nối công nhân, cán bộ an toàn và ban chỉ huy." />
+  <title>Đăng nhập | SiteSafe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/auth.css" />
+  <link rel="stylesheet" href="../../css/responsive.css" />
+</head>
 
-      body {
-        min-height: 100vh;
-        margin: 0;
-        overflow: hidden;
-        color: var(--text);
-        background: var(--background);
-        font-family: Arial, sans-serif;
-      }
+<body>
+  <div class="auth-signin">
 
-      .background-grid {
-        position: fixed;
-        inset: 0;
-        display: grid;
-        grid-template-columns: repeat(12, 1fr);
-        grid-template-rows: repeat(8, 1fr);
-        gap: 12px;
-        padding: 18px;
-        background-image: url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1800&q=80");
-        background-position: center;
-        background-size: cover;
-        opacity: 0.72;
-      }
+    <!-- Cột trái: khu vực thương hiệu -->
+    <aside class="auth-signin-brand" aria-label="Giới thiệu SiteSafe">
+      <a class="auth-signin-logo" href="../../index.html" title="Trang chủ SiteSafe">
+        <svg class="auth-signin-logo-icon" viewBox="0 0 32 36" width="32" height="36" fill="none" aria-hidden="true">
+          <path d="M16 2 3 7v9c0 8.5 5.4 15.3 13 18 7.6-2.7 13-9.5 13-18V7L16 2Z" stroke="#f97316" stroke-width="2.4"
+            stroke-linejoin="round" />
+          <path d="m10.5 17.5 4 4 7-8" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <span class="auth-signin-logo-text">site<span>safe</span></span>
+      </a>
 
-      /* Ảnh nền công trường ở góc trên bên trái. */
-      .background-card--one {
-        grid-column: 1 / 4;
-        grid-row: 1 / 4;
-        background-image: url("../../assets/images/ảnh\ nền\ phần\ đăng\ nhập\ bên\ trái.jpg");
-      }
+      <div class="auth-signin-hero">
+        <h2 class="auth-signin-hero-title">Đồng hành an toàn,<br /><span>vững bước</span> mọi công trình.</h2>
+        <p class="auth-signin-hero-desc">
+          Nền tảng kiểm tra an toàn và giám sát công trường theo thời gian thực – giúp đội ngũ phát hiện rủi ro sớm và
+          báo cáo nhanh chóng.
+        </p>
 
-      /* Ảnh nền công nhân đang làm việc ở khu vực phía trên. */
-      .background-card--two {
-        grid-column: 4 / 8;
-        grid-row: 1 / 3;
-        background-image: url("../../assets/images/ảnh\ nền\ phần\ đăng\ nhập\ bên\ trái.jpg");
-      }
+        <ul class="auth-signin-features">
+          <li>
+            <span class="auth-signin-tick" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="12" height="12" fill="none"><path d="m3.5 8.5 3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+            Checklist kiểm tra an toàn ngay tại hiện trường
+          </li>
+          <li>
+            <span class="auth-signin-tick" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="12" height="12" fill="none"><path d="m3.5 8.5 3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+            Báo cáo sự cố kèm hình ảnh, định vị
+          </li>
+          <li>
+            <span class="auth-signin-tick" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="12" height="12" fill="none"><path d="m3.5 8.5 3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+            Phân quyền theo vai trò rõ ràng
+          </li>
+        </ul>
 
-      /* Ảnh nền máy móc thi công ở góc trên bên phải. */
-      .background-card--three {
-        grid-column: 8 / 13;
-        grid-row: 1 / 4;
-        background-image: url("https://images.unsplash.com/photo-1581094794329-cfae7f79c9c2?auto=format&fit=crop&w=1100&q=80");
-      }
+        <dl class="auth-signin-stats">
+          <div>
+            <dt>Công trình</dt>
+            <dd>500+</dd>
+          </div>
+          <div>
+            <dt>Lượt kiểm tra/tháng</dt>
+            <dd>12k</dd>
+          </div>
+          <div>
+            <dt>Sự cố an toàn</dt>
+            <dd>-38%</dd>
+          </div>
+        </dl>
+      </div>
 
-      /* Ảnh nền công trường đặt so le ở giữa bên trái. */
-      .background-card--four {
-        grid-column: 1 / 5;
-        grid-row: 4 / 7;
-        background-image: url("https://images.unsplash.com/photo-1590644365607-1c5a0c4a3f25?auto=format&fit=crop&w=1000&q=80");
-      }
+      <div class="auth-signin-stripe" aria-hidden="true"></div>
+    </aside>
 
-      /* Ảnh nền kết cấu xây dựng đặt so le ở giữa bên phải. */
-      .background-card--five {
-        grid-column: 9 / 13;
-        grid-row: 4 / 8;
-        background-image: url("https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1000&q=80");
-      }
+    <!-- Cột phải: form đăng nhập -->
+    <main class="auth-signin-panel" aria-labelledby="loginHeading">
+      <!-- Logo chỉ hiện trên mobile (cột trái bị ẩn) -->
+      <a class="auth-signin-logo auth-signin-logo--mobile" href="../../index.html" title="Trang chủ SiteSafe">
+        <svg class="auth-signin-logo-icon" viewBox="0 0 32 36" width="30" height="34" fill="none" aria-hidden="true">
+          <path d="M16 2 3 7v9c0 8.5 5.4 15.3 13 18 7.6-2.7 13-9.5 13-18V7L16 2Z" stroke="#f97316" stroke-width="2.4"
+            stroke-linejoin="round" />
+          <path d="m10.5 17.5 4 4 7-8" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <span class="auth-signin-logo-text">site<span>safe</span></span>
+      </a>
 
-      /* Ảnh nền khu vực thi công ở góc dưới bên trái. */
-      .background-card--six {
-        grid-column: 2 / 7;
-        grid-row: 7 / 9;
-        background-image: url("https://images.unsplash.com/photo-1503387762-592e5585918a?auto=format&fit=crop&w=1000&q=80");
-      }
+      <section class="auth-signin-card">
+        <h1 class="auth-signin-title" id="loginHeading">Đăng nhập hệ thống</h1>
+        <p class="auth-signin-sub">Truy cập để thực hiện kiểm tra an toàn và giám sát công trường.</p>
 
-      .background-card {
-        min-width: 0;
-        min-height: 0;
-        border-radius: 16px;
-        background-position: center;
-        background-size: cover;
-        filter: saturate(0.8);
-      }
+        <form id="loginForm" data-auth-form="login" novalidate>
+          <!-- Chọn vai trò công tác -->
+          <div class="auth-signin-group">
+            <div class="auth-signin-label-row">
+              <span class="auth-signin-label" id="loginRoleLabel">Vai trò công tác</span>
+              <span class="auth-signin-hint">Tùy chọn · kiểm tra phân quyền</span>
+            </div>
+            <div class="auth-signin-roles" id="loginRole" role="group" aria-labelledby="loginRoleLabel">
+              <button type="button" class="auth-signin-role" data-role="WORKER" aria-pressed="false">Công nhân</button>
+              <button type="button" class="auth-signin-role" data-role="SAFETY_OFFICER" aria-pressed="false">An toàn viên</button>
+              <button type="button" class="auth-signin-role" data-role="SITE_MANAGER" aria-pressed="false">Quản lý</button>
+              <button type="button" class="auth-signin-role" data-role="ADMIN" aria-pressed="false">Quản trị viên</button>
+            </div>
+          </div>
 
-      .background-shade {
-        position: fixed;
-        inset: 0;
-        background: rgb(24 28 36 / 58%);
-      }
+          <!-- Email hoặc tên đăng nhập -->
+          <div class="auth-signin-group">
+            <label class="auth-signin-label" for="loginEmail">Tên đăng nhập <span class="auth-label-required">*</span></label>
+            <div class="auth-signin-field">
+              <svg class="auth-signin-field-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 20c0-3.9 3.6-7 8-7s8 3.1 8 7" />
+              </svg>
+              <input class="auth-signin-input" id="loginEmail" name="emailOrUsername" type="text"
+                autocomplete="username" autocapitalize="off" spellcheck="false"
+                placeholder="ten@sitesafe.test hoặc Mã USR" data-auth-field="email"
+                data-auth-type="email-or-username" aria-describedby="loginEmailError" required />
+            </div>
+            <span class="auth-field-error" id="loginEmailError" data-auth-error="email" hidden></span>
+          </div>
 
-      .login-card {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        width: min(420px, calc(100% - 32px));
-        padding: 38px;
-        background: var(--card);
-        border-radius: 12px;
-        box-shadow: 0 24px 70px rgb(0 0 0 / 38%);
-        transform: translate(-50%, -50%);
-      }
+          <!-- Mật khẩu -->
+          <div class="auth-signin-group">
+            <div class="auth-signin-label-row">
+              <label class="auth-signin-label" for="loginPassword">Mật khẩu <span class="auth-label-required">*</span></label>
+              <a class="auth-signin-link" href="forgot-password.html" data-auth-link="forgot-password">Quên mật khẩu?</a>
+            </div>
+            <div class="auth-signin-field">
+              <svg class="auth-signin-field-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="4" y="11" width="16" height="10" rx="2" />
+                <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+              </svg>
+              <input class="auth-signin-input auth-signin-input--password" id="loginPassword" name="password"
+                type="password" autocomplete="current-password" placeholder="Nhập mật khẩu của bạn"
+                data-auth-field="password" aria-describedby="loginPasswordError" required />
+              <button class="auth-signin-toggle" id="togglePasswordBtn" type="button" aria-label="Hiện mật khẩu"
+                aria-pressed="false" data-auth-action="toggle-password" data-target-input="loginPassword">
+                <svg class="auth-signin-eye" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg class="auth-signin-eye-off" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+                  <path d="M3 3l18 18" />
+                  <path d="M10.6 5.1A10.5 10.5 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.5 6.6C3.7 8.4 2 12 2 12s3.6 7 10 7c1.7 0 3.2-.4 4.5-1.1" />
+                  <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+                </svg>
+              </button>
+            </div>
+            <span class="auth-signin-caps" id="loginCapsHint" role="status" hidden>Caps Lock đang bật</span>
+            <span class="auth-field-error" id="loginPasswordError" data-auth-error="password" hidden></span>
+          </div>
 
-      .brand {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        width: 100%;
-        gap: 8px;
-        margin-bottom: 34px;
-        color: var(--text);
-        font-size: 1.25rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-      }
+          <!-- Thông báo lỗi chung (ví dụ 401) nằm phía trên nút -->
+          <div class="auth-alert auth-alert--error" id="loginAlert" data-auth-alert="general" role="alert"
+            aria-live="polite" hidden>
+            <span class="auth-alert-icon" id="loginAlertIcon" data-auth-alert-icon aria-hidden="true"></span>
+            <div class="auth-alert-content">
+              <div id="loginAlertMessage" data-auth-alert-message></div>
+            </div>
+          </div>
 
-      .brand-logo {
-        display: block;
-        width: auto;
-        max-width: 320px;
-        height: 140px;
-        object-fit: contain;
-        filter: contrast(1.3) brightness(1.12) saturate(1.2);
-      }
+          <button class="auth-signin-submit" id="loginSubmitBtn" type="submit" data-auth-action="submit">
+            <span class="auth-btn-spinner" data-auth-spinner></span>
+            <span class="auth-btn-text-default" data-auth-btn-text="default">Đăng nhập</span>
+            <span class="auth-btn-text-loading" data-auth-btn-text="loading">Đang đăng nhập…</span>
+          </button>
+        </form>
 
-      .brand-tagline {
-        position: relative;
-        padding-bottom: 10px;
-        color: var(--primary);
-        font-size: 1rem;
-        font-weight: 700;
-        letter-spacing: 0;
-        line-height: 1.4;
-        text-align: center;
-      }
-
-      .brand-tagline::after {
-        position: absolute;
-        right: 25%;
-        bottom: 0;
-        left: 25%;
-        height: 3px;
-        background: var(--primary);
-        border-radius: 3px;
-        content: "";
-      }
-
-      h1 {
-        margin: 0 0 26px;
-        color: var(--text);
-        font-size: 1.35rem;
-        font-weight: 600;
-        line-height: 1.25;
-        white-space: nowrap;
-      }
-
-      .form-group {
-        margin-bottom: 18px;
-      }
-
-      label {
-        display: block;
-        margin-bottom: 7px;
-        color: var(--text);
-        font-size: 0.9rem;
-        font-weight: 600;
-      }
-
-      input {
-        display: block;
-        width: 100%;
-        min-height: 46px;
-        padding: 11px 13px;
-        color: var(--text);
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        outline: none;
-        font: inherit;
-      }
-
-      select {
-        display: block;
-        width: 100%;
-        min-height: 46px;
-        padding: 11px 13px;
-        color: var(--text);
-        background: var(--color-white);
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        outline: none;
-        font: inherit;
-      }
-
-      select:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgb(37 99 235 / 14%);
-      }
-
-      .step-note {
-        margin: -10px 0 20px;
-        color: var(--muted);
-        font-size: 0.92rem;
-      }
-
-      .is-hidden {
-        display: none;
-      }
-
-      .back-button {
-        display: block;
-        width: 100%;
-        margin-top: 10px;
-        padding: 8px;
-        color: var(--muted);
-        background: transparent;
-        border: 0;
-        cursor: pointer;
-        font: inherit;
-      }
-
-      input:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgb(37 99 235 / 14%);
-      }
-
-      .reset-link {
-        display: inline-block;
-        margin-top: 9px;
-        color: var(--primary);
-        font-size: 0.88rem;
-        text-decoration: none;
-      }
-
-      .reset-link:hover {
-        text-decoration: underline;
-      }
-
-      .submit-button {
-        width: 100%;
-        min-height: 46px;
-        margin-top: 8px;
-        color: var(--color-white);
-        background: var(--primary);
-        border: 0;
-        border-radius: 6px;
-        cursor: pointer;
-        font: inherit;
-        font-weight: 600;
-      }
-
-      .submit-button:hover {
-        background: var(--primary-dark);
-      }
-
-      .form-message {
-        min-height: 20px;
-        margin: 14px 0 0;
-        color: var(--error);
-        font-size: 0.88rem;
-      }
-
-      @media (max-width: 480px) {
-        .background-grid {
-          grid-template-columns: repeat(6, 1fr);
-          grid-template-rows: repeat(10, 1fr);
-          gap: 8px;
-          padding: 10px;
-        }
-
-        .background-card--one {
-          grid-column: 1 / 4;
-          grid-row: 1 / 3;
-        }
-
-        .background-card--two {
-          grid-column: 4 / 7;
-          grid-row: 1 / 3;
-        }
-
-        .background-card--three {
-          grid-column: 1 / 3;
-          grid-row: 3 / 6;
-        }
-
-        .background-card--four {
-          grid-column: 5 / 7;
-          grid-row: 3 / 6;
-        }
-
-        .background-card--five {
-          grid-column: 1 / 4;
-          grid-row: 8 / 11;
-        }
-
-        .background-card--six {
-          grid-column: 4 / 7;
-          grid-row: 8 / 11;
-        }
-
-        .login-card {
-          padding: 28px 22px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <main aria-label="Đăng nhập SiteSafe">
-      <section class="background-grid" aria-hidden="true">
-        <div class="background-card background-card--one"></div>
-        <div class="background-card background-card--two"></div>
-        <div class="background-card background-card--three"></div>
-        <div class="background-card background-card--four"></div>
-        <div class="background-card background-card--five"></div>
-        <div class="background-card background-card--six"></div>
-      </section>
-      <div class="background-shade" aria-hidden="true"></div>
-
-      <section class="login-card">
-        <!-- Sử dụng logo SiteSafe chính thức từ thư mục assets/images. -->
-        <div class="brand" aria-label="Logo SiteSafe">
-          <img
-            class="brand-logo"
-            src="../../assets/images/sitesafe-logo.png"
-            alt="Logo SiteSafe"
-          />
-          <span class="brand-tagline"
-            >Đồng hành an toàn, vững bước mọi công trình.</span
-          >
+        <!-- Đăng nhập nhanh bằng tài khoản demo (bấm là vào thẳng trang của vai trò) -->
+        <div class="demo-login" role="group" aria-labelledby="demoLoginTitle">
+          <p class="demo-login__title" id="demoLoginTitle">Hoặc vào nhanh bằng tài khoản demo</p>
+          <div class="demo-login__grid">
+            <button type="button" class="demo-login__btn" data-demo-role="WORKER">
+              <strong>Công nhân</strong><span>hao.pa@sitesafe.test</span>
+            </button>
+            <button type="button" class="demo-login__btn" data-demo-role="SAFETY_OFFICER">
+              <strong>Cán bộ an toàn</strong><span>antoan.hoang@sitesafe.test</span>
+            </button>
+            <button type="button" class="demo-login__btn" data-demo-role="SITE_MANAGER">
+              <strong>Quản lý công trường</strong><span>quan.pm@sitesafe.test</span>
+            </button>
+            <button type="button" class="demo-login__btn" data-demo-role="ADMIN">
+              <strong>Quản trị viên</strong><span>admin@sitesafe.test</span>
+            </button>
+          </div>
         </div>
 
-        <h1>Đăng nhập bằng địa chỉ email</h1>
-
-        <form id="loginForm" novalidate>
-          <div id="roleStep">
-            <p class="step-note">
-              Chọn vai trò để tiếp tục đến phần đăng nhập.
-            </p>
-            <div class="form-group">
-              <label for="role">Vai trò đăng nhập</label>
-              <select id="role" name="role" required>
-                <option value="">Chọn vai trò của bạn</option>
-                <option value="WORKER">Công nhân hiện trường</option>
-                <option value="SAFETY_OFFICER">Cán bộ an toàn</option>
-                <option value="SITE_MANAGER">Quản lý công trường</option>
-                <option value="ADMIN">Quản trị viên</option>
-              </select>
-            </div>
-            <button class="submit-button" id="continueButton" type="button">
-              Tiếp tục
-            </button>
-          </div>
-
-          <div class="is-hidden" id="credentialsStep">
-            <p class="step-note" id="selectedRoleText"></p>
-            <div class="form-group">
-              <label for="email">Địa chỉ email</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                placeholder="ban@example.com"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="password">Mật khẩu</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autocomplete="current-password"
-                placeholder="Nhập mật khẩu của bạn"
-                required
-              />
-              <a class="reset-link" href="forgot-password.html"
-                >Đặt lại mật khẩu</a
-              >
-            </div>
-
-            <button class="submit-button" type="submit">Đăng nhập</button>
-            <button class="back-button" id="backButton" type="button">
-              Đổi vai trò
-            </button>
-          </div>
-          <p
-            class="form-message"
-            id="formMessage"
-            role="alert"
-            aria-live="polite"
-          ></p>
-        </form>
+        <div class="auth-footer-nav">
+          Chưa có tài khoản?
+          <a href="register.html" data-auth-link="register">Đăng ký tài khoản mới</a>
+        </div>
       </section>
     </main>
+  </div>
 
-    <script>
-      const loginForm = document.getElementById("loginForm");
-      const formMessage = document.getElementById("formMessage");
-      const roleSelect = document.getElementById("role");
-      const roleStep = document.getElementById("roleStep");
-      const credentialsStep = document.getElementById("credentialsStep");
-      const continueButton = document.getElementById("continueButton");
-      const backButton = document.getElementById("backButton");
-      const selectedRoleText = document.getElementById("selectedRoleText");
+  <!-- Nạp đúng thứ tự bắt buộc: api.js -> main.js -> auth.js -->
+  <script src="../../js/api.js"></script>
+  <script src="../../js/main.js"></script>
+  <script src="../../js/modules/auth.js"></script>
 
-      const dashboardByRole = {
-        ADMIN: "../admin/admin-user-management.html",
-        SAFETY_OFFICER: "../safety-officer/safety-dashboard.html",
-        SITE_MANAGER: "../manager/manager-safety-report.html",
-        WORKER: "../worker/worker-my-hazards.html",
-      };
+  <!-- Script đăng nhập đầy đủ: UI + Logic kết nối siteSafeAuth -->
+  <script>
+    (function () {
+      "use strict";
 
-      continueButton.addEventListener("click", function () {
-        if (!roleSelect.value) {
-          formMessage.textContent = "Vui lòng chọn vai trò trước khi tiếp tục.";
-          return;
-        }
+      // ── Phần tử DOM ──────────────────────────────────────────────
+      const loginForm     = document.getElementById("loginForm");
+      const emailInput    = document.getElementById("loginEmail");
+      const passInput     = document.getElementById("loginPassword");
+      const roleButtons   = document.querySelectorAll(".auth-signin-role");
+      const submitBtn     = document.getElementById("loginSubmitBtn");
+      const toggleBtn     = document.getElementById("togglePasswordBtn");
+      const alertBox      = document.getElementById("loginAlert");
+      const alertIcon     = document.getElementById("loginAlertIcon");
+      const alertMessage  = document.getElementById("loginAlertMessage");
+      const emailError    = document.getElementById("loginEmailError");
+      const passwordError = document.getElementById("loginPasswordError");
 
-        selectedRoleText.textContent = `Vai trò đã chọn: ${roleSelect.options[roleSelect.selectedIndex].text}`;
-        roleStep.classList.add("is-hidden");
-        credentialsStep.classList.remove("is-hidden");
-        formMessage.textContent = "";
-        document.getElementById("email").focus();
+      const ICON_ERROR = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17.5v.01"/></svg>';
+      const ICON_OK = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></svg>';
+
+      // ── Chọn vai trò (bấm lần nữa để bỏ chọn, vì trường này là tùy chọn) ──
+      // Không chọn sẵn vai trò: trang đích lấy theo vai trò của tài khoản
+      let selectedRole = "";
+      roleButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const role = btn.getAttribute("data-role");
+          selectedRole = selectedRole === role ? "" : role;
+          roleButtons.forEach(function (b) {
+            const on = b.getAttribute("data-role") === selectedRole;
+            b.classList.toggle("is-active", on);
+            b.setAttribute("aria-pressed", String(on));
+          });
+        });
       });
 
-      backButton.addEventListener("click", function () {
-        credentialsStep.classList.add("is-hidden");
-        roleStep.classList.remove("is-hidden");
-        formMessage.textContent = "";
+      // ── Nút ẩn/hiện mật khẩu ────────────────────────────────────
+      toggleBtn.addEventListener("click", function () {
+        const show = passInput.type === "password";
+        passInput.type = show ? "text" : "password";
+        toggleBtn.setAttribute("aria-label", show ? "Ẩn mật khẩu" : "Hiện mật khẩu");
+        toggleBtn.setAttribute("aria-pressed", String(show));
+        toggleBtn.querySelector(".auth-signin-eye").hidden = show;
+        toggleBtn.querySelector(".auth-signin-eye-off").hidden = !show;
       });
 
-      loginForm.addEventListener("submit", function (event) {
-        event.preventDefault();
+      // ── Tiện ích hiển thị ────────────────────────────────────────
+      function setLoading(on) {
+        submitBtn.disabled = on;
+        submitBtn.classList.toggle("auth-btn--loading", on);
+      }
 
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
+      function showAlert(msg, type) {
+        alertBox.className = "auth-alert auth-alert--" + (type || "error");
+        alertBox.setAttribute("role", type === "success" ? "status" : "alert");
+        alertIcon.innerHTML = type === "success" ? ICON_OK : ICON_ERROR;
+        alertMessage.textContent = msg;
+        alertBox.hidden = false;
+      }
 
-        if (!email || !password) {
-          formMessage.textContent = "Vui lòng nhập địa chỉ email và mật khẩu.";
-          return;
-        }
+      function clearFieldError(inputEl, errorEl) {
+        inputEl.classList.remove("is-invalid");
+        inputEl.removeAttribute("aria-invalid");
+        errorEl.hidden = true;
+      }
 
-        if (!email.includes("@")) {
-          formMessage.textContent = "Vui lòng nhập địa chỉ email hợp lệ.";
-          return;
-        }
+      function showFieldError(inputEl, errorEl, msg) {
+        inputEl.classList.add("is-invalid");
+        inputEl.setAttribute("aria-invalid", "true");
+        errorEl.textContent = msg;
+        errorEl.hidden = false;
+      }
 
-        localStorage.setItem(
-          "siteSafeUser",
-          JSON.stringify({ email, role: roleSelect.value }),
-        );
-        const next = new URLSearchParams(window.location.search).get("next");
-        if (next && next.startsWith("pages/")) {
-          window.location.href = next;
-          return;
-        }
+      // Cảnh báo Caps Lock khi đang nhập mật khẩu
+      const capsHint = document.getElementById("loginCapsHint");
+      function updateCaps(e) {
+        capsHint.hidden = !(e.getModifierState && e.getModifierState("CapsLock"));
+      }
+      passInput.addEventListener("keydown", updateCaps);
+      passInput.addEventListener("keyup", updateCaps);
+      passInput.addEventListener("blur", function () { capsHint.hidden = true; });
 
-        window.location.href = dashboardByRole[roleSelect.value];
+      // Lỗi biến mất khi người dùng gõ lại
+      emailInput.addEventListener("input", function () {
+        clearFieldError(emailInput, emailError);
+        alertBox.hidden = true;
       });
-    </script>
-  </body>
+      passInput.addEventListener("input", function () {
+        clearFieldError(passInput, passwordError);
+        alertBox.hidden = true;
+      });
+
+      // ── Validate phía client trước khi gọi API ───────────────────
+      function validateForm() {
+        let ok = true;
+        alertBox.hidden = true;
+        clearFieldError(emailInput, emailError);
+        clearFieldError(passInput, passwordError);
+        if (!emailInput.value.trim()) {
+          showFieldError(emailInput, emailError, "Vui lòng nhập tên đăng nhập.");
+          ok = false;
+        }
+        if (!passInput.value) {
+          showFieldError(passInput, passwordError, "Vui lòng nhập mật khẩu.");
+          ok = false;
+        }
+        return ok;
+      }
+
+      // ── Map role → trang đích ───────────────────────────────────
+      function getRedirectUrl(role) {
+        // login.html nằm tại pages/auth/ → dùng ../ để về pages/ rồi đi tới trang đích
+        switch ((role || "").toUpperCase()) {
+          case "WORKER":         return "../worker/worker-safety-checklist.html";
+          case "SAFETY_OFFICER": return "../safety-officer/safety-dashboard.html";
+          case "SITE_MANAGER":   return "../manager/manager-corrective-actions.html";
+          case "ADMIN":          return "../admin/admin-user-management.html";
+          default:               return "../worker/worker-safety-checklist.html";
+        }
+      }
+
+      // ── Xử lý submit form đăng nhập ─────────────────────────────
+      loginForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        if (!validateForm()) {
+          (emailInput.value.trim() === "" ? emailInput : passInput).focus();
+          return;
+        }
+
+        setLoading(true);
+        try {
+          // TODO nối API thật: POST /auth/login { identifier, password, role }
+          const sessionUser = await window.siteSafeAuth.login({
+            emailOrUsername: emailInput.value.trim(),
+            password:        passInput.value,
+            role:            selectedRole,
+          });
+
+          showAlert("Đăng nhập thành công! Đang chuyển hướng...", "success");
+
+          setTimeout(function () {
+            window.location.href = getRedirectUrl(sessionUser.role);
+          }, 600);
+        } catch (err) {
+          setLoading(false);
+          showAlert(err.message || "Sai thông tin đăng nhập");
+          passInput.value = "";
+          passInput.focus();
+        }
+      });
+
+      // ── Đăng nhập nhanh bằng tài khoản demo ─────────────────────
+      const demoButtons = document.querySelectorAll(".demo-login__btn");
+      demoButtons.forEach(function (btn) {
+        btn.addEventListener("click", async function () {
+          demoButtons.forEach(function (b) { b.disabled = true; });
+          setLoading(true);
+          try {
+            const sessionUser = await window.siteSafeAuth.loginDemo(btn.getAttribute("data-demo-role"));
+            showAlert("Đăng nhập demo thành công! Đang chuyển hướng...", "success");
+            setTimeout(function () {
+              window.location.href = getRedirectUrl(sessionUser.role);
+            }, 400);
+          } catch (err) {
+            demoButtons.forEach(function (b) { b.disabled = false; });
+            setLoading(false);
+            showAlert(err.message || "Không đăng nhập được tài khoản demo");
+          }
+        });
+      });
+
+      // ── Luôn bắt nhập tài khoản + mật khẩu: bỏ phiên cũ còn lưu ──
+      try { localStorage.removeItem("siteSafeUser"); } catch (err) { /* bỏ qua */ }
+
+    })();
+  </script>
+</body>
+
 </html>

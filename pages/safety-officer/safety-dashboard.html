@@ -237,19 +237,19 @@
       <section class="stats-grid" aria-label="Chỉ số an toàn">
         <article class="card stat-card stat-card--danger">
           <span class="stat-label">Sự cố cần xử lý gấp</span>
-          <strong class="stat-value">08</strong>
+          <strong class="stat-value" id="statUrgent">08</strong>
         </article>
         <article class="card stat-card stat-card--warning">
           <span class="stat-label">Đang chờ đánh giá</span>
-          <strong class="stat-value">14</strong>
+          <strong class="stat-value" id="statPending">14</strong>
         </article>
         <article class="card stat-card stat-card--success">
-          <span class="stat-label">Đã xử lý trong tuần</span>
-          <strong class="stat-value">32</strong>
+          <span class="stat-label">Đã xử lý</span>
+          <strong class="stat-value" id="statResolved">32</strong>
         </article>
         <article class="card stat-card">
           <span class="stat-label">Khu vực đang giám sát</span>
-          <strong class="stat-value">06</strong>
+          <strong class="stat-value" id="statZones">06</strong>
         </article>
       </section>
 
@@ -270,7 +270,7 @@
                 <th scope="col">Ngày gửi</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="urgentList">
               <tr
                 data-detail-url="safety-hazard-detail.html?hazard=HZ-001"
                 tabindex="0"
@@ -350,20 +350,96 @@
       </div>
     </div>
 
+    <script src="../../js/api.js"></script>
     <script>
-      document.querySelectorAll("tr[data-detail-url]").forEach(function (row) {
-        const openDetail = function () {
-          window.location.href = row.dataset.detailUrl;
-        };
+      // Số liệu và bảng sự cố lấy từ api.js (đồng bộ MockAPI); không có api.js thì giữ nội dung mẫu trong HTML.
+      const riskInfo = {
+        CRITICAL: { label: "Nghiêm trọng", badge: "badge-critical" },
+        HIGH: { label: "Cao", badge: "badge-high" },
+        MEDIUM: { label: "Trung bình", badge: "badge-medium" },
+        LOW: { label: "Thấp", badge: "badge-success" },
+      };
+      const statusInfo = {
+        OPEN: { label: "Chưa xử lý", badge: "badge-danger" },
+        ASSIGNED: { label: "Đã giao", badge: "badge-warning" },
+        IN_PROGRESS: { label: "Đang xử lý", badge: "badge-warning" },
+        RESOLVED: { label: "Đã giải quyết", badge: "badge-success" },
+        CLOSED: { label: "Đã đóng", badge: "badge-success" },
+      };
+      const riskOrder = { CRITICAL: 0, HIGH: 1, MEDIUM: 2, LOW: 3 };
 
-        row.addEventListener("click", openDetail);
-        row.addEventListener("keydown", function (event) {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            openDetail();
-          }
-        });
+      // Escape dữ liệu động trước khi đưa vào innerHTML để tránh XSS.
+      function escapeHtml(value) {
+        return String(value == null ? "" : value).replace(
+          /[&<>"']/g,
+          (character) =>
+            ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character],
+        );
+      }
+
+      function twoDigits(value) {
+        return String(value).padStart(2, "0");
+      }
+
+      function formatDate(value) {
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? "" : date.toLocaleDateString("vi-VN");
+      }
+
+      function renderDashboard() {
+        if (!window.siteSafeApi) return;
+        const stats = siteSafeApi.hazards.getStats();
+        const zones = siteSafeApi.getZones().filter((zone) => zone.status !== "INACTIVE");
+        document.getElementById("statUrgent").textContent = twoDigits(stats.urgentCount);
+        document.getElementById("statPending").textContent = twoDigits(stats.pendingReviewCount);
+        document.getElementById("statResolved").textContent = twoDigits(stats.resolvedCount);
+        document.getElementById("statZones").textContent = twoDigits(zones.length);
+
+        const urgent = siteSafeApi
+          .getHazards()
+          .filter((hazard) => !["RESOLVED", "CLOSED"].includes(hazard.status))
+          .sort(
+            (a, b) =>
+              (riskOrder[a.riskLevel] ?? 9) - (riskOrder[b.riskLevel] ?? 9) ||
+              new Date(b.reportedAt || 0) - new Date(a.reportedAt || 0),
+          )
+          .slice(0, 5);
+
+        document.getElementById("urgentList").innerHTML = urgent.length
+          ? urgent
+              .map((hazard) => {
+                const risk = riskInfo[hazard.riskLevel] || riskInfo.MEDIUM;
+                const status = statusInfo[hazard.status] || {
+                  label: hazard.statusLabel || hazard.status,
+                  badge: "badge-warning",
+                };
+                const id = encodeURIComponent(hazard.id);
+                return `<tr data-detail-url="safety-hazard-detail.html?hazard=${id}" tabindex="0" role="link" aria-label="Xem chi tiết sự cố ${escapeHtml(hazard.id)}">
+                <td class="hazard-title">${escapeHtml(hazard.title)}</td>
+                <td class="zone-name">${escapeHtml(hazard.zoneName)}</td>
+                <td><span class="badge ${risk.badge}">${risk.label}</span></td>
+                <td><span class="badge ${status.badge} status-badge">${escapeHtml(status.label)}</span></td>
+                <td>${formatDate(hazard.reportedAt)}</td>
+              </tr>`;
+              })
+              .join("")
+          : '<tr><td colspan="5">Không có sự cố nào đang chờ xử lý.</td></tr>';
+      }
+
+      const urgentList = document.getElementById("urgentList");
+      urgentList.addEventListener("click", function (event) {
+        const row = event.target.closest("tr[data-detail-url]");
+        if (row) window.location.href = row.dataset.detailUrl;
       });
+      urgentList.addEventListener("keydown", function (event) {
+        const row = event.target.closest("tr[data-detail-url]");
+        if (row && (event.key === "Enter" || event.key === " ")) {
+          event.preventDefault();
+          window.location.href = row.dataset.detailUrl;
+        }
+      });
+
+      renderDashboard();
     </script>
     <script src="../../js/main.js"></script>
     <script src="../../js/modules/safety.js"></script>

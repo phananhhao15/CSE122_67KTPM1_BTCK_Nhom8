@@ -77,6 +77,7 @@
         </div>
       </div>
     </div>
+    <script src="../../js/api.js"></script>
     <script src="../../js/main.js"></script>
     <script src="../../js/modules/common.js"></script>
     <script>
@@ -100,23 +101,31 @@
           read: true,
         },
       ];
-      let notifications =
-        JSON.parse(localStorage.getItem("siteSafeNotifications") || "null") ||
-        defaultNotifications;
+      const savedNotifications = siteSafeCommon.getNotifications();
+      let notifications = savedNotifications.length
+        ? savedNotifications
+        : defaultNotifications;
+
+      // Escape dữ liệu động trước khi đưa vào innerHTML để tránh XSS.
+      function escapeHtml(value) {
+        return String(value == null ? "" : value).replace(
+          /[&<>"']/g,
+          (character) =>
+            ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character],
+        );
+      }
       function renderNotifications() {
         notificationList.innerHTML = notifications
           .map(
             (item) =>
-              `<article class="notification ${item.read ? "" : "unread"}"><div>${item.title}<small>${item.detail}</small></div><span class="badge ${item.read ? "badge-success" : "badge-warning"}">${item.read ? "Đã đọc" : "Mới"}</span></article>`,
+              `<article class="notification ${item.read ? "" : "unread"}"><div>${escapeHtml(item.title)}<small>${escapeHtml(item.detail)}</small></div><span class="badge ${item.read ? "badge-success" : "badge-warning"}">${item.read ? "Đã đọc" : "Mới"}</span></article>`,
           )
           .join("");
       }
       clearButton.addEventListener("click", function () {
-        notifications = notifications.map((item) => ({ ...item, read: true }));
-        localStorage.setItem(
-          "siteSafeNotifications",
-          JSON.stringify(notifications),
-        );
+        notifications = savedNotifications.length
+          ? siteSafeCommon.markAllNotificationsRead()
+          : notifications.map((item) => ({ ...item, read: true }));
         renderNotifications();
       });
       renderNotifications();

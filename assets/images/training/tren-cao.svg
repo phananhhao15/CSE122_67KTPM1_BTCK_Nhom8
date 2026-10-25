@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" width="600" height="320">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#bae6fd"/></linearGradient>
+  </defs>
+  <rect width="600" height="320" fill="url(#sky)"/>
+  <rect y="290" width="600" height="30" fill="#78716c"/>
+  <!-- Tòa nhà đang xây -->
+  <rect x="380" y="60" width="180" height="230" fill="#cbd5e1"/>
+  <g fill="#94a3b8"><rect x="400" y="80" width="40" height="30"/><rect x="460" y="80" width="40" height="30"/><rect x="400" y="130" width="40" height="30"/><rect x="460" y="130" width="40" height="30"/><rect x="400" y="180" width="40" height="30"/><rect x="460" y="180" width="40" height="30"/><rect x="400" y="230" width="40" height="30"/><rect x="460" y="230" width="40" height="30"/></g>
+  <!-- Giàn giáo -->
+  <g stroke="#f59e0b" stroke-width="6" fill="none">
+    <line x1="140" y1="70" x2="140" y2="290"/><line x1="240" y1="70" x2="240" y2="290"/><line x1="340" y1="70" x2="340" y2="290"/>
+    <line x1="140" y1="290" x2="240" y2="200"/><line x1="240" y1="290" x2="340" y2="200"/><line x1="140" y1="200" x2="240" y2="110"/><line x1="240" y1="200" x2="340" y2="110"/>
+  </g>
+  <g fill="#92400e"><rect x="130" y="196" width="220" height="10"/><rect x="130" y="106" width="220" height="10"/></g>
+  <!-- Lan can -->
+  <g stroke="#facc15" stroke-width="4"><line x1="140" y1="80" x2="340" y2="80"/><line x1="140" y1="170" x2="340" y2="170"/></g>
+  <!-- Lưới chống rơi -->
+  <g stroke="#16a34a" stroke-width="2" fill="none">
+    <line x1="30" y1="240" x2="120" y2="240"/>
+    <path d="M30 240 Q75 275 120 240"/>
+    <path d="M45 240 L52 254 M60 240 L64 260 M75 240 L75 262 M90 240 L86 260 M105 240 L98 254"/>
+  </g>
+  <!-- Công nhân đeo dây an toàn 2 móc -->
+  <g>
+    <rect x="225" y="14" width="30" height="8" rx="2" fill="#475569"/>
+    <path d="M232 22 L236 76 M248 22 L244 76" stroke="#dc2626" stroke-width="3" fill="none"/>
+    <circle cx="240" cy="64" r="11" fill="#fcd34d"/>
+    <path d="M227 60 Q240 44 253 60 Z" fill="#facc15"/>
+    <rect x="228" y="76" width="24" height="30" rx="4" fill="#f97316"/>
+    <path d="M228 80 L252 102 M252 80 L228 102" stroke="#dc2626" stroke-width="3"/>
+  </g>
+  <!-- Biển cảnh báo nguy cơ ngã cao -->
+  <g transform="translate(40 40)">
+    <path d="M40 0 L80 70 L0 70 Z" fill="#facc15" stroke="#1e293b" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="40" cy="26" r="6" fill="#1e293b"/>
+    <path d="M40 34 L40 48 M40 48 L32 60 M40 48 L48 60 M40 38 L30 32 M40 38 L52 42" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</svg>

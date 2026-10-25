@@ -1,440 +1,1057 @@
 <!doctype html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SiteSafe | An toàn cho mọi công trình</title>
-    <style>
-      :root {
-        --ink: #11131d;
-        --ink-soft: #1b1d2a;
-        --orange: #ff8b2b;
-        --blue: #2563eb;
-        --white: #ffffff;
-        --muted: #a9abb8;
-      }
 
-      * {
-        box-sizing: border-box;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        margin: 0;
-        color: var(--white);
-        background: var(--ink);
-        font-family: Arial, sans-serif;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="SiteSafe – Hệ thống quản lý an toàn công trường thông minh. Nhận diện nguy cơ, báo cáo, xử lý và giám sát an toàn lao động toàn diện." />
+  <meta name="keywords" content="an toàn lao động, quản lý công trường, SiteSafe, safety management" />
+  <title>SiteSafe | An toàn cho mọi công trình</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/landing.css" />
+</head>
 
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
+<body data-default-theme="dark">
 
-      .site-header {
-        position: relative;
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 24px;
-        min-height: 92px;
-        padding: 14px 32px 14px 48px;
-        background: rgb(17 19 29 / 94%);
-      }
+  <!-- ============ STICKY NAVBAR ============ -->
+  <header class="site-header" id="siteHeader">
+    <a class="brand" href="index.html" aria-label="Trang chủ SiteSafe">
+      <span class="brand-tagline">Đồng hành an toàn, vững bước mọi công trình</span>
+    </a>
 
-      .brand {
-        display: flex;
-        flex-shrink: 0;
-        align-items: center;
-        gap: 12px;
-      }
+    <nav class="main-nav" id="mainNav" aria-label="Điều hướng chính">
+      <!-- data-sections: các phần trên trang làm sáng mục menu này khi cuộn tới -->
+      <a href="#gioi-thieu" class="active" data-sections="gioi-thieu">Tổng quan</a>
+      <a href="#tinh-nang" data-sections="tinh-nang quy-trinh">Tính năng</a>
+      <a href="#cong-nhan" data-sections="cong-nhan dia-diem">Quản lý</a>
+    </nav>
 
-      .brand img {
-        display: block;
-        width: 240px;
-        height: 88px;
-        padding: 0;
-        background: transparent;
-        border-radius: 0;
-        box-shadow: none;
-        object-fit: contain;
-      }
+    <div class="header-actions">
+      <a class="nav-button nav-button--login" href="pages/auth/login.html">Đăng nhập</a>
+      <a class="nav-button nav-button--signup" href="pages/auth/register.html">Đăng ký</a>
+    </div>
 
-      .brand-tagline {
-        display: none;
-      }
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Mở menu" aria-expanded="false">☰</button>
+  </header>
 
-      .main-nav {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 28px;
-        font-size: 0.92rem;
-        font-weight: 700;
-      }
+  <!-- ============ MODAL ĐĂNG NHẬP ============ -->
+  <div class="login-modal" id="loginModal" hidden>
+    <div class="login-modal__backdrop" data-login-close></div>
+    <div class="login-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+      <button class="login-modal__close" type="button" aria-label="Đóng" data-login-close>×</button>
+      <h2 class="login-modal__title" id="loginModalTitle">Đăng nhập hệ thống</h2>
+      <p class="login-modal__sub">Đăng nhập để thực hiện kiểm tra an toàn và giám sát công trường.</p>
 
-      .main-nav a {
-        position: relative;
-        padding: 10px 0;
-        color: #f8fafc;
-        text-align: center;
-        transition: color 0.2s ease;
-      }
+      <form id="loginModalForm" novalidate>
+        <div class="login-modal__group">
+          <span class="login-modal__label">Vai trò công tác <small>Tùy chọn</small></span>
+          <div class="login-modal__roles" id="loginModalRoles" role="group" aria-label="Vai trò công tác">
+            <button type="button" class="login-modal__role" data-role="WORKER" aria-pressed="false">Công nhân</button>
+            <button type="button" class="login-modal__role" data-role="SAFETY_OFFICER" aria-pressed="false">An toàn viên</button>
+            <button type="button" class="login-modal__role" data-role="SITE_MANAGER" aria-pressed="false">Quản lý</button>
+            <button type="button" class="login-modal__role" data-role="ADMIN" aria-pressed="false">Quản trị viên</button>
+          </div>
+        </div>
 
-      .main-nav a::after {
-        position: absolute;
-        right: 0;
-        bottom: 2px;
-        left: 0;
-        height: 2px;
-        background: var(--orange);
-        content: "";
-        transform: scaleX(0);
-        transition: transform 0.2s ease;
-      }
+        <div class="login-modal__group">
+          <label class="login-modal__label" for="loginModalEmail">Tên đăng nhập</label>
+          <input class="login-modal__input" id="loginModalEmail" type="text" autocomplete="username"
+            autocapitalize="off" spellcheck="false" placeholder="ten@sitesafe.test hoặc Mã USR" />
+          <span class="login-modal__error" id="loginModalEmailError" hidden></span>
+        </div>
 
-      .main-nav a:hover {
-        color: var(--orange);
-      }
+        <div class="login-modal__group">
+          <div class="login-modal__label-row">
+            <label class="login-modal__label" for="loginModalPassword">Mật khẩu</label>
+            <a href="pages/auth/forgot-password.html">Quên mật khẩu?</a>
+          </div>
+          <div class="login-modal__pass">
+            <input class="login-modal__input login-modal__input--pass" id="loginModalPassword" type="password"
+              autocomplete="current-password" placeholder="Nhập mật khẩu của bạn" />
+            <button class="login-modal__toggle" id="loginModalToggle" type="button" aria-label="Hiện mật khẩu"
+              aria-pressed="false">
+              <svg class="login-modal__eye" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <svg class="login-modal__eye-off" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true" hidden>
+                <path d="M3 3l18 18" />
+                <path d="M10.6 5.1A10.5 10.5 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.5 6.6C3.7 8.4 2 12 2 12s3.6 7 10 7c1.7 0 3.2-.4 4.5-1.1" />
+                <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+              </svg>
+            </button>
+          </div>
+          <span class="login-modal__error" id="loginModalPasswordError" hidden></span>
+        </div>
 
-      .main-nav a:hover::after {
-        transform: scaleX(1);
-      }
+        <div class="login-modal__alert" id="loginModalAlert" role="alert" aria-live="polite" hidden></div>
 
-      .header-actions {
-        display: flex;
-        flex-shrink: 0;
-        gap: 10px;
-      }
+        <button class="login-modal__submit" id="loginModalSubmit" type="submit">Đăng nhập</button>
+      </form>
 
-      .nav-button {
-        display: inline-flex;
-        min-width: 112px;
-        min-height: 48px;
-        align-items: center;
-        justify-content: center;
-        padding: 10px 18px;
-        border-radius: 8px;
-        font-weight: 700;
-        text-align: center;
-      }
-
-      .nav-button--signup {
-        color: #171923;
-        background: var(--orange);
-      }
-
-      .nav-button--login {
-        background: var(--ink-soft);
-      }
-
-      .menu-toggle {
-        display: none;
-        width: 44px;
-        height: 44px;
-        color: var(--white);
-        background: var(--ink-soft);
-        border: 1px solid #3a3d4d;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 1.4rem;
-      }
-
-      .hero {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        min-height: 630px;
-        background: var(--ink);
-      }
-
-      .hero-image {
-        min-height: 630px;
-        background-image:
-          linear-gradient(rgb(17 19 29 / 3%), rgb(17 19 29 / 12%)),
-          url("/assets/images/ảnh\ phần\ index.jpg");
-        background-position: center;
-        background-size: cover;
-      }
-
-      .hero-copy {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 72px clamp(32px, 7vw, 112px);
-      }
-
-      .eyebrow {
-        margin: 0 0 24px;
-        color: #f8fafc;
-        font-size: 0.8rem;
-        font-weight: 800;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-      }
-
-      .hero h1 {
-        max-width: 620px;
-        margin: 0;
-        color: var(--orange);
-        font-size: clamp(2.3rem, 4.3vw, 4.2rem);
-        font-weight: 500;
-        line-height: 1.12;
-      }
-
-      .hero-cta {
-        display: inline-flex;
-        width: fit-content;
-        min-height: 52px;
-        align-items: center;
-        margin-top: 34px;
-        padding: 12px 22px;
-        color: var(--white);
-        background: #34334f;
-        border-radius: 7px;
-        font-weight: 700;
-      }
-
-      .hero-cta:hover {
-        background: var(--blue);
-      }
-
-      .hero-description {
-        max-width: 540px;
-        margin: 62px 0 0;
-        color: var(--muted);
-        font-size: 1rem;
-        line-height: 1.8;
-      }
-
-      .feature-strip {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1px;
-        background: #333543;
-        border-top: 1px solid #333543;
-      }
-
-      .feature-item {
-        min-height: 160px;
-        padding: 28px 30px;
-        background: var(--ink-soft);
-      }
-
-      .feature-item strong {
-        display: block;
-        margin-bottom: 8px;
-        color: var(--orange);
-        font-size: 1.05rem;
-      }
-
-      .feature-item span {
-        color: var(--muted);
-        font-size: 0.9rem;
-        line-height: 1.5;
-      }
-
-      @media (max-width: 1180px) {
-        .site-header {
-          padding-right: 22px;
-          padding-left: 28px;
-        }
-
-        .main-nav {
-          gap: 16px;
-          font-size: 0.82rem;
-        }
-
-        .nav-button {
-          min-width: 92px;
-          padding: 10px 12px;
-        }
-      }
-
-      @media (max-width: 860px) {
-        .site-header {
-          min-height: 76px;
-          padding: 10px 18px;
-        }
-
-        .brand img {
-          width: 190px;
-          height: 70px;
-        }
-
-        .menu-toggle {
-          display: block;
-        }
-
-        .main-nav,
-        .header-actions {
-          display: none;
-        }
-
-        .site-header.is-open {
-          flex-wrap: wrap;
-        }
-
-        .site-header.is-open .main-nav,
-        .site-header.is-open .header-actions {
-          display: flex;
-          width: 100%;
-        }
-
-        .site-header.is-open .main-nav {
-          align-items: stretch;
-          flex-direction: column;
-          gap: 0;
-        }
-
-        .site-header.is-open .main-nav a {
-          padding: 13px 0;
-          border-top: 1px solid #2b2e3d;
-          text-align: left;
-        }
-
-        .site-header.is-open .header-actions {
-          padding-top: 12px;
-        }
-
-        .hero {
-          grid-template-columns: 1fr;
-        }
-
-        .hero-image {
-          min-height: 380px;
-        }
-
-        .hero-copy {
-          min-height: 500px;
-          padding: 54px 28px;
-        }
-
-        .feature-strip {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
-
-      @media (max-width: 520px) {
-        .hero-image {
-          min-height: 300px;
-        }
-
-        .hero-copy {
-          min-height: 470px;
-          padding: 42px 22px;
-        }
-
-        .hero h1 {
-          font-size: 2.3rem;
-        }
-
-        .hero-description {
-          margin-top: 42px;
-        }
-
-        .feature-strip {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <header class="site-header" id="siteHeader">
-      <a class="brand" href="index.html" aria-label="Trang chủ SiteSafe">
-        <img src="assets/images/sitesafe-logo-dark.png" alt="Logo SiteSafe" />
-        <span class="brand-tagline"
-          >Đồng hành an toàn, vững bước mọi công trình.</span
-        >
-      </a>
-
-      <nav class="main-nav" aria-label="Điều hướng chính">
-        <a href="#gioi-thieu">Tổng quan</a>
-        <a href="pages/worker/worker-safety-checklist.html"
-          >Checklist an toàn</a
-        >
-        <a href="pages/worker/worker-hazard-create.html">Báo cáo nguy cơ</a>
-        <a href="pages/safety-officer/safety-inspection-management.html"
-          >Kiểm tra hiện trường</a
-        >
-        <a href="pages/manager/manager-corrective-actions.html"
-          >Xử lý khắc phục</a
-        >
-        <a href="pages/manager/manager-zone-risk-map.html">Khu vực</a>
-        <a href="pages/training/safety-training.html">Huấn luyện</a>
-      </nav>
-
-      <div class="header-actions">
-        <a class="nav-button nav-button--signup" href="pages/auth/register.html"
-          >Đăng ký</a
-        >
-        <a class="nav-button nav-button--login" href="pages/auth/login.html"
-          >Đăng nhập</a
-        >
+      <!-- Đăng nhập nhanh bằng tài khoản demo (bấm là vào thẳng trang của vai trò) -->
+      <div class="demo-login" role="group" aria-labelledby="demoLoginTitle">
+        <p class="demo-login__title" id="demoLoginTitle">Hoặc vào nhanh bằng tài khoản demo</p>
+        <div class="demo-login__grid">
+          <button type="button" class="demo-login__btn" data-demo-role="WORKER">
+            <strong>Công nhân</strong><span>hao.pa@sitesafe.test</span>
+          </button>
+          <button type="button" class="demo-login__btn" data-demo-role="SAFETY_OFFICER">
+            <strong>Cán bộ an toàn</strong><span>antoan.hoang@sitesafe.test</span>
+          </button>
+          <button type="button" class="demo-login__btn" data-demo-role="SITE_MANAGER">
+            <strong>Quản lý công trường</strong><span>quan.pm@sitesafe.test</span>
+          </button>
+          <button type="button" class="demo-login__btn" data-demo-role="ADMIN">
+            <strong>Quản trị viên</strong><span>admin@sitesafe.test</span>
+          </button>
+        </div>
       </div>
 
-      <button
-        class="menu-toggle"
-        id="menuToggle"
-        type="button"
-        aria-label="Mở menu"
-        aria-expanded="false"
-      >
-        ☰
-      </button>
-    </header>
+      <p class="login-modal__foot">Chưa có tài khoản? <a href="pages/auth/register.html">Đăng ký tài khoản mới</a></p>
+    </div>
+  </div>
 
-    <main id="gioi-thieu">
-      <section class="hero">
-        <div
-          class="hero-image"
-          role="img"
-          aria-label="Công nhân đang kiểm tra an toàn tại công trường"
-        ></div>
-        <div class="hero-copy">
-          <p class="eyebrow">Nền tảng an toàn công trường</p>
-          <h1>
-            Hãy yên tâm rằng sức khỏe và sự an toàn của bạn đang được đảm bảo.
-          </h1>
-          <span class="hero-cta">Bắt đầu kiểm tra an toàn</span>
-          <p class="hero-description">
-            SiteSafe kết nối công nhân, cán bộ an toàn, quản lý công trường và
-            quản trị viên trên cùng một quy trình rõ ràng: nhận diện nguy cơ,
-            báo cáo, xử lý và theo dõi đến khi hoàn tất.
+  <main>
+
+    <!-- ============ HERO SECTION ============ -->
+    <section class="hero" id="gioi-thieu">
+      <div class="hero-image">
+        <figure class="hero-video-card">
+          <video class="hero-video" id="heroVideo" autoplay muted loop playsinline preload="auto"
+            aria-label="Video giới thiệu công trường">
+            <source src="assets/video/mixkit-buildings-under-construction-aerial-view-4010-full-hd.mp4"
+              type="video/mp4" />
+          </video>
+          <figcaption class="hero-video-label">Công trường</figcaption>
+        </figure>
+      </div>
+      <div class="hero-copy">
+        <p class="eyebrow">Nền Tảng An Toàn Công Trường</p>
+        <h1>
+          Bảo vệ <span class="text-gradient">sức khỏe</span> và
+          <span class="text-orange">an toàn</span> cho mọi công trình.
+        </h1>
+        <p class="hero-description">
+          SiteSafe kết nối công nhân, cán bộ an toàn, quản lý công trường và quản trị viên
+          trên cùng một quy trình rõ ràng: nhận diện nguy cơ, báo cáo, xử lý và theo dõi đến khi hoàn tất.
+        </p>
+        <div class="hero-actions">
+          <a class="btn-primary" href="#tinh-nang">
+            Khám phá tính năng
+            <span class="btn-icon">→</span>
+          </a>
+          <a class="btn-outline" href="pages/auth/register.html">
+            Bắt đầu ngay
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-value">1,200<span class="stat-accent">+</span></span>
+            <span class="hero-stat-label">Công nhân</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-value">98<span class="stat-accent">%</span></span>
+            <span class="hero-stat-label">An toàn</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-value">24<span class="stat-accent">/7</span></span>
+            <span class="hero-stat-label">Giám sát</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-value">50<span class="stat-accent">+</span></span>
+            <span class="hero-stat-label">Công trường</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURE STRIP ============ -->
+    <section class="feature-strip" id="tinh-nang" aria-label="Các chức năng chính">
+      <div class="feature-item fade-in">
+        <div class="feature-icon"><img src="assets/icons/checklist.svg" width="24" height="24" alt=""></div>
+        <strong>Checklist mỗi ngày</strong>
+        <span>Kiểm tra an toàn trước khi bắt đầu ca làm việc.</span>
+      </div>
+      <div class="feature-item fade-in">
+        <div class="feature-icon"><img src="assets/icons/hazard-report.svg" width="24" height="24" alt=""></div>
+        <strong>Báo cáo nguy cơ</strong>
+        <span>Gửi mô tả và ảnh hiện trường trong vài thao tác.</span>
+      </div>
+      <div class="feature-item fade-in">
+        <div class="feature-icon"><img src="assets/icons/inspection.svg" width="24" height="24" alt=""></div>
+        <strong>Kiểm tra & Xử lý</strong>
+        <span>Review nguy cơ, giao hành động và theo dõi trạng thái.</span>
+      </div>
+      <div class="feature-item fade-in">
+        <div class="feature-icon"><img src="assets/icons/risk-map.svg" width="24" height="24" alt=""></div>
+        <strong>Bản đồ rủi ro</strong>
+        <span>Nhìn nhanh các điểm nóng an toàn theo khu vực.</span>
+      </div>
+    </section>
+
+    <!-- ============ QUY TRÌNH XỬ LÝ NGUY CƠ ============ -->
+    <section class="process-section" id="quy-trinh">
+      <div class="container">
+        <div class="process-header fade-in">
+          <span class="section-badge"><span class="badge-dot"></span>Quy trình</span>
+          <h2 class="section-title">Từ phát hiện đến <span class="highlight">khắc phục</span> trong 4 bước</h2>
+          <p class="section-subtitle">
+            Mọi nguy cơ đều đi qua cùng một quy trình, có người phụ trách và trạng thái rõ ràng ở từng bước.
           </p>
         </div>
-      </section>
 
-      <section class="feature-strip" aria-label="Các chức năng chính">
-        <div class="feature-item">
-          <strong>Checklist mỗi ngày</strong>
-          <span>Kiểm tra an toàn trước khi bắt đầu ca làm việc.</span>
-        </div>
-        <div class="feature-item">
-          <strong>Báo cáo nguy cơ</strong>
-          <span>Gửi mô tả và ảnh hiện trường trong vài thao tác.</span>
-        </div>
-        <div class="feature-item">
-          <strong>Kiểm tra và xử lý</strong>
-          <span>Review nguy cơ, giao hành động và theo dõi trạng thái.</span>
-        </div>
-        <div class="feature-item">
-          <strong>Bản đồ rủi ro</strong>
-          <span>Nhìn nhanh các điểm nóng an toàn theo khu vực.</span>
-        </div>
-      </section>
-    </main>
+        <ol class="process-steps stagger-children">
+          <li class="process-step fade-in">
+            <span class="process-number">01</span>
+            <h3>Phát hiện và báo cáo</h3>
+            <p>Công nhân gửi báo cáo kèm khu vực, mô tả và ảnh hiện trường. Hệ thống gợi ý mức độ nguy cơ.</p>
+          </li>
+          <li class="process-step fade-in">
+            <span class="process-number">02</span>
+            <h3>Xác minh</h3>
+            <p>Cán bộ an toàn kiểm tra thực tế, xác nhận mức độ và phân loại báo cáo.</p>
+          </li>
+          <li class="process-step fade-in">
+            <span class="process-number">03</span>
+            <h3>Giao khắc phục</h3>
+            <p>Quản lý công trường giao hành động khắc phục cho người phụ trách, kèm hạn hoàn thành.</p>
+          </li>
+          <li class="process-step fade-in">
+            <span class="process-number">04</span>
+            <h3>Theo dõi và đóng</h3>
+            <p>Trạng thái được cập nhật liên tục cho đến khi nguy cơ được xử lý và đóng lại.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
 
-    <script>
-      const siteHeader = document.getElementById("siteHeader");
-      const menuToggle = document.getElementById("menuToggle");
+    <!-- ============ WORKER GRID SECTION ============ -->
+    <section class="workers-section" id="cong-nhan">
+      <div class="container">
+        <div class="workers-header fade-in">
+          <div class="workers-header-left">
+            <div class="section-badge">
+              <span class="badge-dot"></span>
+              Quản lý công nhân
+            </div>
+            <h2 class="section-title">Giám sát <span class="highlight">toàn diện</span> đội ngũ</h2>
+            <p class="section-subtitle">
+              Theo dõi trạng thái điểm danh, thiết bị bảo hộ và ca trực của từng công nhân theo thời gian thực.
+            </p>
+          </div>
+          <div class="workers-filters">
+            <button class="filter-btn active">Tất cả</button>
+            <button class="filter-btn">Ca sáng</button>
+            <button class="filter-btn">Ca chiều</button>
+            <button class="filter-btn">Ca đêm</button>
+          </div>
+        </div>
 
-      menuToggle.addEventListener("click", function () {
-        const isOpen = siteHeader.classList.toggle("is-open");
-        menuToggle.setAttribute("aria-expanded", String(isOpen));
-        menuToggle.setAttribute("aria-label", isOpen ? "Đóng menu" : "Mở menu");
+        <div class="worker-grid stagger-children">
+          <!-- Card 1 -->
+          <div class="worker-card fade-in">
+            <div class="worker-avatar-row">
+              <div class="worker-avatar">NT</div>
+              <div>
+                <div class="worker-name">Nguyễn Văn Toàn</div>
+                <div class="worker-role">Thợ hàn – Khu A</div>
+              </div>
+            </div>
+            <div class="worker-details">
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">📍</span> Điểm danh</span>
+                <span class="status-badge status-badge--present"><span class="status-dot"></span> Có mặt</span>
+              </div>
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">🦺</span> Bảo hộ</span>
+                <span class="status-badge status-badge--ok"><span class="status-dot"></span> Đầy đủ</span>
+              </div>
+            </div>
+            <div class="worker-card-footer">
+              <span class="worker-shift">🕐 Ca sáng · 06:00–14:00</span>
+              <button class="worker-action-btn" aria-label="Xem chi tiết" title="Xem chi tiết">→</button>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="worker-card fade-in">
+            <div class="worker-avatar-row">
+              <div class="worker-avatar worker-avatar--amber">TL</div>
+              <div>
+                <div class="worker-name">Trần Thị Lan</div>
+                <div class="worker-role">Giám sát an toàn – Khu B</div>
+              </div>
+            </div>
+            <div class="worker-details">
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">📍</span> Điểm danh</span>
+                <span class="status-badge status-badge--present"><span class="status-dot"></span> Có mặt</span>
+              </div>
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">🦺</span> Bảo hộ</span>
+                <span class="status-badge status-badge--ok"><span class="status-dot"></span> Đầy đủ</span>
+              </div>
+            </div>
+            <div class="worker-card-footer">
+              <span class="worker-shift">🕐 Ca sáng · 06:00–14:00</span>
+              <button class="worker-action-btn" aria-label="Xem chi tiết" title="Xem chi tiết">→</button>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="worker-card fade-in">
+            <div class="worker-avatar-row">
+              <div class="worker-avatar worker-avatar--red">PH</div>
+              <div>
+                <div class="worker-name">Phạm Quốc Hùng</div>
+                <div class="worker-role">Thợ điện – Khu C</div>
+              </div>
+            </div>
+            <div class="worker-details">
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">📍</span> Điểm danh</span>
+                <span class="status-badge status-badge--late"><span class="status-dot"></span> Đi trễ</span>
+              </div>
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">🦺</span> Bảo hộ</span>
+                <span class="status-badge status-badge--warning"><span class="status-dot"></span> Thiếu mũ</span>
+              </div>
+            </div>
+            <div class="worker-card-footer">
+              <span class="worker-shift">🕐 Ca chiều · 14:00–22:00</span>
+              <button class="worker-action-btn" aria-label="Xem chi tiết" title="Xem chi tiết">→</button>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="worker-card fade-in">
+            <div class="worker-avatar-row">
+              <div class="worker-avatar worker-avatar--cyan">LM</div>
+              <div>
+                <div class="worker-name">Lê Văn Minh</div>
+                <div class="worker-role">Công nhân xây dựng – Khu A</div>
+              </div>
+            </div>
+            <div class="worker-details">
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">📍</span> Điểm danh</span>
+                <span class="status-badge status-badge--absent"><span class="status-dot"></span> Vắng mặt</span>
+              </div>
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">🦺</span> Bảo hộ</span>
+                <span class="status-badge status-badge--warning"><span class="status-dot"></span> Chưa xác nhận</span>
+              </div>
+            </div>
+            <div class="worker-card-footer">
+              <span class="worker-shift">🕐 Ca đêm · 22:00–06:00</span>
+              <button class="worker-action-btn" aria-label="Xem chi tiết" title="Xem chi tiết">→</button>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="worker-card fade-in">
+            <div class="worker-avatar-row">
+              <div class="worker-avatar worker-avatar--violet">HD</div>
+              <div>
+                <div class="worker-name">Hoàng Đức Dũng</div>
+                <div class="worker-role">Lái cẩu – Khu D</div>
+              </div>
+            </div>
+            <div class="worker-details">
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">📍</span> Điểm danh</span>
+                <span class="status-badge status-badge--present"><span class="status-dot"></span> Có mặt</span>
+              </div>
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">🦺</span> Bảo hộ</span>
+                <span class="status-badge status-badge--ok"><span class="status-dot"></span> Đầy đủ</span>
+              </div>
+            </div>
+            <div class="worker-card-footer">
+              <span class="worker-shift">🕐 Ca sáng · 06:00–14:00</span>
+              <button class="worker-action-btn" aria-label="Xem chi tiết" title="Xem chi tiết">→</button>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="worker-card fade-in">
+            <div class="worker-avatar-row">
+              <div class="worker-avatar worker-avatar--green">VT</div>
+              <div>
+                <div class="worker-name">Võ Thanh Tùng</div>
+                <div class="worker-role">Thợ sắt – Khu B</div>
+              </div>
+            </div>
+            <div class="worker-details">
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">📍</span> Điểm danh</span>
+                <span class="status-badge status-badge--present"><span class="status-dot"></span> Có mặt</span>
+              </div>
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">🦺</span> Bảo hộ</span>
+                <span class="status-badge status-badge--ok"><span class="status-dot"></span> Đầy đủ</span>
+              </div>
+            </div>
+            <div class="worker-card-footer">
+              <span class="worker-shift">🕐 Ca chiều · 14:00–22:00</span>
+              <button class="worker-action-btn" aria-label="Xem chi tiết" title="Xem chi tiết">→</button>
+            </div>
+          </div>
+
+          <!-- Card 7 -->
+          <div class="worker-card fade-in">
+            <div class="worker-avatar-row">
+              <div class="worker-avatar worker-avatar--rose">NA</div>
+              <div>
+                <div class="worker-name">Ngô Anh Tú</div>
+                <div class="worker-role">Kỹ thuật viên – Khu C</div>
+              </div>
+            </div>
+            <div class="worker-details">
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">📍</span> Điểm danh</span>
+                <span class="status-badge status-badge--present"><span class="status-dot"></span> Có mặt</span>
+              </div>
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">🦺</span> Bảo hộ</span>
+                <span class="status-badge status-badge--warning"><span class="status-dot"></span> Thiếu kính</span>
+              </div>
+            </div>
+            <div class="worker-card-footer">
+              <span class="worker-shift">🕐 Ca sáng · 06:00–14:00</span>
+              <button class="worker-action-btn" aria-label="Xem chi tiết" title="Xem chi tiết">→</button>
+            </div>
+          </div>
+
+          <!-- Card 8 -->
+          <div class="worker-card fade-in">
+            <div class="worker-avatar-row">
+              <div class="worker-avatar worker-avatar--blue">DK</div>
+              <div>
+                <div class="worker-name">Đặng Khoa</div>
+                <div class="worker-role">Thợ ống nước – Khu A</div>
+              </div>
+            </div>
+            <div class="worker-details">
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">📍</span> Điểm danh</span>
+                <span class="status-badge status-badge--present"><span class="status-dot"></span> Có mặt</span>
+              </div>
+              <div class="worker-detail-row">
+                <span class="worker-detail-label"><span class="detail-icon">🦺</span> Bảo hộ</span>
+                <span class="status-badge status-badge--ok"><span class="status-dot"></span> Đầy đủ</span>
+              </div>
+            </div>
+            <div class="worker-card-footer">
+              <span class="worker-shift">🕐 Ca đêm · 22:00–06:00</span>
+              <button class="worker-action-btn" aria-label="Xem chi tiết" title="Xem chi tiết">→</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ĐỊA ĐIỂM THI CÔNG ============ -->
+    <section class="sites-section" id="dia-diem">
+      <div class="container">
+        <div class="sites-header fade-in">
+          <div class="workers-header-left">
+            <div class="section-badge">
+              <span class="badge-dot"></span>
+              Địa Điểm Thi Công
+            </div>
+            <h2 class="section-title">Các <span class="highlight">công trường</span> đang hoạt động</h2>
+            <p class="section-subtitle">
+              Tổng quan tiến độ, nhân lực và mức an toàn tại từng địa điểm thi công đang triển khai.
+            </p>
+          </div>
+        </div>
+
+        <div class="sites-grid stagger-children">
+
+          <!-- Site 1 -->
+          <div class="site-card fade-in">
+            <div class="site-card-header">
+              <div class="site-icon">🏗️</div>
+              <div>
+                <div class="site-name">Khu đô thị Tân Phú Trung</div>
+                <div class="site-location">📍 Củ Chi, TP. Hồ Chí Minh</div>
+              </div>
+            </div>
+            <div class="site-progress">
+              <div class="site-progress-header">
+                <span class="site-progress-label">Tiến độ tổng thể</span>
+                <span class="site-progress-value">72%</span>
+              </div>
+              <div class="site-progress-bar">
+                <div class="site-progress-fill site-progress-fill--72"></div>
+              </div>
+            </div>
+            <div class="site-stats-row">
+              <div class="site-stat">
+                <span class="site-stat-value">148</span>
+                <span class="site-stat-label">Công nhân</span>
+              </div>
+              <div class="site-stat">
+                <span class="site-stat-value">4</span>
+                <span class="site-stat-label">Khu vực</span>
+              </div>
+              <div class="site-stat">
+                <span class="site-stat-value">96%</span>
+                <span class="site-stat-label">An toàn</span>
+              </div>
+            </div>
+            <div class="site-card-footer">
+              <span class="status-badge status-badge--present"><span class="status-dot"></span> Đang thi công</span>
+              <span class="worker-shift">Cập nhật: Hôm nay</span>
+            </div>
+          </div>
+
+          <!-- Site 2 -->
+          <div class="site-card fade-in">
+            <div class="site-card-header">
+              <div class="site-icon site-icon--orange">🏢</div>
+              <div>
+                <div class="site-name">Cao ốc văn phòng Landmark</div>
+                <div class="site-location">📍 Quận 1, TP. Hồ Chí Minh</div>
+              </div>
+            </div>
+            <div class="site-progress">
+              <div class="site-progress-header">
+                <span class="site-progress-label">Tiến độ tổng thể</span>
+                <span class="site-progress-value">45%</span>
+              </div>
+              <div class="site-progress-bar">
+                <div class="site-progress-fill site-progress-fill--orange site-progress-fill--45"></div>
+              </div>
+            </div>
+            <div class="site-stats-row">
+              <div class="site-stat">
+                <span class="site-stat-value">312</span>
+                <span class="site-stat-label">Công nhân</span>
+              </div>
+              <div class="site-stat">
+                <span class="site-stat-value">8</span>
+                <span class="site-stat-label">Khu vực</span>
+              </div>
+              <div class="site-stat">
+                <span class="site-stat-value">91%</span>
+                <span class="site-stat-label">An toàn</span>
+              </div>
+            </div>
+            <div class="site-card-footer">
+              <span class="status-badge status-badge--present"><span class="status-dot"></span> Đang thi công</span>
+              <span class="worker-shift">Cập nhật: Hôm nay</span>
+            </div>
+          </div>
+
+          <!-- Site 3 -->
+          <div class="site-card fade-in">
+            <div class="site-card-header">
+              <div class="site-icon site-icon--cyan">🌉</div>
+              <div>
+                <div class="site-name">Cầu vượt Ngã tư Thủ Đức</div>
+                <div class="site-location">📍 TP. Thủ Đức, TP. Hồ Chí Minh</div>
+              </div>
+            </div>
+            <div class="site-progress">
+              <div class="site-progress-header">
+                <span class="site-progress-label">Tiến độ tổng thể</span>
+                <span class="site-progress-value">88%</span>
+              </div>
+              <div class="site-progress-bar">
+                <div class="site-progress-fill site-progress-fill--cyan site-progress-fill--88"></div>
+              </div>
+            </div>
+            <div class="site-stats-row">
+              <div class="site-stat">
+                <span class="site-stat-value">76</span>
+                <span class="site-stat-label">Công nhân</span>
+              </div>
+              <div class="site-stat">
+                <span class="site-stat-value">2</span>
+                <span class="site-stat-label">Khu vực</span>
+              </div>
+              <div class="site-stat">
+                <span class="site-stat-value">99%</span>
+                <span class="site-stat-label">An toàn</span>
+              </div>
+            </div>
+            <div class="site-card-footer">
+              <span class="status-badge status-badge--ok"><span class="status-dot"></span> Sắp hoàn thành</span>
+              <span class="worker-shift">Cập nhật: Hôm qua</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VAI TRÒ NGƯỜI DÙNG ============ -->
+    <section class="roles-section" id="vai-tro">
+      <div class="container">
+        <div class="roles-header fade-in">
+          <span class="section-badge"><span class="badge-dot"></span>Phân quyền rõ ràng</span>
+          <h2 class="section-title">Mỗi vai trò một <span class="highlight">không gian làm việc</span></h2>
+          <p class="section-subtitle">
+            Sau khi đăng nhập, hệ thống chuyển bạn đến đúng màn hình theo vai trò, chỉ hiển thị các chức năng cần thiết.
+          </p>
+        </div>
+
+        <div class="roles-grid stagger-children">
+          <article class="role-card fade-in">
+            <div class="role-icon"><img src="assets/icons/role-worker.svg" alt=""></div>
+            <h3>Công nhân</h3>
+            <ul>
+              <li>Thực hiện checklist an toàn đầu ca</li>
+              <li>Báo cáo nguy cơ kèm mô tả và ảnh</li>
+              <li>Xem lịch sử và trạng thái báo cáo của mình</li>
+            </ul>
+          </article>
+          <article class="role-card fade-in">
+            <div class="role-icon"><img src="assets/icons/role-safety-officer.svg" alt=""></div>
+            <h3>Cán bộ an toàn</h3>
+            <ul>
+              <li>Tiếp nhận và xác minh báo cáo nguy cơ</li>
+              <li>Lập kế hoạch và ghi nhận kiểm tra hiện trường</li>
+              <li>Theo dõi bảng điều khiển an toàn</li>
+            </ul>
+          </article>
+          <article class="role-card fade-in">
+            <div class="role-icon"><img src="assets/icons/role-manager.svg" alt=""></div>
+            <h3>Quản lý công trường</h3>
+            <ul>
+              <li>Giao và theo dõi hành động khắc phục</li>
+              <li>Xem bản đồ rủi ro theo khu vực</li>
+              <li>Nắm tiến độ xử lý của từng công trường</li>
+            </ul>
+          </article>
+          <article class="role-card fade-in">
+            <div class="role-icon"><img src="assets/icons/role-admin.svg" alt=""></div>
+            <h3>Quản trị viên</h3>
+            <ul>
+              <li>Quản lý tài khoản và phân quyền người dùng</li>
+              <li>Cấu hình danh mục khu vực, công trường</li>
+              <li>Giám sát hoạt động của toàn hệ thống</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CÂU HỎI THƯỜNG GẶP ============ -->
+    <section class="faq-section" id="hoi-dap">
+      <div class="container faq-layout">
+        <div class="faq-intro fade-in">
+          <span class="section-badge"><span class="badge-dot"></span>Hỏi đáp</span>
+          <h2 class="section-title">Câu hỏi <span class="highlight">thường gặp</span></h2>
+          <p class="section-subtitle">
+            Những thắc mắc phổ biến khi bắt đầu dùng SiteSafe tại công trường.
+          </p>
+        </div>
+
+        <div class="faq-list fade-in">
+          <details class="faq-item" open>
+            <summary>Tôi cần làm gì khi phát hiện nguy cơ tại công trường?</summary>
+            <p>Vào mục Báo cáo nguy cơ, chọn khu vực, mô tả tình huống và đính kèm ảnh nếu có. Hệ thống gợi ý phân loại
+              mức độ để bạn tham khảo, sau đó báo cáo được gửi đến cán bộ an toàn.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Checklist an toàn phải thực hiện khi nào?</summary>
+            <p>Công nhân thực hiện checklist trước khi bắt đầu mỗi ca làm việc, gồm kiểm tra trang bị bảo hộ, mặt bằng
+              làm việc và thiết bị điện. Hạng mục không đạt sẽ được cảnh báo để báo ngay cho cán bộ an toàn.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Làm sao biết báo cáo của tôi đã được xử lý?</summary>
+            <p>Trong mục báo cáo của tôi, bạn xem được toàn bộ lịch sử cùng trạng thái hiện tại của từng báo cáo, và có
+              thể lọc hoặc tìm kiếm theo nội dung.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Quên mật khẩu thì khôi phục như thế nào?</summary>
+            <p>Tại trang đăng nhập, chọn "Quên mật khẩu" và nhập email đã đăng ký để nhận hướng dẫn đặt lại mật khẩu.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>Một tài khoản có dùng được nhiều vai trò không?</summary>
+            <p>Mỗi tài khoản gắn với một vai trò do quản trị viên phân quyền. Khi cần thay đổi vai trò, hãy liên hệ quản
+              trị viên của công trường.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ QUY TẮC AN TOÀN ============ -->
+    <section class="rules-section" id="quy-tac">
+      <div class="container">
+        <div class="rules-header fade-in">
+          <span class="section-badge"><span class="badge-dot"></span>Nhắc nhở an toàn</span>
+          <h2 class="section-title">4 quy tắc an toàn <span class="highlight">không thể bỏ qua</span></h2>
+          <p class="section-subtitle">
+            Những nguyên tắc cơ bản nhất tại công trường, cũng là các nhóm nguy cơ SiteSafe theo dõi thường xuyên.
+          </p>
+        </div>
+
+        <div class="rules-grid stagger-children">
+          <div class="rule-item fade-in">
+            <span class="rule-tag">Bảo hộ cá nhân</span>
+            <h3>Đội mũ, đeo kính, mang găng và ủng</h3>
+            <p>Trang bị đầy đủ bảo hộ lao động trước khi vào khu vực thi công, kiểm tra tình trạng trang bị mỗi ca.</p>
+          </div>
+          <div class="rule-item fade-in">
+            <span class="rule-tag">Làm việc trên cao</span>
+            <h3>Móc dây đai an toàn từ độ cao 2 m</h3>
+            <p>Cố định dây đai vào điểm neo chịu lực, kiểm tra giàn giáo và lan can trước khi leo lên.</p>
+          </div>
+          <div class="rule-item fade-in">
+            <span class="rule-tag">An toàn điện</span>
+            <h3>Ngắt nguồn trước khi sửa chữa</h3>
+            <p>Không tự ý đấu nối điện, tránh dây dẫn hở, ẩm ướt và bảo đảm thiết bị có tiếp địa.</p>
+          </div>
+          <div class="rule-item fade-in">
+            <span class="rule-tag">Hố đào và mặt bằng</span>
+            <h3>Rào chắn và biển cảnh báo rõ ràng</h3>
+            <p>Không đứng sát mép hố đào, giữ lối đi thông thoáng và báo ngay khi thấy khu vực nguy hiểm chưa che chắn.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-brand-col">
+          <p class="footer-brand-description">
+            Hệ thống quản lý <span class="footer-highlight">an toàn công trường thông minh</span> – kết nối toàn bộ quy
+            trình nhận diện, báo cáo
+            và xử lý nguy cơ trên <span class="footer-highlight">một nền tảng duy nhất</span>.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Chức năng</h4>
+          <div class="footer-links">
+            <a href="pages/worker/worker-safety-checklist.html">Checklist an toàn</a>
+            <a href="pages/worker/worker-hazard-create.html">Báo cáo nguy cơ</a>
+            <a href="pages/safety-officer/safety-inspection-management.html">Kiểm tra hiện trường</a>
+            <a href="pages/manager/manager-zone-risk-map.html">Bản đồ rủi ro</a>
+            <a href="pages/training/safety-training.html">Huấn luyện an toàn</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Vai trò</h4>
+          <div class="footer-links">
+            <a href="#vai-tro">Công nhân</a>
+            <a href="#vai-tro">Cán bộ an toàn</a>
+            <a href="#vai-tro">Quản lý công trường</a>
+            <a href="#vai-tro">Quản trị viên</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Liên hệ</h4>
+          <div class="footer-contact-item">
+            <span class="contact-name">Phan Anh Hào</span>
+            <a class="contact-fb" href="https://www.facebook.com/phan.haoanh.35" target="_blank"
+              rel="noopener noreferrer" aria-label="Facebook của Phan Anh Hào" title="Facebook của Phan Anh Hào"><img src="assets/icons/facebook.svg" width="18" height="18" alt=""></a>
+          </div>
+          <div class="footer-contact-item">
+            <span class="contact-name">Đoàn Thanh Sơn</span>
+            <a class="contact-fb" href="https://www.facebook.com/s.doanthanh" target="_blank" rel="noopener noreferrer"
+              aria-label="Facebook của Đoàn Thanh Sơn" title="Facebook của Đoàn Thanh Sơn"><img src="assets/icons/facebook.svg" width="18" height="18" alt=""></a>
+          </div>
+          <div class="footer-contact-item">
+            <span class="contact-name">Trần Huy Hoàng</span>
+            <a class="contact-fb" href="https://www.facebook.com/huylong.tran.9674" target="_blank"
+              rel="noopener noreferrer" aria-label="Facebook của Trần Huy Hoàng"
+              title="Facebook của Trần Huy Hoàng"><img src="assets/icons/facebook.svg" width="18" height="18" alt=""></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ SCRIPTS ============ -->
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/modules/auth.js"></script>
+  <script>
+    /* --- Modal đăng nhập --- */
+    (function () {
+      "use strict";
+
+      const modal = document.getElementById("loginModal");
+      const form = document.getElementById("loginModalForm");
+      const emailInput = document.getElementById("loginModalEmail");
+      const passInput = document.getElementById("loginModalPassword");
+      const submitBtn = document.getElementById("loginModalSubmit");
+      const alertBox = document.getElementById("loginModalAlert");
+      const emailError = document.getElementById("loginModalEmailError");
+      const passError = document.getElementById("loginModalPasswordError");
+      const roleButtons = document.querySelectorAll(".login-modal__role");
+      const loginLinks = document.querySelectorAll(".nav-button--login");
+      // Không chọn sẵn vai trò: trang đích lấy theo vai trò của tài khoản
+      let selectedRole = "";
+      let lastFocus = null;
+
+      function redirectUrl(role) {
+        switch ((role || "").toUpperCase()) {
+          case "SAFETY_OFFICER": return "pages/safety-officer/safety-dashboard.html";
+          case "SITE_MANAGER": return "pages/manager/manager-corrective-actions.html";
+          case "ADMIN": return "pages/admin/admin-user-management.html";
+          default: return "pages/worker/worker-safety-checklist.html";
+        }
+      }
+
+      function openModal() {
+        // Luôn bắt nhập tài khoản + mật khẩu: bỏ phiên cũ còn lưu trong trình duyệt
+        try { localStorage.removeItem("siteSafeUser"); } catch (err) { /* bỏ qua */ }
+        form.reset();
+        setPasswordVisible(false);
+        clearErrors();
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        document.body.classList.add("login-modal-open");
+        emailInput.focus();
+      }
+
+      function closeModal() {
+        modal.hidden = true;
+        document.body.classList.remove("login-modal-open");
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+
+      function clearErrors() {
+        [emailInput, passInput].forEach(function (el) { el.classList.remove("is-invalid"); });
+        emailError.hidden = true;
+        passError.hidden = true;
+        alertBox.hidden = true;
+      }
+
+      function showAlert(msg, type) {
+        alertBox.className = "login-modal__alert login-modal__alert--" + (type || "error");
+        alertBox.textContent = msg;
+        alertBox.hidden = false;
+      }
+
+      loginLinks.forEach(function (link) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault(); // Không có JS thì href vẫn dẫn tới trang login.html
+          openModal();
+        });
       });
-    </script>
-  </body>
+
+      modal.querySelectorAll("[data-login-close]").forEach(function (el) {
+        el.addEventListener("click", closeModal);
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !modal.hidden) closeModal();
+      });
+
+      roleButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const role = btn.getAttribute("data-role");
+          selectedRole = selectedRole === role ? "" : role;
+          roleButtons.forEach(function (b) {
+            const on = b.getAttribute("data-role") === selectedRole;
+            b.classList.toggle("is-active", on);
+            b.setAttribute("aria-pressed", String(on));
+          });
+        });
+      });
+
+      // Nút ẩn/hiện mật khẩu
+      const toggleBtn = document.getElementById("loginModalToggle");
+      function setPasswordVisible(show) {
+        passInput.type = show ? "text" : "password";
+        toggleBtn.setAttribute("aria-label", show ? "Ẩn mật khẩu" : "Hiện mật khẩu");
+        toggleBtn.setAttribute("aria-pressed", String(show));
+        toggleBtn.querySelector(".login-modal__eye").hidden = show;
+        toggleBtn.querySelector(".login-modal__eye-off").hidden = !show;
+      }
+      toggleBtn.addEventListener("click", function () {
+        setPasswordVisible(passInput.type === "password");
+        passInput.focus();
+      });
+
+      emailInput.addEventListener("input", clearErrors);
+      passInput.addEventListener("input", clearErrors);
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        clearErrors();
+        let ok = true;
+        if (!emailInput.value.trim()) {
+          emailInput.classList.add("is-invalid");
+          emailError.textContent = "Vui lòng nhập tên đăng nhập.";
+          emailError.hidden = false;
+          ok = false;
+        }
+        if (!passInput.value) {
+          passInput.classList.add("is-invalid");
+          passError.textContent = "Vui lòng nhập mật khẩu.";
+          passError.hidden = false;
+          ok = false;
+        }
+        if (!ok) {
+          (emailInput.value.trim() ? passInput : emailInput).focus();
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Đang đăng nhập…";
+        try {
+          const sessionUser = await window.siteSafeAuth.login({
+            emailOrUsername: emailInput.value.trim(),
+            password: passInput.value,
+            role: selectedRole,
+          });
+          showAlert("Đăng nhập thành công! Đang chuyển hướng...", "success");
+          setTimeout(function () { window.location.href = redirectUrl(sessionUser.role); }, 600);
+        } catch (err) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Đăng nhập";
+          showAlert(err.message || "Sai thông tin đăng nhập");
+          passInput.value = "";
+          passInput.focus();
+        }
+      });
+
+      // Đăng nhập nhanh bằng tài khoản demo
+      const demoButtons = modal.querySelectorAll(".demo-login__btn");
+      demoButtons.forEach(function (btn) {
+        btn.addEventListener("click", async function () {
+          clearErrors();
+          demoButtons.forEach(function (b) { b.disabled = true; });
+          submitBtn.disabled = true;
+          try {
+            const sessionUser = await window.siteSafeAuth.loginDemo(btn.getAttribute("data-demo-role"));
+            showAlert("Đăng nhập demo thành công! Đang chuyển hướng...", "success");
+            setTimeout(function () { window.location.href = redirectUrl(sessionUser.role); }, 400);
+          } catch (err) {
+            demoButtons.forEach(function (b) { b.disabled = false; });
+            submitBtn.disabled = false;
+            showAlert(err.message || "Không đăng nhập được tài khoản demo");
+          }
+        });
+      });
+    })();
+  </script>
+  <script>
+    /* --- Mobile menu toggle --- */
+    const siteHeader = document.getElementById('siteHeader');
+    const menuToggle = document.getElementById('menuToggle');
+
+    menuToggle.addEventListener('click', function () {
+      const isOpen = siteHeader.classList.toggle('is-open');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+      menuToggle.setAttribute('aria-label', isOpen ? 'Đóng menu' : 'Mở menu');
+    });
+
+    /* --- Sticky header shadow on scroll --- */
+    window.addEventListener('scroll', function () {
+      siteHeader.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    /* --- Active nav link tracking on scroll --- */
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.main-nav a[data-sections]');
+
+    function updateActiveNav() {
+      let current = '';
+      sections.forEach(function (section) {
+        const top = section.offsetTop - 120;
+        if (window.scrollY >= top) {
+          current = section.getAttribute('id');
+        }
+      });
+      // Phần cuối trang thấp, không cuộn lên được tới đỉnh: chạm đáy trang thì chọn phần cuối
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      if (atBottom && sections.length) {
+        current = sections[sections.length - 1].getAttribute('id');
+      }
+      navLinks.forEach(function (link) {
+        const linkSections = link.dataset.sections.split(' ');
+        link.classList.toggle('active', linkSections.includes(current));
+      });
+    }
+    let navTicking = false;
+    window.addEventListener('scroll', function () {
+      if (navTicking) return;
+      navTicking = true;
+      requestAnimationFrame(function () {
+        updateActiveNav();
+        navTicking = false;
+      });
+    }, { passive: true });
+
+
+
+
+    /* --- Scroll-triggered fade-in animations --- */
+    const animatedElements = document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right');
+
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    animatedElements.forEach(function (el) { observer.observe(el); });
+
+    /* Hiện dần xong thì thêm is-settled để hiệu ứng zoom khi hover không bị trễ */
+    document.addEventListener("transitionend", function (e) {
+      if (e.propertyName === "opacity" && /fade-in/.test(e.target.className)) e.target.classList.add("is-settled");
+    });
+
+    /* --- Video hero: khi chạy hết thì phát lại từ đầu (dự phòng cho thuộc tính loop) --- */
+    const heroVideo = document.getElementById('heroVideo');
+    heroVideo.addEventListener('ended', function () {
+      heroVideo.currentTime = 0;
+      heroVideo.play().catch(function () { });
+    });
+
+    /* --- Chỉ phát video hero khi nó còn nằm trong màn hình, để cuộn mượt hơn --- */
+    const heroVideoEl = document.getElementById('heroVideo');
+    if (heroVideoEl && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            heroVideoEl.play().catch(function () { });
+          } else {
+            heroVideoEl.pause();
+          }
+        });
+      }, { threshold: 0.1 }).observe(heroVideoEl);
+    }
+
+    /* --- Filter buttons toggle --- */
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        filterBtns.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+
 </html>

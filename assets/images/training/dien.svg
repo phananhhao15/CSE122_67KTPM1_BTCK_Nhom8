@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" width="600" height="320">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e3a8a"/><stop offset="1" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="600" height="320" fill="url(#bg)"/>
+  <rect y="285" width="600" height="35" fill="#334155"/>
+  <!-- Tủ điện tạm IP54 -->
+  <g transform="translate(90 40)">
+    <rect width="200" height="235" rx="8" fill="#cbd5e1" stroke="#64748b" stroke-width="4"/>
+    <rect x="14" y="14" width="172" height="190" rx="4" fill="#e2e8f0"/>
+    <g fill="#1e293b"><rect x="30" y="30" width="22" height="44" rx="3"/><rect x="62" y="30" width="22" height="44" rx="3"/><rect x="94" y="30" width="22" height="44" rx="3"/><rect x="126" y="30" width="22" height="44" rx="3"/></g>
+    <g fill="#22c55e"><rect x="35" y="38" width="12" height="14" rx="2"/><rect x="67" y="38" width="12" height="14" rx="2"/><rect x="99" y="38" width="12" height="14" rx="2"/><rect x="131" y="38" width="12" height="14" rx="2"/></g>
+    <rect x="30" y="90" width="118" height="30" rx="4" fill="#0ea5e9"/>
+    <text x="89" y="111" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">IP54</text>
+    <path d="M89 135 L124 195 L54 195 Z" fill="#facc15" stroke="#1e293b" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M94 149 L80 173 L92 173 L84 189 L102 163 L90 163 Z" fill="#1e293b"/>
+  </g>
+  <!-- Dây nối đất -->
+  <path d="M260 275 L260 300" stroke="#16a34a" stroke-width="5"/>
+  <path d="M240 300 L280 300 M246 307 L274 307 M253 314 L267 314" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
+  <!-- Cáp điện -->
+  <path d="M290 230 C340 230 330 160 380 160 C430 160 430 220 470 220" stroke="#f59e0b" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <!-- Máy khoan cầm tay -->
+  <g transform="translate(460 170)">
+    <path d="M10 30 L80 30 L80 70 L45 70 L40 110 L20 110 L22 70 L10 70 Z" fill="#f59e0b" stroke="#1e293b" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="80" y="40" width="14" height="20" fill="#1e293b"/>
+    <rect x="94" y="46" width="30" height="8" fill="#94a3b8"/>
+  </g>
+  <!-- Tia sét -->
+  <path d="M430 30 L395 100 L425 100 L400 160 L465 80 L435 80 L460 30 Z" fill="#facc15" opacity=".9"/>
+</svg>

@@ -3,39 +3,309 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
     <title>Không tìm thấy trang | SiteSafe</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Trang 404 có thể được hiển thị ở mọi đường dẫn con nên CSS và icon viết ngay trong file,
+         không dùng đường dẫn tương đối tới css/ hay assets/ -->
     <style>
+      :root {
+        --bg: #0b0e1a;
+        --card: #161933;
+        --text: #f1f5f9;
+        --text-muted: #a9b6c9;
+        --border: rgba(255, 255, 255, 0.09);
+        --accent: #ff8b2b;
+        --accent-dark: #e67a1f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 15% 10%, rgba(255, 139, 43, 0.16) 0%, rgba(255, 139, 43, 0) 45%),
+          radial-gradient(circle at 90% 95%, rgba(37, 99, 235, 0.14) 0%, rgba(37, 99, 235, 0) 45%),
+          var(--bg);
+        font-family: "Inter", system-ui, sans-serif;
+        line-height: 1.5;
+      }
+
+      /* Vạch cảnh báo công trường ở đầu và cuối trang */
+      .hazard-bar {
+        height: 14px;
+        background: repeating-linear-gradient(-45deg, #f97316 0 16px, #0b0e1a 16px 32px);
+      }
+
       .not-found {
         display: grid;
-        min-height: 100vh;
         place-items: center;
-        padding: 24px;
+        min-height: calc(100vh - 28px);
+        min-height: calc(100dvh - 28px);
+        padding: 32px 20px;
+      }
+
+      .not-found__card {
+        width: 100%;
+        max-width: 560px;
+        padding: 44px 36px 36px;
         text-align: center;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+        animation: rise 0.5s ease both;
       }
-      .not-found h1 {
-        margin: 0;
-        color: var(--color-primary);
-        font-size: 5rem;
+
+      .not-found__brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 28px;
+        color: var(--text);
+        font-size: 1.25rem;
+        font-weight: 800;
+        text-decoration: none;
       }
-      .not-found h2 {
+
+      .not-found__brand b {
+        font-weight: inherit;
+      }
+
+      .not-found__brand span {
+        color: var(--accent);
+      }
+
+      .not-found__code {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin: 0 0 8px;
+        font-size: clamp(4.5rem, 20vw, 7rem);
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      .not-found__code svg {
+        width: 0.9em;
+        height: 0.9em;
+        flex-shrink: 0;
+        animation: sway 3s ease-in-out infinite;
+        transform-origin: 50% 90%;
+      }
+
+      .not-found__code-num {
+        background: linear-gradient(135deg, #ffad60 0%, #ff8b2b 55%, #e67a1f 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .not-found__title {
         margin: 0 0 10px;
-        color: var(--color-primary);
+        font-size: clamp(1.4rem, 5vw, 1.75rem);
+        font-weight: 700;
       }
-      .not-found p {
-        margin: 0 0 20px;
-        color: #64748b;
+
+      .not-found__desc {
+        margin: 0 auto 8px;
+        max-width: 42ch;
+        color: var(--text-muted);
+      }
+
+      .not-found__path {
+        display: block;
+        max-width: 100%;
+        margin: 14px auto 0;
+        padding: 8px 12px;
+        overflow: hidden;
+        color: var(--text-muted);
+        font-family: ui-monospace, Consolas, monospace;
+        font-size: 0.8rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px dashed var(--border);
+        border-radius: 10px;
+      }
+
+      .not-found__path[hidden] {
+        display: none;
+      }
+
+      .not-found__actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 0 22px;
+        font: inherit;
+        font-size: 0.95rem;
+        font-weight: 700;
+        text-decoration: none;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+      }
+
+      .btn--primary {
+        color: #1a1004;
+        background: linear-gradient(135deg, #ffad60 0%, #ff8b2b 100%);
+        box-shadow: 0 8px 22px rgba(255, 139, 43, 0.3);
+      }
+
+      .btn--primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(255, 139, 43, 0.45);
+      }
+
+      .btn--ghost {
+        color: var(--text);
+        background: transparent;
+        border-color: var(--border);
+      }
+
+      .btn--ghost:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.22);
+      }
+
+      .btn:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @keyframes sway {
+        0%,
+        100% {
+          transform: rotate(-4deg);
+        }
+        50% {
+          transform: rotate(4deg);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .not-found__card {
+          padding: 36px 22px 28px;
+        }
+
+        .not-found__actions .btn {
+          width: 100%;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .not-found__card,
+        .not-found__code svg {
+          animation: none;
+        }
+
+        .btn {
+          transition: none;
+        }
       }
     </style>
   </head>
   <body>
+    <div class="hazard-bar" aria-hidden="true"></div>
+
     <main class="not-found">
-      <section class="card">
-        <h1>404</h1>
-        <h2>Không tìm thấy trang</h2>
-        <p>Đường dẫn có thể đã thay đổi hoặc không còn tồn tại.</p>
-        <a class="btn" href="index.html">Về trang chính</a>
+      <section class="not-found__card" aria-labelledby="notFoundTitle">
+        <a class="not-found__brand" id="brandLink" href="index.html" aria-label="Trang chủ SiteSafe">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#ff8b2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3 4 6v6c0 4.5 3.2 7.8 8 9 4.8-1.2 8-4.5 8-9V6l-8-3Z" />
+            <path d="m8.5 12 2.5 2.5 4.5-5" />
+          </svg>
+          <b>site<span>safe</span></b>
+        </a>
+
+        <p class="not-found__code" aria-hidden="true">
+          <span class="not-found__code-num">4</span>
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <path d="M32 6 3 56h58L32 6Z" fill="#ff8b2b" stroke="#ffad60" stroke-width="3" stroke-linejoin="round" />
+            <path d="M32 24v16" stroke="#1a1004" stroke-width="5" stroke-linecap="round" />
+            <circle cx="32" cy="48" r="3.2" fill="#1a1004" />
+          </svg>
+          <span class="not-found__code-num">4</span>
+        </p>
+
+        <h1 class="not-found__title" id="notFoundTitle">Khu vực này không tồn tại</h1>
+        <p class="not-found__desc">
+          Trang bạn tìm có thể đã được chuyển đi, đổi đường dẫn hoặc chưa từng có. Hãy quay lại khu vực an toàn.
+        </p>
+        <code class="not-found__path" id="missingPath" hidden></code>
+
+        <div class="not-found__actions">
+          <a class="btn btn--primary" id="homeLink" href="index.html">Về trang chủ</a>
+          <a class="btn btn--ghost" id="loginLink" href="pages/auth/login.html">Đăng nhập</a>
+          <button class="btn btn--ghost" type="button" id="backBtn">Quay lại</button>
+        </div>
       </section>
     </main>
+
+    <div class="hazard-bar" aria-hidden="true"></div>
+
+    <script>
+      (function () {
+        // Đường dẫn gốc của site: trên GitHub Pages dạng https://<user>.github.io/<repo>/ thì gốc là /<repo>/,
+        // còn chạy cục bộ hoặc tên miền riêng thì gốc là /
+        var segments = window.location.pathname.split("/").filter(Boolean);
+        var base = "/";
+        if (/\.github\.io$/.test(window.location.hostname) && segments.length) {
+          base = "/" + segments[0] + "/";
+        }
+
+        document.getElementById("homeLink").href = base + "index.html";
+        document.getElementById("brandLink").href = base + "index.html";
+        document.getElementById("loginLink").href = base + "pages/auth/login.html";
+
+        // Hiện đường dẫn đã gõ sai để người dùng đối chiếu
+        var pathBox = document.getElementById("missingPath");
+        var shownPath = window.location.pathname + window.location.search;
+        if (shownPath && shownPath !== "/" && !/404\.html$/.test(shownPath)) {
+          pathBox.textContent = shownPath;
+          pathBox.hidden = false;
+        }
+
+        // Không có trang trước đó thì nút "Quay lại" đưa về trang chủ
+        document.getElementById("backBtn").addEventListener("click", function () {
+          if (window.history.length > 1) {
+            window.history.back();
+          } else {
+            window.location.href = base + "index.html";
+          }
+        });
+      })();
+    </script>
   </body>
 </html>

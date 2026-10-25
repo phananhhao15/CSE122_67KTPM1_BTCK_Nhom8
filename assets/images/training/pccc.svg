@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" width="600" height="320">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7f1d1d"/><stop offset="1" stop-color="#1e293b"/></linearGradient>
+    <radialGradient id="glow" cx=".7" cy=".75" r=".5"><stop offset="0" stop-color="#f97316" stop-opacity=".7"/><stop offset="1" stop-color="#f97316" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="600" height="320" fill="url(#bg)"/>
+  <rect width="600" height="320" fill="url(#glow)"/>
+  <rect y="280" width="600" height="40" fill="#0f172a"/>
+  <!-- Ngọn lửa -->
+  <g transform="translate(380 120)">
+    <path d="M80 160 C10 160 0 100 30 60 C35 90 50 95 55 85 C40 50 60 15 95 0 C90 40 130 60 125 100 C140 90 145 75 140 60 C175 95 170 160 80 160 Z" fill="#f97316"/>
+    <path d="M85 160 C45 160 40 120 60 100 C65 115 75 118 78 110 C72 90 85 70 105 62 C102 88 125 100 120 125 C130 120 133 112 132 104 C150 130 140 160 85 160 Z" fill="#facc15"/>
+  </g>
+  <!-- Bình chữa cháy CO2 -->
+  <g transform="translate(150 70)">
+    <path d="M60 30 L60 10 L90 10 L90 30" fill="#1e293b"/>
+    <path d="M90 16 L140 6 L150 14 L96 26 Z" fill="#334155"/>
+    <path d="M60 20 Q20 30 22 80" stroke="#1e293b" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M14 78 L30 78 L34 100 L10 100 Z" fill="#1e293b"/>
+    <rect x="40" y="30" width="70" height="180" rx="30" fill="#dc2626"/>
+    <rect x="50" y="40" width="10" height="150" rx="5" fill="#fca5a5" opacity=".6"/>
+    <rect x="44" y="100" width="62" height="56" rx="4" fill="#f8fafc"/>
+    <text x="75" y="126" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#dc2626" text-anchor="middle">CO2</text>
+    <text x="75" y="146" font-family="Arial, sans-serif" font-size="11" fill="#1e293b" text-anchor="middle">5 kg</text>
+  </g>
+  <!-- Biển lối thoát hiểm -->
+  <g transform="translate(30 30)">
+    <rect width="120" height="54" rx="6" fill="#16a34a"/>
+    <circle cx="30" cy="14" r="6" fill="#fff"/>
+    <path d="M30 20 L26 34 L18 46 M26 34 L36 42 L38 50 M28 24 L40 28 M28 24 L18 28" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <path d="M58 27 L102 27 M90 15 L102 27 L90 39" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+</svg>

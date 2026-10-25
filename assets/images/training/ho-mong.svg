@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" width="600" height="320">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fde68a"/><stop offset="1" stop-color="#fef3c7"/></linearGradient>
+    <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a16207"/><stop offset="1" stop-color="#422006"/></linearGradient>
+  </defs>
+  <rect width="600" height="320" fill="url(#sky)"/>
+  <!-- Mặt đất và hố sâu -->
+  <path d="M0 150 L200 150 L230 310 L410 310 L440 150 L600 150 L600 320 L0 320 Z" fill="url(#soil)"/>
+  <path d="M200 150 L230 310 L410 310 L440 150 Z" fill="#1c1917"/>
+  <g stroke="#78350f" stroke-width="6"><line x1="215" y1="200" x2="425" y2="200"/><line x1="222" y1="250" x2="418" y2="250"/></g>
+  <!-- Rào chắn -->
+  <g fill="#dc2626"><rect x="40" y="120" width="120" height="12"/><rect x="480" y="120" width="100" height="12"/></g>
+  <g fill="#f8fafc"><rect x="60" y="120" width="20" height="12"/><rect x="100" y="120" width="20" height="12"/><rect x="140" y="120" width="20" height="12"/><rect x="500" y="120" width="20" height="12"/><rect x="540" y="120" width="20" height="12"/></g>
+  <g fill="#334155"><rect x="48" y="132" width="6" height="18"/><rect x="146" y="132" width="6" height="18"/><rect x="486" y="132" width="6" height="18"/><rect x="566" y="132" width="6" height="18"/></g>
+  <!-- Giá ba chân và tời cứu sinh -->
+  <g stroke="#475569" stroke-width="6" stroke-linecap="round">
+    <line x1="320" y1="30" x2="230" y2="150"/><line x1="320" y1="30" x2="410" y2="150"/><line x1="320" y1="30" x2="320" y2="150"/>
+  </g>
+  <circle cx="320" cy="30" r="10" fill="#f59e0b"/>
+  <rect x="330" y="80" width="26" height="20" rx="3" fill="#f59e0b"/>
+  <line x1="320" y1="34" x2="320" y2="230" stroke="#facc15" stroke-width="3"/>
+  <!-- Công nhân dưới hố -->
+  <g transform="translate(305 230)">
+    <circle cx="15" cy="12" r="10" fill="#fcd34d"/>
+    <path d="M3 9 Q15 -6 27 9 Z" fill="#facc15"/>
+    <rect x="3" y="24" width="24" height="40" rx="4" fill="#f97316"/>
+    <path d="M3 28 L27 50 M27 28 L3 50" stroke="#dc2626" stroke-width="3"/>
+  </g>
+  <!-- Máy đo khí -->
+  <g transform="translate(470 175)">
+    <rect width="80" height="110" rx="10" fill="#facc15" stroke="#1e293b" stroke-width="4"/>
+    <rect x="10" y="12" width="60" height="44" rx="4" fill="#0f172a"/>
+    <text x="40" y="30" font-family="Arial, sans-serif" font-size="11" fill="#4ade80" text-anchor="middle">O2 20.9%</text>
+    <text x="40" y="48" font-family="Arial, sans-serif" font-size="11" fill="#4ade80" text-anchor="middle">H2S 0 ppm</text>
+    <circle cx="24" cy="80" r="9" fill="#16a34a"/><circle cx="56" cy="80" r="9" fill="#dc2626"/>
+  </g>
+  <!-- Quạt và ống cấp khí tươi -->
+  <path d="M60 170 C60 210 140 200 200 215 L260 250" stroke="#2563eb" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <rect x="30" y="150" width="60" height="40" rx="6" fill="#2563eb"/>
+  <circle cx="60" cy="170" r="12" fill="#bfdbfe"/>
+</svg>
