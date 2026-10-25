@@ -8,7 +8,7 @@
     "riskLevel": "CRITICAL",
     "supervisor": "Võ Thành Long",
     "supervisorPhone": "0967890123",
-    "hazardsCount": 12,
+    "hazardsCount": 16,
     "status": "ACTIVE",
     "image": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=400&q=80",
     "coordinates": { "x": 35, "y": 25 },

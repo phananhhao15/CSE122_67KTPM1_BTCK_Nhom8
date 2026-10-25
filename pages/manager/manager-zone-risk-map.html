@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bản đồ rủi ro khu vực | SiteSafe</title>
+    <meta name="description" content="Bản đồ rủi ro khu vực công trường – phân tích điểm nóng bằng AI-3 Risk Hotspot Insight" />
     <link rel="stylesheet" href="../../css/style.css" />
     <link rel="stylesheet" href="../../css/manager.css" />
     <link rel="stylesheet" href="../../css/responsive.css" />
-    
   </head>
   <body data-required-role="SITE_MANAGER">
     <div class="app-layout">
@@ -26,7 +26,6 @@
           <h1>Bản đồ rủi ro khu vực</h1>
           <p>Theo dõi mức độ rủi ro tại từng vùng của công trường.</p>
         </div>
-
       </header>
 
       <section class="map-panel" aria-label="Sơ đồ rủi ro công trường">
@@ -50,6 +49,152 @@
       </section>
 
       <section class="zone-grid" id="zoneGrid" aria-label="Danh sách vùng"></section>
+
+      <!-- ===== AI-3: RISK HOTSPOT INSIGHT ===== -->
+      <section class="ai3-panel card" id="ai3Panel" aria-labelledby="ai3Title">
+        <div class="ai3-header">
+          <div class="ai3-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            AI-3
+          </div>
+          <h2 id="ai3Title">Risk Hotspot Insight – Phân tích điểm nóng rủi ro</h2>
+          <p>AI phân tích dữ liệu sự cố thực tế, tổng hợp khu vực nguy hiểm nhất và đề xuất hành động ưu tiên.</p>
+        </div>
+
+        <!-- BƯỚC 1: NHẬP DỮ LIỆU -->
+        <div class="ai3-step" id="ai3StepInput">
+          <h3 class="ai3-step-title">
+            <span class="ai3-step-num">1</span>Chọn điều kiện phân tích
+          </h3>
+          <div class="ai3-form">
+            <div class="ai3-field">
+              <label for="ai3ZoneFilter">Phạm vi phân tích</label>
+              <select id="ai3ZoneFilter">
+                <option value="all">Toàn bộ công trường</option>
+              </select>
+            </div>
+            <div class="ai3-field">
+              <label for="ai3RiskFilter">Mức rủi ro tối thiểu</label>
+              <select id="ai3RiskFilter">
+                <option value="all">Tất cả mức rủi ro</option>
+                <option value="CRITICAL">Nghiêm trọng</option>
+                <option value="HIGH">Cao</option>
+                <option value="MEDIUM">Trung bình</option>
+              </select>
+            </div>
+            <div class="ai3-field">
+              <label for="ai3TopN">Số điểm nóng cần xác định</label>
+              <select id="ai3TopN">
+                <option value="3">Top 3</option>
+                <option value="5" selected>Top 5</option>
+                <option value="10">Top 10</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary ai3-run-btn" id="ai3RunBtn" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            AI-3 Phân tích điểm nóng
+          </button>
+        </div>
+
+        <!-- BƯỚC 2: ĐANG XỬ LÝ -->
+        <div class="ai3-step is-hidden" id="ai3StepLoading" aria-live="polite">
+          <div class="ai3-loading">
+            <div class="ai3-spinner" aria-hidden="true"></div>
+            <div>
+              <p class="ai3-loading-title">AI đang phân tích dữ liệu…</p>
+              <p class="ai3-loading-sub" id="ai3LoadingMsg">Đang đọc dữ liệu sự cố và khu vực…</p>
+            </div>
+          </div>
+          <div class="ai3-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="ai3ProgressBar">
+            <div class="ai3-progress-fill" id="ai3ProgressFill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- BƯỚC 3 + 4: KẾT QUẢ & GIẢI THÍCH -->
+        <div class="ai3-step is-hidden" id="ai3StepResult">
+          <div class="ai3-result-header">
+            <h3 class="ai3-step-title">
+              <span class="ai3-step-num">3</span>Kết quả phân tích điểm nóng
+            </h3>
+            <span class="ai3-confidence-badge" id="ai3ConfidenceBadge">Độ tin cậy: –</span>
+          </div>
+          <p class="ai3-result-summary" id="ai3ResultSummary"></p>
+          <div class="ai3-hotspot-list" id="ai3HotspotList" aria-label="Danh sách điểm nóng"></div>
+
+          <!-- BƯỚC 4: GIẢI THÍCH -->
+          <div class="ai3-explain card" id="ai3Explain">
+            <h4>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              Vì sao AI kết luận như vậy?
+            </h4>
+            <p id="ai3ExplainText"></p>
+          </div>
+
+          <!-- BƯỚC 5: CHẤP NHẬN / TẠO LẠI / TỪ CHỐI -->
+          <div class="ai3-actions-row">
+            <button class="btn btn-primary" id="ai3AcceptBtn" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              Chấp nhận & Lưu kết quả
+            </button>
+            <button class="btn btn-outline" id="ai3RetryBtn" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              Tạo lại
+            </button>
+            <button class="btn btn-outline ai3-reject-btn" id="ai3RejectBtn" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Từ chối
+            </button>
+          </div>
+        </div>
+
+        <!-- BƯỚC 6: ĐÃ LƯU -->
+        <div class="ai3-step is-hidden" id="ai3StepSaved">
+          <div class="ai3-saved">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="20 6 9 17 4 12"/></svg>
+            <div>
+              <p class="ai3-saved-title">Đã lưu kết quả phân tích AI-3!</p>
+              <p class="ai3-saved-sub" id="ai3SavedTime"></p>
+            </div>
+          </div>
+          <div class="ai3-saved-record card" id="ai3SavedRecord"></div>
+          <div class="ai3-actions-row">
+            <button class="btn btn-outline" id="ai3NewBtn" type="button">Phân tích mới</button>
+          </div>
+        </div>
+
+        <!-- THÔNG BÁO LỖI / TỪ CHỐI -->
+        <div class="ai3-step is-hidden" id="ai3StepError">
+          <div class="ai3-error-box">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            <div>
+              <p class="ai3-error-title" id="ai3ErrorTitle">Đã từ chối kết quả</p>
+              <p id="ai3ErrorMsg">Kết quả AI đã bị hủy. Bạn có thể phân tích lại với điều kiện khác.</p>
+            </div>
+          </div>
+          <button class="btn btn-outline" id="ai3ErrorRetryBtn" type="button">Phân tích lại</button>
+        </div>
+      </section>
+      <!-- ===== /AI-3 ===== -->
+
+      <!-- ===== LỊCH SỬ KẾT QUẢ AI-3 ĐÃ LƯU ===== -->
+      <section class="ai3-history card" id="ai3HistorySection" aria-labelledby="ai3HistoryTitle">
+        <div class="ai3-history-header">
+          <h2 id="ai3HistoryTitle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            Danh sách kết quả phân tích đã lưu
+          </h2>
+          <button class="btn btn-outline ai3-history-clear" id="ai3ClearHistory" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            Xóa tất cả
+          </button>
+        </div>
+        <div id="ai3HistoryList" class="ai3-history-list" aria-label="Lịch sử phân tích điểm nóng">
+          <p class="ai3-empty" id="ai3HistoryEmpty">Chưa có kết quả nào được lưu. Hãy chạy AI-3 và chấp nhận kết quả để lưu vào đây.</p>
+        </div>
+      </section>
+      <!-- ===== /LỊCH SỬ AI-3 ===== -->
+
     </main>
         </div>
       </div>
@@ -92,6 +237,9 @@
     <script src="../../js/main.js"></script>
     <script src="../../js/modules/manager.js"></script>
     <script>
+      /* ============================================================
+         PHẦN 1: BẢN ĐỒ RỦI RO (logic gốc)
+      ============================================================ */
       function escapeHtml(value) {
         return String(value == null ? "" : value).replace(
           /[&<>'"]/g,
@@ -134,6 +282,17 @@
 
         const zones = await siteSafeManager.loadZones();
 
+        // Điền dropdown AI-3 bằng zones thực tế (chỉ thêm nếu chưa có để tránh nhân đôi khi reload)
+        const ai3ZoneFilter = document.getElementById("ai3ZoneFilter");
+        var existingOptionIds = Array.from(ai3ZoneFilter.options).map(function(o) { return o.value; });
+        zones.forEach(function (zone) {
+          if (existingOptionIds.indexOf(zone.id) !== -1) return; // tránh nhân đôi
+          const opt = document.createElement("option");
+          opt.value = zone.id;
+          opt.textContent = zone.name || zone.code || zone.id;
+          ai3ZoneFilter.appendChild(opt);
+        });
+
         zones.forEach(function (zone) {
           const riskKey = zone.riskLevel || "MEDIUM";
           const riskClass = savedZoneClass[riskKey] || "medium";
@@ -142,29 +301,469 @@
 
           // Render khối trên sơ đồ
           const mapZone = document.createElement("div");
-          mapZone.className = `map-zone map-zone--${riskClass}`;
-          mapZone.textContent = `${zone.code || zone.id} · ${zone.name}`;
+          mapZone.className = "map-zone map-zone--" + riskClass;
+          mapZone.textContent = (zone.code || zone.id) + " · " + zone.name;
           mapLayout.appendChild(mapZone);
 
           // Render thẻ chi tiết từng vùng
           const card = document.createElement("article");
-          card.className = `card zone-card zone-card--${riskClass}`;
-          card.innerHTML = `
-            <div class="zone-card-header">
-              <h2>${escapeHtml(zone.code || zone.id)}</h2>
-              <span class="badge ${badgeClass}">${escapeHtml(riskLabels[riskKey] || "Chưa phân loại")}</span>
-            </div>
-            <p>${escapeHtml(zone.description || "Chưa có mô tả.")}</p>
-            <div class="zone-meta">
-              <span>${hazardsCount} sự cố</span>
-              <span>Giám sát: ${escapeHtml(zone.supervisor || "Chưa phân công")}</span>
-            </div>
-          `;
+          card.className = "card zone-card zone-card--" + riskClass;
+          card.innerHTML =
+            '<div class="zone-card-header">' +
+              '<h2>' + escapeHtml(zone.code || zone.id) + '</h2>' +
+              '<span class="badge ' + badgeClass + '">' + escapeHtml(riskLabels[riskKey] || "Chưa phân loại") + '</span>' +
+            '</div>' +
+            '<p>' + escapeHtml(zone.description || "Chưa có mô tả.") + '</p>' +
+            '<div class="zone-meta">' +
+              '<span>' + hazardsCount + ' sự cố</span>' +
+              '<span>Giám sát: ' + escapeHtml(zone.supervisor || "Chưa phân công") + '</span>' +
+            '</div>';
           zoneGrid.appendChild(card);
         });
       }
 
       initRiskMap();
+
+      /* ============================================================
+         PHẦN 2: AI-3 RISK HOTSPOT INSIGHT – LUỒNG 6 BƯỚC
+         Bước 1: Nhập điều kiện phân tích
+         Bước 2: AI đang xử lý (progress bar giả lập 500–900ms)
+         Bước 3: Hiển thị kết quả danh sách điểm nóng
+         Bước 4: Hiển thị giải thích lý do AI kết luận
+         Bước 5: Người dùng Chấp nhận / Tạo lại / Từ chối
+         Bước 6: Lưu kết quả vào localStorage
+      ============================================================ */
+
+      // ---- Tiện ích hiển thị bước ----
+      var AI3_STEPS = ["ai3StepInput","ai3StepLoading","ai3StepResult","ai3StepSaved","ai3StepError"];
+      function ai3ShowStep(stepId) {
+        AI3_STEPS.forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle("is-hidden", id !== stepId);
+        });
+      }
+
+      // ---- Thuật toán phân tích điểm nóng (JavaScript quy tắc) ----
+      function analyzeHotspots(zones, hazards, zoneFilter, riskFilter, topN) {
+        var RISK_SCORE = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1 };
+
+        // Đếm hazards theo zoneId từ dữ liệu thực tế
+        var zoneHazardMap = {};
+        hazards.forEach(function(h) {
+          var zid = h.zoneId || h.zone || "UNKNOWN";
+          if (!zoneHazardMap[zid]) zoneHazardMap[zid] = { total: 0, critical: 0, high: 0, open: 0, categories: {} };
+          zoneHazardMap[zid].total++;
+          if (h.riskLevel === "CRITICAL") zoneHazardMap[zid].critical++;
+          if (h.riskLevel === "HIGH") zoneHazardMap[zid].high++;
+          if (h.status === "OPEN") zoneHazardMap[zid].open++;
+          var cat = h.category || "Chung";
+          zoneHazardMap[zid].categories[cat] = (zoneHazardMap[zid].categories[cat] || 0) + 1;
+        });
+
+        var results = [];
+        zones.forEach(function(zone) {
+          // Lọc theo zone filter
+          if (zoneFilter !== "all" && zone.id !== zoneFilter) return;
+          // Lọc theo mức rủi ro tối thiểu
+          var zoneRiskScore = RISK_SCORE[zone.riskLevel] || 1;
+          if (riskFilter !== "all" && zoneRiskScore < RISK_SCORE[riskFilter]) return;
+
+          var stats = zoneHazardMap[zone.id] || { total: 0, critical: 0, high: 0, open: 0, categories: {} };
+          // Hazards count từ zone data nếu chưa có trong hazards array
+          var totalCount = stats.total > 0 ? stats.total : (Number(zone.hazardsCount) || 0);
+
+          // Tính điểm tổng hợp: sự cố nghiêm trọng x4, cao x3, tổng x1, chưa xử lý x2
+          var score = stats.critical * 4 + stats.high * 3 + totalCount + stats.open * 2 + zoneRiskScore * 2;
+
+          // Xác định loại nguy cơ phổ biến nhất
+          var topCat = "Chung";
+          var topCatCount = 0;
+          Object.keys(stats.categories).forEach(function(cat) {
+            if (stats.categories[cat] > topCatCount) {
+              topCatCount = stats.categories[cat];
+              topCat = cat;
+            }
+          });
+
+          results.push({
+            zone: zone,
+            totalHazards: totalCount,
+            criticalCount: stats.critical,
+            highCount: stats.high,
+            openCount: stats.open,
+            topCategory: topCat,
+            score: score,
+            riskLevel: zone.riskLevel || "MEDIUM",
+          });
+        });
+
+        // Sắp xếp theo điểm giảm dần
+        results.sort(function(a, b) { return b.score - a.score; });
+        return results.slice(0, topN);
+      }
+
+      // ---- Tạo đoạn giải thích AI ----
+      function buildExplanation(hotspots, riskFilter, topN) {
+        if (hotspots.length === 0) {
+          return "Không tìm thấy khu vực nào thỏa điều kiện lọc. Thử mở rộng phạm vi hoặc giảm mức rủi ro tối thiểu.";
+        }
+        var topZone = hotspots[0];
+        var criticalTotal = hotspots.reduce(function(s, h) { return s + h.criticalCount; }, 0);
+        var openTotal = hotspots.reduce(function(s, h) { return s + h.openCount; }, 0);
+        var txt = "AI-3 xếp hạng " + hotspots.length + " khu vực dựa trên số sự cố, mức độ nghiêm trọng và tỉ lệ chưa xử lý. ";
+        txt += "Khu vực điểm nóng số 1 là \"" + (topZone.zone.name || topZone.zone.code) + "\" ";
+        txt += "với " + topZone.totalHazards + " sự cố";
+        if (topZone.criticalCount > 0) txt += " (trong đó " + topZone.criticalCount + " nghiêm trọng)";
+        txt += ". ";
+        if (criticalTotal > 0) txt += "Tổng cộng có " + criticalTotal + " sự cố mức nghiêm trọng cần ưu tiên xử lý ngay. ";
+        if (openTotal > 0) txt += openTotal + " sự cố trong danh sách vẫn chưa có hành động khắc phục. ";
+        txt += "Loại nguy cơ phổ biến nhất tại điểm nóng số 1: " + topZone.topCategory + ". ";
+        txt += "Thuật toán tính điểm kết hợp: sự cố nghiêm trọng (×4), sự cố cao (×3), tổng sự cố (×1), chưa xử lý (×2) và mức rủi ro khu vực (×2).";
+        return txt;
+      }
+
+      // ---- Render danh sách điểm nóng ----
+      function renderHotspots(hotspots) {
+        var list = document.getElementById("ai3HotspotList");
+        list.innerHTML = "";
+        if (hotspots.length === 0) {
+          list.innerHTML = '<p class="ai3-empty">Không tìm thấy điểm nóng nào phù hợp với điều kiện đã chọn.</p>';
+          return;
+        }
+        hotspots.forEach(function(h, idx) {
+          var riskClass = (h.riskLevel || "MEDIUM").toLowerCase();
+          var card = document.createElement("div");
+          card.className = "ai3-hotspot-card ai3-hotspot-card--" + riskClass;
+          card.innerHTML =
+            '<div class="ai3-hotspot-rank">#' + (idx + 1) + '</div>' +
+            '<div class="ai3-hotspot-info">' +
+              '<div class="ai3-hotspot-name">' + escapeHtml(h.zone.name || h.zone.code || h.zone.id) + '</div>' +
+              '<div class="ai3-hotspot-meta">' +
+                '<span class="badge ' + (riskBadgeClass[h.riskLevel] || "badge-warning") + '">' + escapeHtml(riskLabels[h.riskLevel] || h.riskLevel) + '</span>' +
+                '<span>' + h.totalHazards + ' sự cố</span>' +
+                (h.criticalCount > 0 ? '<span class="ai3-badge-critical">' + h.criticalCount + ' nghiêm trọng</span>' : '') +
+                (h.openCount > 0 ? '<span class="ai3-badge-open">' + h.openCount + ' chưa xử lý</span>' : '') +
+              '</div>' +
+              '<div class="ai3-hotspot-cat">Loại phổ biến: ' + escapeHtml(h.topCategory) + '</div>' +
+              (h.zone.supervisor ? '<div class="ai3-hotspot-sup">Giám sát: ' + escapeHtml(h.zone.supervisor) + '</div>' : '') +
+            '</div>' +
+            '<div class="ai3-hotspot-score">Điểm: ' + h.score + '</div>';
+          list.appendChild(card);
+        });
+      }
+
+      // ---- Giả lập tiến trình loading ----
+      function runLoadingProgress(onDone) {
+        var fill = document.getElementById("ai3ProgressFill");
+        var bar = document.getElementById("ai3ProgressBar");
+        var msgEl = document.getElementById("ai3LoadingMsg");
+        var messages = [
+          "Đang đọc dữ liệu sự cố và khu vực…",
+          "Đang tính điểm rủi ro từng khu vực…",
+          "Đang xếp hạng điểm nóng…",
+          "Đang tổng hợp kết quả…",
+        ];
+        var progress = 0;
+        var step = 0;
+        var interval = setInterval(function() {
+          progress += Math.random() * 22 + 8;
+          if (progress > 100) progress = 100;
+          fill.style.width = Math.round(progress) + "%";
+          bar.setAttribute("aria-valuenow", Math.round(progress));
+          if (step < messages.length) {
+            msgEl.textContent = messages[step];
+            step++;
+          }
+          if (progress >= 100) {
+            clearInterval(interval);
+            setTimeout(onDone, 300);
+          }
+        }, 200);
+      }
+
+      // ---- Lưu kết quả AI-3 vào localStorage đồng thời refresh lịch sử ----
+      function saveAI3Result(hotspots, params) {
+        var record = {
+          id: "AI3-" + Date.now(),
+          savedAt: new Date().toISOString(),
+          params: params,
+          hotspots: hotspots.map(function(h) {
+            return {
+              zoneId: h.zone.id,
+              zoneName: h.zone.name || h.zone.code,
+              riskLevel: h.riskLevel,
+              totalHazards: h.totalHazards,
+              criticalCount: h.criticalCount,
+              openCount: h.openCount,
+              topCategory: h.topCategory,
+              score: h.score,
+            };
+          }),
+        };
+        try {
+          var existing = JSON.parse(localStorage.getItem("siteSafeAI3Results") || "[]");
+          existing.unshift(record);
+          if (existing.length > 20) existing = existing.slice(0, 20);
+          localStorage.setItem("siteSafeAI3Results", JSON.stringify(existing));
+          // Refresh lịch sử hiển thị ngay sau khi lưu
+          renderAI3History();
+        } catch (e) {
+          console.warn("Không thể lưu AI-3 vào localStorage:", e);
+        }
+        return record;
+      }
+
+      // ---- Render lịch sử kết quả AI-3 từ localStorage ----
+      function renderAI3History() {
+        var container = document.getElementById("ai3HistoryList");
+        var emptyMsg = document.getElementById("ai3HistoryEmpty");
+        var records;
+        try {
+          records = JSON.parse(localStorage.getItem("siteSafeAI3Results") || "[]");
+        } catch(e) {
+          records = [];
+        }
+
+        // Xóa các item cũ (giữ empty msg)
+        var oldItems = container.querySelectorAll(".ai3-history-item");
+        oldItems.forEach(function(el) { el.remove(); });
+
+        if (records.length === 0) {
+          if (emptyMsg) emptyMsg.style.display = "";
+          return;
+        }
+        if (emptyMsg) emptyMsg.style.display = "none";
+
+        var RISK_LABELS = { CRITICAL: "Nghiêm trọng", HIGH: "Cao", MEDIUM: "Trung bình", LOW: "Thấp" };
+        var RISK_BADGE  = { CRITICAL: "badge-danger", HIGH: "badge-warning", MEDIUM: "badge-warning", LOW: "badge-success" };
+
+        records.forEach(function(rec, idx) {
+          var d = new Date(rec.savedAt);
+          var timeStr = d.toLocaleString("vi-VN");
+          var topHotspot = rec.hotspots && rec.hotspots[0];
+          var totalHazards = (rec.hotspots || []).reduce(function(s, h) { return s + h.totalHazards; }, 0);
+
+          var item = document.createElement("div");
+          item.className = "ai3-history-item";
+          item.setAttribute("data-record-id", rec.id);
+
+          // Tiêu đề hàng
+          var header = '<div class="ai3-hi-header">' +
+            '<span class="ai3-hi-index">#' + (idx + 1) + '</span>' +
+            '<span class="ai3-hi-id">' + escapeHtml(rec.id) + '</span>' +
+            '<span class="ai3-hi-time">' + escapeHtml(timeStr) + '</span>' +
+            '<button class="ai3-hi-toggle btn btn-outline" type="button" aria-expanded="false" data-toggle="' + rec.id + '">Xem chi tiết ▾</button>' +
+            '<button class="ai3-hi-delete btn btn-outline" type="button" data-delete="' + rec.id + '" title="Xóa kết quả này">×</button>' +
+          '</div>';
+
+          // Tóm tắt nhanh
+          var summary = '<div class="ai3-hi-summary">' +
+            '<span>Điểm nóng: <strong>' + (rec.hotspots || []).length + '</strong> khu vực</span>' +
+            '<span>Tổng sự cố: <strong>' + totalHazards + '</strong></span>' +
+            (topHotspot ? '<span>Điểm nóng #1: <strong>' + escapeHtml(topHotspot.zoneName || topHotspot.zoneId) + '</strong> <span class="badge ' + (RISK_BADGE[topHotspot.riskLevel] || "badge-warning") + '">' + (RISK_LABELS[topHotspot.riskLevel] || topHotspot.riskLevel) + '</span></span>' : '') +
+          '</div>';
+
+          // Bảng chi tiết (ẩn ban đầu)
+          var detail = '<div class="ai3-hi-detail is-hidden" id="ai3-detail-' + rec.id + '">';
+          if (!rec.hotspots || rec.hotspots.length === 0) {
+            detail += '<div style="padding:12px;text-align:center;color:#64748b;font-size:0.85rem;background:#ffffff;border-radius:6px;border:1px dashed #cbd5e1">Không có điểm nóng nào trong đợt phân tích này (0 sự cố thỏa điều kiện lọc).</div>';
+          } else {
+            rec.hotspots.forEach(function(h, hi) {
+              detail += '<div class="ai3-hi-detail-row">' +
+                '<span class="ai3-hi-rank">#' + (hi + 1) + '</span>' +
+                '<span class="ai3-hi-zone">' + escapeHtml(h.zoneName || h.zoneId) + '</span>' +
+                '<span class="badge ' + (RISK_BADGE[h.riskLevel] || "badge-warning") + '">' + (RISK_LABELS[h.riskLevel] || h.riskLevel) + '</span>' +
+                '<span>' + h.totalHazards + ' sự cố</span>' +
+                (h.criticalCount > 0 ? '<span class="ai3-badge-critical">' + h.criticalCount + ' nghiêm trọng</span>' : '') +
+                (h.openCount > 0 ? '<span class="ai3-badge-open">' + h.openCount + ' chưa xử lý</span>' : '') +
+                '<span class="ai3-hi-cat">' + escapeHtml(h.topCategory || "Chung") + '</span>' +
+                '<span class="ai3-hi-score">Điểm: ' + h.score + '</span>' +
+              '</div>';
+            });
+          }
+          detail += '</div>';
+
+          item.innerHTML = header + summary + detail;
+          container.appendChild(item);
+        });
+
+        // Gắn sự kiện toggle/delete cho các item vừa render
+        container.querySelectorAll("[data-toggle]").forEach(function(btn) {
+          btn.addEventListener("click", function() {
+            var id = btn.getAttribute("data-toggle");
+            var detailEl = document.getElementById("ai3-detail-" + id);
+            if (!detailEl) return;
+            var hidden = detailEl.classList.toggle("is-hidden");
+            btn.textContent = hidden ? "Xem chi tiết ▾" : "Ẩn bớt ▴";
+            btn.setAttribute("aria-expanded", String(!hidden));
+          });
+        });
+
+        container.querySelectorAll("[data-delete]").forEach(function(btn) {
+          btn.addEventListener("click", function() {
+            var id = btn.getAttribute("data-delete");
+            try {
+              var saved = JSON.parse(localStorage.getItem("siteSafeAI3Results") || "[]");
+              saved = saved.filter(function(r) { return r.id !== id; });
+              localStorage.setItem("siteSafeAI3Results", JSON.stringify(saved));
+            } catch(e) {}
+            renderAI3History();
+          });
+        });
+      }
+
+      // Gắn sự kiện nút "Xóa tất cả"
+      document.getElementById("ai3ClearHistory").addEventListener("click", function() {
+        if (confirm("Xóa toàn bộ lịch sử kết quả AI-3?")) {
+          localStorage.removeItem("siteSafeAI3Results");
+          renderAI3History();
+        }
+      });
+
+      // Hiển thị lịch sử ngay khi tải trang
+      renderAI3History();
+
+      // ---- Biến lưu trạng thái phân tích hiện tại ----
+      var currentHotspots = [];
+      var currentParams = {};
+
+      // ---- Tính độ tin cậy ----
+      // Dữ liệu ít (<5 hazard): cảnh báo độ tin cậy thấp (<=42%)
+      // Dữ liệu vừa (5-15): tin cậy trung bình (55-75%)
+      // Dữ liệu nhiều (>15): tin cậy cao (80-92%)
+      function calcConfidence(hotspots, hazardCount) {
+        if (hazardCount === 0) return 42;
+        if (hotspots.length === 0) return 30;
+        if (hazardCount < 5) return 42;
+        if (hazardCount < 10) return 55 + (hazardCount - 5) * 3;
+        if (hazardCount < 20) return 70 + (hazardCount - 10) * 1.5;
+        return Math.min(92, 85 + (hazardCount - 20) * 0.3);
+      }
+
+      // ---- XỬ LÝ NÚT: Chạy phân tích ----
+      // FIX: Tải data TRƯỚC khi chạy progress bar để tránh race condition:
+      // loadZones/loadHazards async có thể lâu hơn progress bar (1s) → data chưa có mà onDone đã gọi
+      document.getElementById("ai3RunBtn").addEventListener("click", async function() {
+        var zoneFilter = document.getElementById("ai3ZoneFilter").value;
+        var riskFilter = document.getElementById("ai3RiskFilter").value;
+        var topN = parseInt(document.getElementById("ai3TopN").value, 10);
+        currentParams = { zoneFilter: zoneFilter, riskFilter: riskFilter, topN: topN };
+
+        // BƯỚC 2: loading (hiện ngay lập tức)
+        ai3ShowStep("ai3StepLoading");
+        var fill = document.getElementById("ai3ProgressFill");
+        fill.style.width = "0%";
+
+        try {
+          // Tải dữ liệu SONG SONG trước, rồi mới chạy progress bar hiển thị
+          var dataLoaded = false;
+          var zones, hazards;
+
+          // Fetch data
+          var dataPromise = Promise.all([
+            siteSafeManager.loadZones(),
+            siteSafeManager.loadHazards()
+          ]).then(function(results) {
+            zones = results[0];
+            hazards = results[1];
+            dataLoaded = true;
+          });
+
+          // Chạy progress bar song song với việc tải data
+          // progress bar chờ data nếu cần (tối thiểu hiển thị 800ms)
+          await dataPromise;
+
+          runLoadingProgress(function() {
+            // BƯỚC 3 + 4: kết quả + giải thích
+            currentHotspots = analyzeHotspots(zones, hazards, zoneFilter, riskFilter, topN);
+
+            var confidence = calcConfidence(currentHotspots, hazards.length);
+            var confBadge = document.getElementById("ai3ConfidenceBadge");
+            confBadge.textContent = "Độ tin cậy: " + Math.round(confidence) + "%";
+            confBadge.className = "ai3-confidence-badge" + (confidence >= 80 ? " ai3-conf-high" : confidence >= 55 ? " ai3-conf-mid" : " ai3-conf-low");
+            if (confidence < 55) {
+              confBadge.title = "Độ tin cậy thấp do ít dữ liệu (" + hazards.length + " sự cố). Kết quả mang tính tham khảo.";
+            } else {
+              confBadge.title = "";
+            }
+
+            var summaryCount = currentHotspots.length;
+            var summaryTotal = currentHotspots.reduce(function(s, h) { return s + h.totalHazards; }, 0);
+            document.getElementById("ai3ResultSummary").textContent =
+              "Phát hiện " + summaryCount + " khu vực điểm nóng với tổng cộng " + summaryTotal + " sự cố liên quan.";
+
+            renderHotspots(currentHotspots);
+            document.getElementById("ai3ExplainText").textContent =
+              buildExplanation(currentHotspots, riskFilter, topN);
+
+            ai3ShowStep("ai3StepResult");
+          });
+        } catch (err) {
+          document.getElementById("ai3ErrorTitle").textContent = "Lỗi khi phân tích dữ liệu";
+          document.getElementById("ai3ErrorMsg").textContent = "Không thể tải dữ liệu để phân tích. Vui lòng thử lại. (" + err.message + ")";
+          ai3ShowStep("ai3StepError");
+        }
+      });
+
+      // ---- XỬ LÝ NÚT: Chấp nhận & Lưu (Bước 6) ----
+      document.getElementById("ai3AcceptBtn").addEventListener("click", function() {
+        var record = saveAI3Result(currentHotspots, currentParams);
+        var savedTime = new Date().toLocaleString("vi-VN");
+        document.getElementById("ai3SavedTime").textContent = "Lưu lúc " + savedTime + " · Mã kết quả: " + record.id;
+
+        // Hiển thị bản tóm tắt đã lưu
+        var savedRecord = document.getElementById("ai3SavedRecord");
+        savedRecord.innerHTML =
+          '<h4 style="margin-bottom:12px;color:var(--color-primary);">Tóm tắt điểm nóng đã lưu</h4>' +
+          currentHotspots.map(function(h, i) {
+            return '<div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--color-border)">' +
+              '<span style="font-weight:700;min-width:24px">#' + (i+1) + '</span>' +
+              '<span style="flex:1">' + escapeHtml(h.zone.name || h.zone.code) + '</span>' +
+              '<span class="badge ' + (riskBadgeClass[h.riskLevel] || "badge-warning") + '">' + escapeHtml(riskLabels[h.riskLevel] || h.riskLevel) + '</span>' +
+              '<span style="color:var(--color-text);font-size:.875rem">' + h.totalHazards + ' sự cố</span>' +
+            '</div>';
+          }).join("") +
+          '<p style="font-size:.8rem;color:var(--color-text);opacity:.6;margin-top:10px">Kết quả này được lưu vào localStorage và có thể truy xuất để phát sinh hành động khắc phục.</p>';
+
+        ai3ShowStep("ai3StepSaved");
+      });
+
+      // ---- XỬ LÝ NÚT: Tạo lại ----
+      document.getElementById("ai3RetryBtn").addEventListener("click", function() {
+        ai3ShowStep("ai3StepInput");
+      });
+
+      // ---- XỬ LÝ NÚT: Từ chối ----
+      document.getElementById("ai3RejectBtn").addEventListener("click", function() {
+        document.getElementById("ai3ErrorTitle").textContent = "Đã từ chối kết quả";
+        document.getElementById("ai3ErrorMsg").textContent = "Kết quả AI đã bị hủy. Bạn có thể phân tích lại với điều kiện khác.";
+        ai3ShowStep("ai3StepError");
+      });
+
+      // ---- XỬ LÝ NÚT: Phân tích lại (từ error) ----
+      document.getElementById("ai3ErrorRetryBtn").addEventListener("click", function() {
+        ai3ShowStep("ai3StepInput");
+      });
+
+      // ---- XỬ LÝ NÚT: Phân tích mới (từ saved) ----
+      document.getElementById("ai3NewBtn").addEventListener("click", function() {
+        currentHotspots = [];
+        currentParams = {};
+        ai3ShowStep("ai3StepInput");
+      });
+
+      // ---- Phím Esc: quay lại form nhập ----
+      document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+          var resultEl = document.getElementById("ai3StepResult");
+          var loadingEl = document.getElementById("ai3StepLoading");
+          if (resultEl && !resultEl.classList.contains("is-hidden")) {
+            ai3ShowStep("ai3StepInput");
+          } else if (loadingEl && !loadingEl.classList.contains("is-hidden")) {
+            ai3ShowStep("ai3StepInput");
+          }
+        }
+      });
     </script>
   </body>
 </html>
